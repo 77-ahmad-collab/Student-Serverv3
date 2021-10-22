@@ -897,10 +897,55 @@ const ProposalForm = async (req, res) => {
   });
   const doc1 = await submitproposal.save();
   console.log(doc1, "your form is submitted");
+  const leader = await user.findOne({id: rollNo.toUpperCase()});
+  const formid = leader.formid;
+  const formdata = await form.findOne({_id: formid});
+
   const updatestu1 = await user.updateOne(
     {id: rollNo},
     {$set: {proposalid: doc1._id, isPROPOSAL: true}}
   );
+  if (formdata.mem_count == 2) {
+    if (formdata.mem2.length > 0) {
+      const updatestu2 = await user.updateOne(
+        {id: formdata.mem2.toUppercase()},
+        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+      );
+    } else if (formdata.mem3.length > 0) {
+      const updatestu2 = await user.updateOne(
+        {id: formdata.mem3.toUppercase()},
+        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+      );
+    }
+  } else if (formdata.mem_count == 3) {
+    if (formdata.mem2.length > 0 && formdata.mem3.length > 0) {
+      const updatestu2 = await user.updateOne(
+        {id: formdata.mem2.toUppercase()},
+        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+      );
+      const updatestu3 = await user.updateOne(
+        {id: formdata.mem3.toUppercase()},
+        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+      );
+    } else if (
+      (formdata.mem3.length > 0 && formdata.mem2.length == 0) ||
+      formdata.mem2.length == ""
+    ) {
+      const updatestu2 = await user.updateOne(
+        {id: formdata.mem3.toUppercase()},
+        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+      );
+    } else if (
+      (formdata.mem2.length > 0 && formdata.mem3.length == 0) ||
+      formdata.mem2.length == ""
+    ) {
+      const updatestu2 = await user.updateOne(
+        {id: formdata.mem2.toUppercase()},
+        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+      );
+    }
+  }
+
   console.log(updatestu1);
 };
-module.exports = {formdata, updateStatus,ProposalForm};
+module.exports = {formdata, updateStatus, ProposalForm};
