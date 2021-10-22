@@ -30,9 +30,14 @@ const studentSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  isPROPOSAL: {
+    type: Boolean,
+    default: false,
+  },
   s_rollno: {
     type: String,
     trim: true,
+    uppercase: true,
   },
   s_email: {
     type: String,

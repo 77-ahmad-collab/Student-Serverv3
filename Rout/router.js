@@ -13,7 +13,7 @@ const {
   // student_data,
 } = require("./Datacontroller");
 const {login, signup, about} = require("./AuthController");
-const {formdata, updateStatus} = require("./Form");
+const {formdata, updateStatus, ProposalForm} = require("./Form");
 // **********  START OF Middleware for authentication
 
 const authy = async (req, res, next) => {
@@ -59,7 +59,7 @@ router.post("/student/form", formdata);
 
 //***route for getting form data */
 
-router.get("/student/getformdata/:rollNo", getformdata);
+router.get("/student/getformdata/:rollNo", getformdata); //`${}
 
 //****************USED FOR AUTHENTICATION*/
 router.get("/student/about", authy, about);
@@ -74,6 +74,7 @@ router.get("/student/all/rollNo", usernames);
 
 //****ROUTE FOR THE ACCEPT OR REJECT GROUP INVITE */
 router.post("/student/status", updateStatus);
+router.post("/student/proposalForm", ProposalForm);
 
 // //dont delete
 // router.get("/student/test/ahmed", test);

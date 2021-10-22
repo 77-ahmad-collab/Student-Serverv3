@@ -653,53 +653,59 @@ const testmai = async (req, res, next) => {
 
 const getformdata = async (req, res) => {
   const {rollNo} = req.params;
+  console.log(rollNo, "rollno");
   const data = await user.findOne({id: rollNo.toUpperCase()}, {_id: 0});
+  console.log(data, "data");
   const formid = await data.formid;
-
-  const formdata = await form.findOne({_id: formid}, {_id: 0});
-  const stu1_id = formdata.mem1;
-  const stu2_id = formdata.mem2;
-  const stu3_id = formdata.mem3;
-
-  let student = [];
-  if (formdata.mem_count == 2) {
-    const stu1 = await user.findOne({id: stu1_id}, {_id: 0, s_tokens: 0});
-    const stu2 = await user.findOne({id: stu2_id}, {_id: 0, s_tokens: 0});
-    //  const stu3 = await user.findOne({id: stu3_id}, {_id: 0, s_tokens: 0});
-    const formdata = await form.findOne({_id: stu1.formid}, {_id: 0});
-    student = [
-      ...student,
-      {
-        name: stu1.s_name,
-        email: stu1.s_email,
-        seatno: stu1.id,
-        status: stu1.s_status,
-      },
-    ];
-    student = [
-      ...student,
-      {
-        name: stu2.s_name,
-        email: stu2.s_email,
-        seatno: stu2.id,
-        status: stu2.s_status,
-      },
-    ];
+  if (
+    formid == null ||
+    formid.length == 0 ||
+    formdata == null ||
+    formdata.length == 0
+  ) {
     res.status(200).json({
-      student: student,
-      project_title: formdata.s_proj_title,
-      internal: formdata.s_internal,
-      external: formdata.s_external,
-      project_description: formdata.project_description,
+      student: [],
+      project_title: "",
+      internal: "",
+      external: "",
+      project_description: "",
     });
-  } else if (formdata.mem_count == 3) {
-    const stu1 = await user.findOne({id: stu1_id}, {_id: 0, s_tokens: 0});
-    const stu2 = await user.findOne({id: stu2_id}, {_id: 0, s_tokens: 0});
-    const stu3 = await user.findOne({id: stu3_id}, {_id: 0, s_tokens: 0});
-    const formdata = await form.findOne({_id: stu1.formid}, {_id: 0});
+  } else {
+    const formdata = await form.findOne({_id: formid}, {_id: 0});
+    const stu1_id = formdata.mem1;
+    const stu2_id = formdata.mem2;
+    const stu3_id = formdata.mem3;
 
-    if (stu2 == !null && stu3 == !null) {
-      console.log("both are not null");
+    let student = [];
+    if (formdata.mem_count == 1) {
+      const stu1 = await user.findOne({id: stu1_id}, {_id: 0, s_tokens: 0});
+      const formdata = await form.findOne({_id: stu1.formid}, {_id: 0});
+      student = [
+        ...student,
+        {
+          name: stu1.s_name,
+          email: stu1.s_email,
+          seatno: stu1.id,
+          status: stu1.s_status,
+         
+        },
+      ];
+      res.status(200).json({
+        student: student,
+        project_title: formdata.s_proj_title,
+        internal: formdata.s_internal,
+        external: formdata.s_external,
+        project_description: formdata.project_description,
+        internal_designation: formdata.internal_designation,
+        external_designation: formdata.external_designation,
+        mem_count: formdata.mem_count,
+        rejected: [],
+      });
+    } else if (formdata.mem_count == 2) {
+      const stu1 = await user.findOne({id: stu1_id}, {_id: 0, s_tokens: 0});
+      const stu2 = await user.findOne({id: stu2_id}, {_id: 0, s_tokens: 0});
+      //  const stu3 = await user.findOne({id: stu3_id}, {_id: 0, s_tokens: 0});
+      const formdata = await form.findOne({_id: stu1.formid}, {_id: 0});
       student = [
         ...student,
         {
@@ -718,64 +724,125 @@ const getformdata = async (req, res) => {
           status: stu2.s_status,
         },
       ];
-      student = [
-        ...student,
-        {
-          name: stu3.s_name,
-          email: stu3.s_email,
-          seatno: stu3.id,
-          status: stu3.s_status,
-        },
-      ];
-    } else if (stu2 == null) {
-      console.log("stu2 is null");
-      student = [
-        ...student,
-        {
-          name: stu1.s_name,
-          email: stu1.s_email,
-          seatno: stu1.id,
-          status: stu1.s_status,
-        },
-      ];
-      student = [
-        ...student,
-        {
-          name: stu3.s_name,
-          email: stu3.s_email,
-          seatno: stu3.id,
-          status: stu3.s_status,
-        },
-      ];
-    } else if (stu3 == null) {
-      console.log("stu3 is null");
-      student = [
-        ...student,
-        {
-          name: stu1.s_name,
-          email: stu1.s_email,
-          seatno: stu1.id,
-          status: stu1.s_status,
-        },
-      ];
-      student = [
-        ...student,
-        {
-          name: stu2.s_name,
-          email: stu2.s_email,
-          seatno: stu2.id,
-          status: stu2.s_status,
-        },
-      ];
+      res.status(200).json({
+        student: student,
+        project_title: formdata.s_proj_title,
+        internal: formdata.s_internal,
+        external: formdata.s_external,
+        project_description: formdata.project_description,
+        internal_designation: formdata.internal_designation,
+        external_designation: formdata.external_designation,
+        mem_count: formdata.mem_count,
+        rejected: [],
+      });
+    } else if (formdata.mem_count == 3) {
+      console.log("memcount is 3");
+      const stu1 = await user.findOne({id: stu1_id}, {_id: 0, s_tokens: 0});
+      const stu2 = await user.findOne({id: stu2_id}, {_id: 0, s_tokens: 0});
+      const stu3 = await user.findOne({id: stu3_id}, {_id: 0, s_tokens: 0});
+      const formdata = await form.findOne({_id: stu1.formid}, {_id: 0});
+      console.log(stu1, stu2, stu3);
+      let reject = [];
+      console.log(formdata.reject.length, "reject");
+      if (formdata.reject.length > 0) {
+        // reject = formdata.reject
+        console.log(" i not run if id is not");
+        const studentreject = await user.findOne(
+          {id: formdata.reject},
+          {_id: 0, s_tokens: 0}
+        );
+        reject = [
+          {
+            name: studentreject.s_name,
+            email: studentreject.s_email,
+            seatno: studentreject.id,
+            status: studentreject.s_status,
+          },
+        ];
+      }
+      if (stu2 != null && stu3 != null) {
+        console.log("both are not null");
+        student = [
+          ...student,
+          {
+            name: stu1.s_name,
+            email: stu1.s_email,
+            seatno: stu1.id,
+            status: stu1.s_status,
+          },
+        ];
+        student = [
+          ...student,
+          {
+            name: stu2.s_name,
+            email: stu2.s_email,
+            seatno: stu2.id,
+            status: stu2.s_status,
+          },
+        ];
+        student = [
+          ...student,
+          {
+            name: stu3.s_name,
+            email: stu3.s_email,
+            seatno: stu3.id,
+            status: stu3.s_status,
+          },
+        ];
+      } else if (stu2 == null) {
+        console.log("stu2 is null");
+        student = [
+          ...student,
+          {
+            name: stu1.s_name,
+            email: stu1.s_email,
+            seatno: stu1.id,
+            status: stu1.s_status,
+          },
+        ];
+        student = [
+          ...student,
+          {
+            name: stu3.s_name,
+            email: stu3.s_email,
+            seatno: stu3.id,
+            status: stu3.s_status,
+          },
+        ];
+      } else if (stu3 == null) {
+        console.log("stu3 is null");
+        student = [
+          ...student,
+          {
+            name: stu1.s_name,
+            email: stu1.s_email,
+            seatno: stu1.id,
+            status: stu1.s_status,
+          },
+        ];
+        student = [
+          ...student,
+          {
+            name: stu2.s_name,
+            email: stu2.s_email,
+            seatno: stu2.id,
+            status: stu2.s_status,
+          },
+        ];
+      }
+
+      res.status(200).json({
+        student: student,
+        project_title: formdata.s_proj_title,
+        internal: formdata.s_internal,
+        external: formdata.s_external,
+        project_description: formdata.project_description,
+        internal_designation: formdata.internal_designation,
+        external_designation: formdata.external_designation,
+        mem_count: formdata.mem_count,
+        rejected: reject,
+      });
     }
-
-    res.status(200).json({
-      student: student,
-      project_title: formdata.s_proj_title,
-      internal: formdata.s_internal,
-      external: formdata.s_external,
-      project_description: formdata.project_description,
-    });
   }
 
   // res.send("formdat");

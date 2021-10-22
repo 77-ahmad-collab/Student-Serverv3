@@ -88,6 +88,7 @@ const login = async (req, res) => {
         isINVITE: person.isINVITE,
         isACCEPTED: person.isACCEPTED,
         department: person.s_department,
+        isPROPOSAL: person.isPROPOSAL,
       });
     } else {
       res.cookie("jwt", {}, {maxAge: -1});
@@ -114,6 +115,7 @@ const about = async (req, res) => {
       isSUBMIT,
       isINVITE,
       isACCEPTED,
+      isPROPOSAL,
     } = result;
     if (req.formid) {
       console.log(req.formid, "haina");
@@ -131,6 +133,9 @@ const about = async (req, res) => {
           isSUBMIT,
           isINVITE,
           isACCEPTED,
+          isPROPOSAL,
+          internal_designation: formdata.internal_designation,
+          external_designation: formdata.external_designation,
           mem2: formdata.mem2,
           mem3: formdata.mem3,
         });
@@ -143,9 +148,12 @@ const about = async (req, res) => {
           contact: s_contact,
           department: s_department,
           batch: s_batch,
+          internal_designation: "no value",
+          external_designation: "no value",
           isSUBMIT,
           isINVITE,
           isACCEPTED,
+          isPROPOSAL,
         });
       } else if (formdata.mem2.length == 0) {
         console.log("mem2 is 0");
@@ -159,6 +167,9 @@ const about = async (req, res) => {
           isSUBMIT,
           isINVITE,
           isACCEPTED,
+          isPROPOSAL,
+          internal_designation: formdata.internal_designation,
+          external_designation: formdata.external_designation,
           mem2: formdata.mem3,
           //  mem3: formdata.mem3,
         });
@@ -174,6 +185,9 @@ const about = async (req, res) => {
           isSUBMIT,
           isINVITE,
           isACCEPTED,
+          isPROPOSAL,
+          internal_designation: formdata.internal_designation,
+          external_designation: formdata.external_designation,
           mem2: formdata.mem2,
           //  mem3: formdata.mem3,
         });
@@ -190,6 +204,9 @@ const about = async (req, res) => {
         isSUBMIT,
         isINVITE,
         isACCEPTED,
+        isPROPOSAL,
+        internal_designation: "no value",
+        external_designation: "no value",
       });
     }
 

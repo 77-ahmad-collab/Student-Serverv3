@@ -1,5 +1,6 @@
 const user = require("../models/StudentSchema");
 const form = require("../models/FormSchema");
+const proposal = require("../models/ProposalSchema");
 const {sendMail, sendSingleMail} = require("./sendMail");
 const formdata = async (req, res) => {
   //getting values from client
@@ -19,6 +20,8 @@ const formdata = async (req, res) => {
       s_name1,
       s_name2,
       s_name3,
+      internal_designation,
+      external_designation,
       group_count,
     } = req.body;
     // const leaderfinal = await user.find({id: s_leader}, {s_name: 1});
@@ -38,6 +41,10 @@ const formdata = async (req, res) => {
         const leader = await user.findOne({id: stu1_id});
         const formid = await leader.formid;
         console.log(formid);
+        const updateformOf = await form.updateOne(
+          {_id: formid},
+          {$set: {reject: ""}}
+        );
         const formdata = await form.findOne({_id: formid});
         const {mem2, mem3} = formdata;
         if (mem2 == "") {
@@ -131,6 +138,8 @@ const formdata = async (req, res) => {
         s_proj_title,
         s_internal,
         s_external,
+        internal_designation,
+        external_designation,
       });
 
       const doc1 = await SubmitForm.save();
@@ -144,6 +153,7 @@ const formdata = async (req, res) => {
             $set: {
               isSUBMIT: true,
               isACCEPTED: true,
+
               groupRequest: stu1_id,
               formid: doc1._id,
               s_status: "Accepted",
@@ -159,6 +169,7 @@ const formdata = async (req, res) => {
               $set: {
                 isSUBMIT: true,
                 isACCEPTED: true,
+
                 groupRequest: stu1_id,
                 formid: doc1._id,
                 s_status: "Accepted",
@@ -171,6 +182,7 @@ const formdata = async (req, res) => {
               $set: {
                 isSUBMIT: true,
                 isINVITE: true,
+
                 groupRequest: stu1_id,
                 formid: doc1._id,
                 s_status: "Pending",
@@ -196,6 +208,7 @@ const formdata = async (req, res) => {
               $set: {
                 isSUBMIT: true,
                 isACCEPTED: true,
+
                 groupRequest: stu1_id,
                 ResponseCount: 1,
                 formid: doc1._id,
@@ -209,6 +222,7 @@ const formdata = async (req, res) => {
               $set: {
                 isSUBMIT: true,
                 isINVITE: true,
+
                 groupRequest: stu1_id,
                 formid: doc1._id,
                 s_status: "Pending",
@@ -221,6 +235,7 @@ const formdata = async (req, res) => {
               $set: {
                 isSUBMIT: true,
                 isINVITE: true,
+
                 groupRequest: stu1_id,
                 formid: doc1._id,
                 s_status: "Pending",
@@ -256,7 +271,12 @@ const formdata = async (req, res) => {
         project_title: formdata.s_proj_title,
         internal: formdata.s_internal,
         external: formdata.s_external,
-        project_description: formdata.project_description,
+        mem_count: formdata.mem_count,
+        internal_designation: formdata.internal_designation,
+        external_designation: formdata.external_designation,
+        isPROPOSAL: stu1.isPROPOSAL,
+        rejected: [],
+        // project_description: formdata.project_description,
       });
     } else if (group_count == 2) {
       let student = [];
@@ -286,7 +306,12 @@ const formdata = async (req, res) => {
         project_title: formdata.s_proj_title,
         internal: formdata.s_internal,
         external: formdata.s_external,
-        project_description: formdata.project_description,
+        mem_count: formdata.mem_count,
+        isPROPOSAL: stu1.isPROPOSAL,
+        internal_designation: formdata.internal_designation,
+        external_designation: formdata.external_designation,
+        rejected: [],
+        // project_description: formdata.project_description,
       });
     } else if (group_count == 3) {
       let student = [];
@@ -326,7 +351,12 @@ const formdata = async (req, res) => {
         project_title: formdata.s_proj_title,
         internal: formdata.s_internal,
         external: formdata.s_external,
-        project_description: formdata.project_description,
+        mem_count: formdata.mem_count,
+        isPROPOSAL: stu1.isPROPOSAL,
+        internal_designation: formdata.internal_designation,
+        external_designation: formdata.external_designation,
+        rejected: [],
+        // project_description: formdata.project_description,
       });
     }
 
@@ -514,6 +544,7 @@ const updateStatus = async (req, res) => {
   } else if (val == "false") {
     console.log("student has rejected the proposal");
     const {rollNo} = req.body;
+    console.log(rollNo);
     const upadateStudentRecord = await user.updateOne(
       {id: rollNo.toUpperCase()},
       {$set: {s_status: ""}}
@@ -526,11 +557,21 @@ const updateStatus = async (req, res) => {
     // const findLeader = findStudent.groupRequest;
 
     const formid = findStudent.formid;
+    console.log(formid, "form id");
     const formdata = await form.findOne(
       {_id: formid},
       {mem_count: 1, _id: 0, mem2: 1, mem3: 1}
     );
-
+    const updaterejectOf = await form.updateOne(
+      {
+        _id: formid,
+      },
+      {$set: {reject: `${rollNo}`}},
+      {
+        new: true,
+      }
+    );
+    console.log("rejectonee", updaterejectOf, rollNo);
     if (formdata.mem_count == 2) {
       const memberTwo = formdata.mem2;
       console.log(formdata.mem_count, "2 member rejection");
@@ -729,6 +770,8 @@ const updateStatus = async (req, res) => {
         project_title: formdata.s_proj_title,
         internal: formdata.s_internal,
         external: formdata.s_external,
+        internal_designation: formdata.internal_designation,
+        external_designation: formdata.external_designation,
         project_description: formdata.project_description,
       });
     } else if (formdata.mem_count == 3) {
@@ -813,6 +856,8 @@ const updateStatus = async (req, res) => {
         project_title: formdata.s_proj_title,
         internal: formdata.s_internal,
         external: formdata.s_external,
+        internal_designation: formdata.internal_designation,
+        external_designation: formdata.external_designation,
         project_description: formdata.project_description,
       });
     }
@@ -821,4 +866,41 @@ const updateStatus = async (req, res) => {
   // res.send("you have hiten the route");
 };
 
-module.exports = {formdata, updateStatus};
+const ProposalForm = async (req, res) => {
+  console.log(req.body);
+  const {
+    category,
+    characteristics,
+    outline,
+    objectives,
+    scope,
+    methodology,
+    exp_outcomes,
+    exp_budget,
+    gant_chart,
+    alignment,
+    co_supervisor,
+    rollNo,
+  } = req.body;
+  const submitproposal = await new proposal({
+    category,
+    characteristics,
+    outline,
+    objectives,
+    scope,
+    methodology,
+    exp_outcomes,
+    exp_budget,
+    gant_chart,
+    alignment,
+    co_supervisor,
+  });
+  const doc1 = await submitproposal.save();
+  console.log(doc1, "your form is submitted");
+  const updatestu1 = await user.updateOne(
+    {id: rollNo},
+    {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+  );
+  console.log(updatestu1);
+};
+module.exports = {formdata, updateStatus,ProposalForm};

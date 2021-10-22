@@ -3,58 +3,48 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 require("dotenv").config();
 
-const FormSchema = new mongoose.Schema({
-  mem_count: {
-    type: Number,
-  },
-
-  mem1: {
-    type: String,
-    uppercase: true,
-  },
-
-  mem2: {
-    type: String,
-    uppercase: true,
-  },
-  mem3: {
-    type: String,
-    uppercase: true,
-  },
-  s_internal: {
+const ProposalSchema = new mongoose.Schema({
+  category: {
     type: String,
     trim: true,
   },
-  s_external: {
+  characteristics: {
     type: String,
     trim: true,
   },
-  s_proj_title: {
+  outline: {
     type: String,
     trim: true,
   },
-  s_organization: {
+  objective: {
     type: String,
     trim: true,
   },
-  internal_designation: {
+  scope: {
     type: String,
     trim: true,
   },
-  external_designation: {
+  methodology: {
     type: String,
     trim: true,
   },
-  project_description: {
+  exp_outcomes: {
     type: String,
     trim: true,
   },
-  reject: {
+  exp_budget: {
     type: String,
-    uppercase: true,
-    default: "",
+    trim: true,
+  },
+  alignment: {
+    type: String,
+    trim: true,
+  },
+  co_supervisor: {
+    type: String,
+    trim: true,
   },
 });
 
-const form = mongoose.model("formdata", FormSchema);
-module.exports = form;
+const proposal = mongoose.model("Proposal", ProposalSchema);
+module.exports = proposal;
