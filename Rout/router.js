@@ -10,6 +10,7 @@ const {
   userdata,
   usernames,
   getformdata,
+  getProposalData,
   // student_data,
 } = require("./Datacontroller");
 const {login, signup, about} = require("./AuthController");
@@ -75,7 +76,7 @@ router.get("/student/all/rollNo", usernames);
 //****ROUTE FOR THE ACCEPT OR REJECT GROUP INVITE */
 router.post("/student/status", updateStatus);
 router.post("/student/proposalForm", ProposalForm);
-
+router.get("/student/getProposalData/:rollNo", getProposalData);
 // //dont delete
 // router.get("/student/test/ahmed", test);
 

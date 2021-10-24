@@ -116,6 +116,7 @@ const about = async (req, res) => {
       isINVITE,
       isACCEPTED,
       isPROPOSAL,
+        isPROPOSALSUBMIT
     } = result;
     if (req.formid) {
       console.log(req.formid, "haina");
@@ -134,6 +135,7 @@ const about = async (req, res) => {
           isINVITE,
           isACCEPTED,
           isPROPOSAL,
+          isPROPOSALSUBMIT,
           internal_designation: formdata.internal_designation,
           external_designation: formdata.external_designation,
           mem2: formdata.mem2,
@@ -154,6 +156,7 @@ const about = async (req, res) => {
           isINVITE,
           isACCEPTED,
           isPROPOSAL,
+          isPROPOSALSUBMIT,
         });
       } else if (formdata.mem2.length == 0) {
         console.log("mem2 is 0");
@@ -168,6 +171,7 @@ const about = async (req, res) => {
           isINVITE,
           isACCEPTED,
           isPROPOSAL,
+          isPROPOSALSUBMIT,
           internal_designation: formdata.internal_designation,
           external_designation: formdata.external_designation,
           mem2: formdata.mem3,
@@ -186,6 +190,7 @@ const about = async (req, res) => {
           isINVITE,
           isACCEPTED,
           isPROPOSAL,
+          isPROPOSALSUBMIT,
           internal_designation: formdata.internal_designation,
           external_designation: formdata.external_designation,
           mem2: formdata.mem2,
@@ -205,6 +210,7 @@ const about = async (req, res) => {
         isINVITE,
         isACCEPTED,
         isPROPOSAL,
+        isPROPOSALSUBMIT,
         internal_designation: "no value",
         external_designation: "no value",
       });

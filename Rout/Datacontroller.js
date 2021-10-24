@@ -1,5 +1,6 @@
 const user = require("../models/StudentSchema");
 const form = require("../models/FormSchema");
+const proposal = require("../models/ProposalSchema");
 require("dotenv").config();
 const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
@@ -687,7 +688,6 @@ const getformdata = async (req, res) => {
           email: stu1.s_email,
           seatno: stu1.id,
           status: stu1.s_status,
-         
         },
       ];
       res.status(200).json({
@@ -847,6 +847,27 @@ const getformdata = async (req, res) => {
 
   // res.send("formdat");
 };
+
+const getProposalData = async (req, res) => {
+  const student = await user.findOne({id: req.params.rollNo});
+  if (
+    student.proposalid ||
+    student.proposalid != null ||
+    student.proposalid.length > 0
+  ) {
+    const proposaldata = await proposal.findOne(
+      {_id: student.proposalid},
+      {_id: 0}
+    );
+    res.json(proposaldata);
+  } else {
+    res.json({
+      message:
+        "no proposal form submit please call only when form submission condition is true",
+    });
+  }
+  //
+};
 module.exports = {
   signup,
   login,
@@ -859,4 +880,5 @@ module.exports = {
   updateStatus,
   testmai,
   getformdata,
+  getProposalData,
 };

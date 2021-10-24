@@ -34,6 +34,10 @@ const studentSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  isPROPOSALSUBMIT: {
+    type: Boolean,
+    default: false,
+  },
   s_rollno: {
     type: String,
     trim: true,
@@ -69,6 +73,7 @@ const studentSchema = new mongoose.Schema({
     },
   ],
   formid: {type: Schema.Types.ObjectId, ref: "Form"},
+  proposalid: {type: Schema.Types.ObjectId, ref: "proposal"},
   groupRequest: {
     type: String,
   },

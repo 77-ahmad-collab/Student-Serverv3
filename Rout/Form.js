@@ -153,7 +153,7 @@ const formdata = async (req, res) => {
             $set: {
               isSUBMIT: true,
               isACCEPTED: true,
-
+                isPROPOSALSUBMIT:true,
               groupRequest: stu1_id,
               formid: doc1._id,
               s_status: "Accepted",
@@ -169,7 +169,7 @@ const formdata = async (req, res) => {
               $set: {
                 isSUBMIT: true,
                 isACCEPTED: true,
-
+                isPROPOSALSUBMIT: true,
                 groupRequest: stu1_id,
                 formid: doc1._id,
                 s_status: "Accepted",
@@ -182,7 +182,7 @@ const formdata = async (req, res) => {
               $set: {
                 isSUBMIT: true,
                 isINVITE: true,
-
+                isPROPOSALSUBMIT: true,
                 groupRequest: stu1_id,
                 formid: doc1._id,
                 s_status: "Pending",
@@ -208,7 +208,7 @@ const formdata = async (req, res) => {
               $set: {
                 isSUBMIT: true,
                 isACCEPTED: true,
-
+                isPROPOSALSUBMIT: true,
                 groupRequest: stu1_id,
                 ResponseCount: 1,
                 formid: doc1._id,
@@ -222,7 +222,7 @@ const formdata = async (req, res) => {
               $set: {
                 isSUBMIT: true,
                 isINVITE: true,
-
+                isPROPOSALSUBMIT: true,
                 groupRequest: stu1_id,
                 formid: doc1._id,
                 s_status: "Pending",
@@ -235,7 +235,7 @@ const formdata = async (req, res) => {
               $set: {
                 isSUBMIT: true,
                 isINVITE: true,
-
+                isPROPOSALSUBMIT: true,
                 groupRequest: stu1_id,
                 formid: doc1._id,
                 s_status: "Pending",
@@ -586,7 +586,7 @@ const updateStatus = async (req, res) => {
       //**INITIALLY UPDATE THE PARTICULAR STUDENT RECORD ON REJECTING THE INVITE */
       const updateformid = await user.updateOne(
         {id: rollNo.toUpperCase()},
-        {$unset: {formid: ""}}
+        {$unset: {formid: "", proposalid: ""}}
       );
       findStudent.groupRequest = "";
       findStudent.isINVITE = false;
@@ -908,23 +908,23 @@ const ProposalForm = async (req, res) => {
   if (formdata.mem_count == 2) {
     if (formdata.mem2.length > 0) {
       const updatestu2 = await user.updateOne(
-        {id: formdata.mem2.toUppercase()},
+        {id: formdata.mem2},
         {$set: {proposalid: doc1._id, isPROPOSAL: true}}
       );
     } else if (formdata.mem3.length > 0) {
       const updatestu2 = await user.updateOne(
-        {id: formdata.mem3.toUppercase()},
+        {id: formdata.mem3},
         {$set: {proposalid: doc1._id, isPROPOSAL: true}}
       );
     }
   } else if (formdata.mem_count == 3) {
     if (formdata.mem2.length > 0 && formdata.mem3.length > 0) {
       const updatestu2 = await user.updateOne(
-        {id: formdata.mem2.toUppercase()},
+        {id: formdata.mem2},
         {$set: {proposalid: doc1._id, isPROPOSAL: true}}
       );
       const updatestu3 = await user.updateOne(
-        {id: formdata.mem3.toUppercase()},
+        {id: formdata.mem3},
         {$set: {proposalid: doc1._id, isPROPOSAL: true}}
       );
     } else if (
@@ -932,20 +932,32 @@ const ProposalForm = async (req, res) => {
       formdata.mem2.length == ""
     ) {
       const updatestu2 = await user.updateOne(
-        {id: formdata.mem3.toUppercase()},
+        {id: formdata.mem3},
         {$set: {proposalid: doc1._id, isPROPOSAL: true}}
       );
     } else if (
       (formdata.mem2.length > 0 && formdata.mem3.length == 0) ||
-      formdata.mem2.length == ""
+      formdata.mem3.length == ""
     ) {
       const updatestu2 = await user.updateOne(
-        {id: formdata.mem2.toUppercase()},
+        {id: formdata.mem2},
         {$set: {proposalid: doc1._id, isPROPOSAL: true}}
       );
     }
   }
-
+  res.json({
+    category,
+    characteristics,
+    outline,
+    objectives,
+    scope,
+    methodology,
+    exp_outcomes,
+    exp_budget,
+    gant_chart,
+    alignment,
+    co_supervisor,
+  });
   console.log(updatestu1);
 };
 module.exports = {formdata, updateStatus, ProposalForm};
