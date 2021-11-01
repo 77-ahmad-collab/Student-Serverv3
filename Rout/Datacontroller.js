@@ -741,7 +741,8 @@ const getformdata = async (req, res) => {
       const stu2 = await user.findOne({id: stu2_id}, {_id: 0, s_tokens: 0});
       const stu3 = await user.findOne({id: stu3_id}, {_id: 0, s_tokens: 0});
       const formdata = await form.findOne({_id: stu1.formid}, {_id: 0});
-      console.log(stu1, stu2, stu3);
+      // console.log(stu1, stu2, stu3);
+
       let reject = [];
       console.log(formdata.reject.length, "reject");
       if (formdata.reject.length > 0) {
@@ -830,6 +831,8 @@ const getformdata = async (req, res) => {
           },
         ];
       }
+      console.log(formdata, "formdata");
+      console.log(formdata.internal_designation, "internal");
 
       res.status(200).json({
         student: student,
