@@ -153,7 +153,7 @@ const formdata = async (req, res) => {
             $set: {
               isSUBMIT: true,
               isACCEPTED: true,
-                isPROPOSALSUBMIT:true,
+              isPROPOSALSUBMIT: true,
               groupRequest: stu1_id,
               formid: doc1._id,
               s_status: "Accepted",
@@ -266,6 +266,7 @@ const formdata = async (req, res) => {
           status: stu1.s_status,
         },
       ];
+      res.set("Access-Control-Allow-Origin", "*");
       res.json({
         student: student,
         project_title: formdata.s_proj_title,
@@ -301,6 +302,7 @@ const formdata = async (req, res) => {
           status: stu2.s_status,
         },
       ];
+      res.set("Access-Control-Allow-Origin", "*");
       res.json({
         student: student,
         project_title: formdata.s_proj_title,
@@ -346,6 +348,7 @@ const formdata = async (req, res) => {
           status: stu3.s_status,
         },
       ];
+      res.set("Access-Control-Allow-Origin", "*");
       res.status(200).json({
         student: student,
         project_title: formdata.s_proj_title,
@@ -362,6 +365,7 @@ const formdata = async (req, res) => {
 
     // res.send("Sucess form");
   } catch (error) {
+    res.set("Access-Control-Allow-Origin", "*");
     res.status(400).send("error hay");
   }
 };
@@ -729,6 +733,7 @@ const updateStatus = async (req, res) => {
         console.log("everything updated in mem3 ");
       }
     }
+    res.set("Access-Control-Allow-Origin", "*");
     res.json({message: "yes you have rejected"});
   }
 
@@ -765,6 +770,7 @@ const updateStatus = async (req, res) => {
           status: stu2.s_status,
         },
       ];
+      res.set("Access-Control-Allow-Origin", "*");
       res.status(200).json({
         student: student,
         project_title: formdata.s_proj_title,
@@ -850,7 +856,7 @@ const updateStatus = async (req, res) => {
           },
         ];
       }
-
+      res.set("Access-Control-Allow-Origin", "*");
       res.status(200).json({
         student: student,
         project_title: formdata.s_proj_title,
@@ -945,6 +951,7 @@ const ProposalForm = async (req, res) => {
       );
     }
   }
+  res.set("Access-Control-Allow-Origin", "*");
   res.json({
     category,
     characteristics,

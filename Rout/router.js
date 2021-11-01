@@ -26,6 +26,7 @@ const authy = async (req, res, next) => {
     });
     // console.log(verifyuser, mainuser, "your user");
     if (!mainuser) {
+      res.set("Access-Control-Allow-Origin", "*");
       res.status(400).send("invalid");
     }
     // console.log(mainuser.formid);
@@ -44,6 +45,7 @@ const authy = async (req, res, next) => {
 
     next();
   } catch (error) {
+    res.set("Access-Control-Allow-Origin", "*");
     res.status(400).send(error);
   }
 };

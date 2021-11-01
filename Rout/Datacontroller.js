@@ -25,6 +25,7 @@ const signup = async (req, res) => {
     //******************IF EMAIL EXISTS SEND DUPLICATE STATUS */
 
     if (verify_e) {
+      res.set("Access-Control-Allow-Origin", "*");
       return res.status(409).send("email exists");
     }
 
@@ -45,8 +46,10 @@ const signup = async (req, res) => {
     const result = await add.save();
     // console.log(result, "the result");
     // console.log(addData.email);
+    res.set("Access-Control-Allow-Origin", "*");
     res.send("Sucess signup");
   } catch (error) {
+    res.set("Access-Control-Allow-Origin", "*");
     res.status(400).send("error hay");
   }
 };
@@ -180,8 +183,10 @@ const formdata = async (req, res) => {
       sendMail(group_count, stu1_id, stu2_id, stu3_id, s_leader, OutputOF);
     }
     // console.log(mail2, mail1, mail3);
+    res.set("Access-Control-Allow-Origin", "*");
     res.send("Sucess form");
   } catch (error) {
+    res.set("Access-Control-Allow-Origin", "*");
     res.status(400).send("error hay");
   }
 };
@@ -193,6 +198,7 @@ const login = async (req, res) => {
     const person = await user.findOne({s_email: email});
     // console.log(person, "perspn");
     if (!person) {
+      res.set("Access-Control-Allow-Origin", "*");
       return res.status(404).send("INVALID CREDENTIALS");
     }
     //****if user exists  matching the password */
@@ -205,6 +211,7 @@ const login = async (req, res) => {
       // console.log(token);
       var inFifteenMinutes = new Date(new Date().getTime() + 45 * 60 * 1000);
       // console.log(inFifteenMinutes, "minutes");
+      res.set("Access-Control-Allow-Origin", "*");
       res.cookie("jwt", token, {
         expires: inFifteenMinutes,
       });
@@ -222,10 +229,12 @@ const login = async (req, res) => {
         member3: "hello",
       });
     } else {
+      res.set("Access-Control-Allow-Origin", "*");
       res.cookie("jwt", {}, {maxAge: -1});
       return res.status(401).send("INVALID CREDENTIALS");
     }
   } catch (error) {
+    res.set("Access-Control-Allow-Origin", "*");
     res.clearCookie("jwt");
     res.status(401).send("INVALID CREDENTIALS");
   }
@@ -249,6 +258,7 @@ const about = async (req, res) => {
     const formdata = await form.findOne({_id: req.formid});
     console.log(formdata.mem2, "yes");
     if (formdata.mem2 == !null && formdata.mem3 && !null) {
+      res.set("Access-Control-Allow-Origin", "*");
       res.json({
         personid: id,
         name: s_name,
@@ -263,6 +273,7 @@ const about = async (req, res) => {
         mem3: formdata.mem3,
       });
     } else if (formdata.mem2 == null) {
+      res.set("Access-Control-Allow-Origin", "*");
       res.json({
         personid: id,
         name: s_name,
@@ -277,6 +288,7 @@ const about = async (req, res) => {
         mem2: formdata.mem3,
       });
     } else if (formdata.mem3 == null) {
+      res.set("Access-Control-Allow-Origin", "*");
       res.json({
         personid: id,
         name: s_name,
@@ -291,8 +303,10 @@ const about = async (req, res) => {
         mem2: formdata.mem2,
       });
     }
+    res.set("Access-Control-Allow-Origin", "*");
     res.send("300");
   } catch (error) {
+    res.set("Access-Control-Allow-Origin", "*");
     res.status(401).send(error, "ajaj");
   }
 };
@@ -305,12 +319,14 @@ const userdata = async (req, res) => {
       {s_contact: 1, s_email: 1, s_name: 1}
     );
     // console.log(result);
+    res.set("Access-Control-Allow-Origin", "*");
     res.json({
       contact: result.s_contact,
       email: result.s_email,
       s_name: result.s_name,
     });
   } catch (error) {
+    res.set("Access-Control-Allow-Origin", "*");
     res.status(401).send("NOT EXIST user");
   }
 };
@@ -320,6 +336,7 @@ const userdata = async (req, res) => {
 const usernames = async (req, res) => {
   const result = await user.find({}, {id: 1, _id: 0});
   // console.log(result);
+  res.set("Access-Control-Allow-Origin", "*");
   res.send(result);
 };
 ///***** CONTROLLER FOR FETCHING STUDENT DATA ON THE BASIS OF NAME */
@@ -332,6 +349,7 @@ const student_data = async (req, res) => {
     {s_name: req.params.name},
     {s_contact: 1, s_email: 1, id: 1}
   );
+  res.set("Access-Control-Allow-Origin", "*");
   // console.log(result);
   res.json({
     contact: result[0].s_contact,
@@ -346,7 +364,7 @@ const test = async (req, res) => {
   // ryu.formdata.mem_count = 2;
   const doc = await ryu.save();
   // console.log(doc, "the doc");
-
+  res.set("Access-Control-Allow-Origin", "*");
   res.json({
     name: "asalm",
   });
@@ -601,6 +619,7 @@ const updateStatus = async (req, res) => {
       }
     }
   }
+  res.set("Access-Control-Allow-Origin", "*");
   res.send("you have hiten the route");
 };
 
@@ -649,6 +668,7 @@ const testmai = async (req, res, next) => {
       console.log("Email sent: " + info.response);
     }
   });
+  res.set("Access-Control-Allow-Origin", "*");
   res.send("mail");
 };
 
@@ -664,6 +684,7 @@ const getformdata = async (req, res) => {
     formdata == null ||
     formdata.length == 0
   ) {
+    res.set("Access-Control-Allow-Origin", "*");
     res.status(200).json({
       student: [],
       project_title: "",
@@ -690,6 +711,7 @@ const getformdata = async (req, res) => {
           status: stu1.s_status,
         },
       ];
+      res.set("Access-Control-Allow-Origin", "*");
       res.status(200).json({
         student: student,
         project_title: formdata.s_proj_title,
@@ -724,6 +746,7 @@ const getformdata = async (req, res) => {
           status: stu2.s_status,
         },
       ];
+      res.set("Access-Control-Allow-Origin", "*");
       res.status(200).json({
         student: student,
         project_title: formdata.s_proj_title,
@@ -833,7 +856,7 @@ const getformdata = async (req, res) => {
       }
       console.log(formdata, "formdata");
       console.log(formdata.internal_designation, "internal");
-
+      res.set("Access-Control-Allow-Origin", "*");
       res.status(200).json({
         student: student,
         project_title: formdata.s_proj_title,
@@ -862,8 +885,10 @@ const getProposalData = async (req, res) => {
       {_id: student.proposalid},
       {_id: 0}
     );
+    res.set("Access-Control-Allow-Origin", "*");
     res.json(proposaldata);
   } else {
+    res.set("Access-Control-Allow-Origin", "*");
     res.json({
       message:
         "no proposal form submit please call only when form submission condition is true",

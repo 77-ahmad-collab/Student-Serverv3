@@ -28,6 +28,7 @@ const signup = async (req, res) => {
 
     if (verify_e) {
       console.log("email exits");
+      res.set("Access-Control-Allow-Origin", "*");
       return res.status(409).send("email exists");
     }
 
@@ -48,8 +49,10 @@ const signup = async (req, res) => {
     const result = await add.save();
     console.log(result, "the result");
     // console.log(addData.email);
+    res.set("Access-Control-Allow-Origin", "*");
     res.send("Sucess signup");
   } catch (error) {
+    res.set("Access-Control-Allow-Origin", "*");
     res.status(400).send("error hay");
   }
 };
@@ -62,6 +65,7 @@ const login = async (req, res) => {
     const person = await user.findOne({s_email: email});
     // console.log(person, "perspn");
     if (!person) {
+      res.set("Access-Control-Allow-Origin", "*");
       return res.status(404).send("INVALID CREDENTIALS");
     }
     //****if user exists  matching the password */
@@ -74,6 +78,7 @@ const login = async (req, res) => {
       // console.log(token);
       var inFifteenMinutes = new Date(new Date().getTime() + 45 * 60 * 1000);
       // console.log(inFifteenMinutes, "minutes");
+      res.set("Access-Control-Allow-Origin", "*");
       res.cookie("jwt", token, {
         expires: inFifteenMinutes,
       });
@@ -91,10 +96,12 @@ const login = async (req, res) => {
         isPROPOSAL: person.isPROPOSAL,
       });
     } else {
+      res.set("Access-Control-Allow-Origin", "*");
       res.cookie("jwt", {}, {maxAge: -1});
       return res.status(401).send("INVALID CREDENTIALS");
     }
   } catch (error) {
+    res.set("Access-Control-Allow-Origin", "*");
     res.clearCookie("jwt");
     res.status(401).send("INVALID CREDENTIALS");
   }
@@ -116,7 +123,7 @@ const about = async (req, res) => {
       isINVITE,
       isACCEPTED,
       isPROPOSAL,
-        isPROPOSALSUBMIT
+      isPROPOSALSUBMIT,
     } = result;
     if (req.formid) {
       console.log(req.formid, "haina");
@@ -124,6 +131,7 @@ const about = async (req, res) => {
       console.log("@", formdata.mem2.length, "1", formdata.mem1, "yes");
       if (formdata.mem2.length > 0 && formdata.mem3.length > 0) {
         console.log("nothing is null");
+        res.set("Access-Control-Allow-Origin", "*");
         res.json({
           personid: id,
           name: s_name,
@@ -143,6 +151,7 @@ const about = async (req, res) => {
         });
       } else if (!formdata.mem2 && !formdata.mem3.length) {
         console.log("execute");
+        res.set("Access-Control-Allow-Origin", "*");
         res.json({
           personid: id,
           name: s_name,
@@ -160,6 +169,7 @@ const about = async (req, res) => {
         });
       } else if (formdata.mem2.length == 0) {
         console.log("mem2 is 0");
+        res.set("Access-Control-Allow-Origin", "*");
         res.json({
           personid: id,
           name: s_name,
@@ -179,6 +189,7 @@ const about = async (req, res) => {
         });
       } else if (formdata.mem3.length == 0) {
         console.log("mem3 is 0");
+        res.set("Access-Control-Allow-Origin", "*");
         res.json({
           personid: id,
           name: s_name,
@@ -199,6 +210,7 @@ const about = async (req, res) => {
       }
     } else {
       console.log("there is no form id");
+      res.set("Access-Control-Allow-Origin", "*");
       res.json({
         personid: id,
         name: s_name,
@@ -219,6 +231,7 @@ const about = async (req, res) => {
     // res.send("hello");
     // res.send("300");
   } catch (error) {
+    res.set("Access-Control-Allow-Origin", "*");
     res.status(401).json({error: "ajaj"});
   }
 };
