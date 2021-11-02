@@ -53,7 +53,7 @@ const authy = async (req, res, next) => {
 // *********** END OF MIDDLEWARE ********
 router.get("/", (req, res) => {
   res.set("Access-Control-Allow-Origin", "*");
-  res.send("Hurray you got th response");
+  res.send("you got the  test response");
 });
 // ****************Route for adding student data to databse
 router.post("/student/signup", signup);
