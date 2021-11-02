@@ -10,7 +10,13 @@ const router = require("./Rout/router");
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use("/", router);
-app.use(cors());
+app.use(
+  cors({
+    credentials: true,
+    allowedHeaders: true,
+    exposedHeaders: ["Content-Length", "X-FOO", "X-BAR"],
+  })
+);
 app.listen(PORT, () => {
   console.log("app is listening on port 5000");
 });
