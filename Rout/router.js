@@ -3,7 +3,7 @@ const router = express.Router();
 const form = require("../models/FormSchema");
 const jwt = require("jsonwebtoken");
 // const user = require("../models/user");
-
+const cors = require("cors");
 const student = require("../models/StudentSchema");
 require("dotenv").config();
 const {

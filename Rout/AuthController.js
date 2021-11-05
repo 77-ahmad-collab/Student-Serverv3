@@ -65,7 +65,8 @@ const login = async (req, res) => {
     const person = await user.findOne({s_email: email});
     // console.log(person, "perspn");
     if (!person) {
-      res.set("Access-Control-Allow-Origin", "*");
+      console.log("not found");
+      // res.set("Access-Control-Allow-Origin", "*");
       return res.status(404).send("INVALID CREDENTIALS");
     }
     //****if user exists  matching the password */
@@ -78,7 +79,7 @@ const login = async (req, res) => {
       // console.log(token);
       var inFifteenMinutes = new Date(new Date().getTime() + 45 * 60 * 1000);
       // console.log(inFifteenMinutes, "minutes");
-      res.set("Access-Control-Allow-Origin", "*");
+      // res.set("Access-Control-Allow-Origin", "*");
       res.cookie("jwt", token, {
         expires: inFifteenMinutes,
       });
@@ -96,12 +97,12 @@ const login = async (req, res) => {
         isPROPOSAL: person.isPROPOSAL,
       });
     } else {
-      res.set("Access-Control-Allow-Origin", "*");
+      // res.set("Access-Control-Allow-Origin", "*");
       res.cookie("jwt", {}, {maxAge: -1});
       return res.status(401).send("INVALID CREDENTIALS");
     }
   } catch (error) {
-    res.set("Access-Control-Allow-Origin", "*");
+    // res.set("Access-Control-Allow-Origin", "*");
     res.clearCookie("jwt");
     res.status(401).send("INVALID CREDENTIALS");
   }
