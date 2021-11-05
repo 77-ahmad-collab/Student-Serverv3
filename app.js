@@ -1,17 +1,18 @@
-const dotenev = require("dotenv").config();
+const dotenv = require("dotenv");
+dotenv.config();
 const express = require("express");
 const app = express();
 require("./db/conn");
 // const path = require("path");
 var cors = require("cors");
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 7000;
 const cookieParser = require("cookie-parser");
 app.use(cookieParser());
 const router = require("./Rout/router");
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use("/", router);
-app.use(cors());
+// app.use(cors());
 // app.use(function (req, res, next) {
 //   res.header("Access-Control-Allow-Origin", "*");
 //   res.header(
