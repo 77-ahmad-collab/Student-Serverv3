@@ -12,7 +12,7 @@ const router = require("./Rout/router");
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use("/", router);
-app.use(cors());
+// app.use(cors());
 // app.use(function (req, res, next) {
 //   res.header("Access-Control-Allow-Origin", "*");
 //   res.header(
