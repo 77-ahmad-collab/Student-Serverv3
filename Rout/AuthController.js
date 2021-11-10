@@ -80,9 +80,9 @@ const login = async (req, res) => {
       var inFifteenMinutes = new Date(new Date().getTime() + 45 * 60 * 1000);
       // console.log(inFifteenMinutes, "minutes");
       // res.set("Access-Control-Allow-Origin", "*");
-      res.cookie("jwt", token, {
-        expires: inFifteenMinutes,
-      });
+      // res.cookie("jwt", token, {
+      //   expires: inFifteenMinutes,
+      // });
       //*******************SENDING THE RESPONSE TO CLIENT IF SUCCCESS */
       console.log(person, "id");
       return res.json({
@@ -95,15 +95,16 @@ const login = async (req, res) => {
         isACCEPTED: person.isACCEPTED,
         department: person.s_department,
         isPROPOSAL: person.isPROPOSAL,
+        token: token,
       });
     } else {
       // res.set("Access-Control-Allow-Origin", "*");
-      res.cookie("jwt", {}, {maxAge: -1});
+
       return res.status(401).send("INVALID CREDENTIALS");
     }
   } catch (error) {
     // res.set("Access-Control-Allow-Origin", "*");
-    res.clearCookie("jwt");
+
     res.status(401).send("INVALID CREDENTIALS");
   }
 };
