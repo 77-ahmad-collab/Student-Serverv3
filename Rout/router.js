@@ -3,7 +3,7 @@ const router = express.Router();
 const form = require("../models/FormSchema");
 const jwt = require("jsonwebtoken");
 // const user = require("../models/user");
-const cors = require("cors");
+
 const student = require("../models/StudentSchema");
 require("dotenv").config();
 const {
@@ -19,7 +19,8 @@ const {formdata, updateStatus, ProposalForm} = require("./Form");
 
 const authy = async (req, res, next) => {
   try {
-    const verifyuser = await jwt.verify(req.cookies.jwt, process.env.SECRET);
+    console.log("Authy",req.headers.authorization)
+    const verifyuser = await jwt.verify(req.headers.authorization, process.env.SECRET);
     const mainuser = await student.findOne({
       _id: verifyuser._id,
       // "tokens.token": req.cookies.jwt,
@@ -53,7 +54,7 @@ const authy = async (req, res, next) => {
 // *********** END OF MIDDLEWARE ********
 router.get("/", (req, res) => {
   res.set("Access-Control-Allow-Origin", "*");
-  res.send("you got the  test response 1");
+  res.send("you got the  test response");
 });
 // ****************Route for adding student data to databse
 router.post("/student/signup", signup);
