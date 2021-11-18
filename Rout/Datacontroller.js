@@ -868,6 +868,246 @@ const getformdata = async (req, res) => {
         mem_count: formdata.mem_count,
         rejected: reject,
       });
+    } else if (formdata.mem_count == 4) {
+      let reject = [];
+      console.log(formdata.reject.length, "reject");
+      if (formdata.reject.length > 0) {
+        // reject = formdata.reject
+        console.log(" i not run if id is not");
+        const studentreject = await user.findOne(
+          {id: formdata.reject},
+          {_id: 0, s_tokens: 0}
+        );
+        reject = [
+          ...reject,
+          {
+            name: studentreject.s_name,
+            email: studentreject.s_email,
+            seatno: studentreject.id,
+            status: studentreject.s_status,
+          },
+        ];
+      }
+      if (formdata.reject1.length > 0) {
+        // reject = formdata.reject
+        console.log(" i not run if id is not");
+        const studentreject1 = await user.findOne(
+          {id: formdata.reject},
+          {_id: 0, s_tokens: 0}
+        );
+        reject = [
+          ...reject,
+          {
+            name: studentreject1.s_name,
+            email: studentreject1.s_email,
+            seatno: studentreject1.id,
+            status: studentreject1.s_status,
+          },
+        ];
+      }
+      const stu1 = await user.findOne({id: stu1_id}, {_id: 0, s_tokens: 0});
+      const stu2 = await user.findOne({id: stu2_id}, {_id: 0, s_tokens: 0});
+      const stu3 = await user.findOne({id: stu3_id}, {_id: 0, s_tokens: 0});
+      const stu4 = await user.findOne({id: stu4_id}, {_id: 0, s_tokens: 0});
+      const formdata = await form.findOne({_id: stu1.formid}, {_id: 0});
+
+      if (stu2 != null && stu3 != null && stu4 != null) {
+        console.log("both are not null");
+        student = [
+          ...student,
+          {
+            name: stu1.s_name,
+            email: stu1.s_email,
+            seatno: stu1.id,
+            status: stu1.s_status,
+          },
+        ];
+        student = [
+          ...student,
+          {
+            name: stu2.s_name,
+            email: stu2.s_email,
+            seatno: stu2.id,
+            status: stu2.s_status,
+          },
+        ];
+        student = [
+          ...student,
+          {
+            name: stu3.s_name,
+            email: stu3.s_email,
+            seatno: stu3.id,
+            status: stu3.s_status,
+          },
+        ];
+        student = [
+          ...student,
+          {
+            name: stu4.s_name,
+            email: stu4.s_email,
+            seatno: stu4.id,
+            status: stu4.s_status,
+          },
+        ];
+      } else if (stu2 == null && stu3 == null && stu4 != null) {
+        console.log("stu2 is null");
+        student = [
+          ...student,
+          {
+            name: stu1.s_name,
+            email: stu1.s_email,
+            seatno: stu1.id,
+            status: stu1.s_status,
+          },
+        ];
+        student = [
+          ...student,
+          {
+            name: stu4.s_name,
+            email: stu4.s_email,
+            seatno: stu4.id,
+            status: stu4.s_status,
+          },
+        ];
+      } else if (stu2 != null && stu3 == null && stu4 == null) {
+        console.log("stu2 is null");
+        student = [
+          ...student,
+          {
+            name: stu1.s_name,
+            email: stu1.s_email,
+            seatno: stu1.id,
+            status: stu1.s_status,
+          },
+        ];
+        student = [
+          ...student,
+          {
+            name: stu2.s_name,
+            email: stu2.s_email,
+            seatno: stu2.id,
+            status: stu2.s_status,
+          },
+        ];
+      } else if (stu2 == null && stu3 != null && stu4 == null) {
+        console.log("stu2 is null");
+        student = [
+          ...student,
+          {
+            name: stu1.s_name,
+            email: stu1.s_email,
+            seatno: stu1.id,
+            status: stu1.s_status,
+          },
+        ];
+        student = [
+          ...student,
+          {
+            name: stu3.s_name,
+            email: stu3.s_email,
+            seatno: stu3.id,
+            status: stu3.s_status,
+          },
+        ];
+      } else if (stu2 == null && stu3 != null && stu4 != null) {
+        console.log("stu2 is null");
+        student = [
+          ...student,
+          {
+            name: stu1.s_name,
+            email: stu1.s_email,
+            seatno: stu1.id,
+            status: stu1.s_status,
+          },
+        ];
+        student = [
+          ...student,
+          {
+            name: stu3.s_name,
+            email: stu3.s_email,
+            seatno: stu3.id,
+            status: stu3.s_status,
+          },
+        ];
+        student = [
+          ...student,
+          {
+            name: stu4.s_name,
+            email: stu4.s_email,
+            seatno: stu4.id,
+            status: stu4.s_status,
+          },
+        ];
+      } else if (stu2 != null && stu3 != null && stu4 == null) {
+        console.log("stu2 is null");
+        student = [
+          ...student,
+          {
+            name: stu1.s_name,
+            email: stu1.s_email,
+            seatno: stu1.id,
+            status: stu1.s_status,
+          },
+        ];
+        student = [
+          ...student,
+          {
+            name: stu3.s_name,
+            email: stu3.s_email,
+            seatno: stu3.id,
+            status: stu3.s_status,
+          },
+        ];
+        student = [
+          ...student,
+          {
+            name: stu2.s_name,
+            email: stu2.s_email,
+            seatno: stu2.id,
+            status: stu2.s_status,
+          },
+        ];
+      } else if (stu2 != null && stu3 == null && stu4 != null) {
+        console.log("stu2 is null");
+        student = [
+          ...student,
+          {
+            name: stu1.s_name,
+            email: stu1.s_email,
+            seatno: stu1.id,
+            status: stu1.s_status,
+          },
+        ];
+        student = [
+          ...student,
+          {
+            name: stu2.s_name,
+            email: stu2.s_email,
+            seatno: stu2.id,
+            status: stu2.s_status,
+          },
+        ];
+        student = [
+          ...student,
+          {
+            name: stu4.s_name,
+            email: stu4.s_email,
+            seatno: stu4.id,
+            status: stu4.s_status,
+          },
+        ];
+      }
+      res.set("Access-Control-Allow-Origin", "*");
+      res.status(200).json({
+        student: student,
+        project_title: formdata.s_proj_title,
+        internal: formdata.s_internal,
+        external: formdata.s_external,
+        internal_designation: formdata.internal_designation,
+        external_designation: formdata.external_designation,
+        project_description: formdata.project_description,
+        rejected: reject,
+      });
     }
   }
 

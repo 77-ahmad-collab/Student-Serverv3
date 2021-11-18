@@ -17,6 +17,7 @@ const formdata = async (req, res) => {
       stu1_id,
       stu2_id,
       stu3_id,
+      stu4_id,
       s_name1,
       s_name2,
       s_name3,
@@ -135,6 +136,7 @@ const formdata = async (req, res) => {
         mem1: stu1_id,
         mem2: stu2_id,
         mem3: stu3_id,
+        mem4: stu4_id,
         s_proj_title,
         s_internal,
         s_external,
@@ -248,6 +250,70 @@ const formdata = async (req, res) => {
         const OutputOF = `<div>
       <h1>Hello Group Members!</h1><br/><h4>You have been invited for the fyp project group formation by ${s_leader} Go and Check dashboard</h4></div>`;
         sendMail(group_count, stu1_id, stu2_id, stu3_id, OutputOF);
+      } else if (group_count == 4) {
+        if (s_leader == stu1_id.toUpperCase()) {
+          const status_res1 = await user.updateOne(
+            {id: stu1_id},
+            {
+              $set: {
+                isSUBMIT: true,
+                isACCEPTED: true,
+                isPROPOSALSUBMIT: true,
+                groupRequest: stu1_id,
+                ResponseCount: 1,
+                formid: doc1._id,
+                s_status: "Accepted",
+              },
+            }
+          );
+          const status_res2 = await user.updateOne(
+            {id: stu2_id},
+            {
+              $set: {
+                isSUBMIT: true,
+                isINVITE: true,
+                isPROPOSALSUBMIT: true,
+                groupRequest: stu1_id,
+                formid: doc1._id,
+                s_status: "Pending",
+              },
+            }
+          );
+          const status_res3 = await user.updateOne(
+            {id: stu3_id},
+            {
+              $set: {
+                isSUBMIT: true,
+                isINVITE: true,
+                isPROPOSALSUBMIT: true,
+                groupRequest: stu1_id,
+                formid: doc1._id,
+                s_status: "Pending",
+              },
+            }
+          );
+          const status_res4 = await user.updateOne(
+            {id: stu4_id},
+            {
+              $set: {
+                isSUBMIT: true,
+                isINVITE: true,
+                isPROPOSALSUBMIT: true,
+                groupRequest: stu1_id,
+                formid: doc1._id,
+                s_status: "Pending",
+              },
+            }
+          );
+          // console.log("leader is student 1");
+        }
+
+        const OutputOF = `<div>
+      <h1>Hello Group Members!</h1><br/><h4>You have been invited for the fyp project group formation by ${s_leader} Go and Check dashboard</h4></div>`;
+        sendSingleMail(group_count, stu1_id, OutputOF);
+        sendSingleMail(group_count, stu2_id, OutputOF);
+        sendSingleMail(group_count, stu3_id, OutputOF);
+        sendSingleMail(group_count, stu4_id, OutputOF);
       }
     }
 
@@ -361,6 +427,62 @@ const formdata = async (req, res) => {
         rejected: [],
         // project_description: formdata.project_description,
       });
+    } else if (group_count == 4) {
+      let student = [];
+      const stu1 = await user.findOne({id: stu1_id}, {_id: 0, s_tokens: 0});
+      const stu2 = await user.findOne({id: stu2_id}, {_id: 0, s_tokens: 0});
+      const stu3 = await user.findOne({id: stu3_id}, {_id: 0, s_tokens: 0});
+      const stu4 = await user.findOne({id: stu4_id}, {_id: 0, s_tokens: 0});
+      const formdata = await form.findOne({_id: stu1.formid}, {_id: 0});
+      student = [
+        ...student,
+        {
+          name: stu1.s_name,
+          email: stu1.s_email,
+          seatno: stu1.id,
+          status: stu1.s_status,
+        },
+      ];
+      student = [
+        ...student,
+        {
+          name: stu2.s_name,
+          email: stu2.s_email,
+          seatno: stu2.id,
+          status: stu2.s_status,
+        },
+      ];
+      student = [
+        ...student,
+        {
+          name: stu3.s_name,
+          email: stu3.s_email,
+          seatno: stu3.id,
+          status: stu3.s_status,
+        },
+      ];
+      student = [
+        ...student,
+        {
+          name: stu4.s_name,
+          email: stu4.s_email,
+          seatno: stu4.id,
+          status: stu4.s_status,
+        },
+      ];
+      res.set("Access-Control-Allow-Origin", "*");
+      res.status(200).json({
+        student: student,
+        project_title: formdata.s_proj_title,
+        internal: formdata.s_internal,
+        external: formdata.s_external,
+        mem_count: formdata.mem_count,
+        isPROPOSAL: stu1.isPROPOSAL,
+        internal_designation: formdata.internal_designation,
+        external_designation: formdata.external_designation,
+        rejected: [],
+        // project_description: formdata.project_description,
+      });
     }
 
     // res.send("Sucess form");
@@ -405,7 +527,7 @@ const updateStatus = async (req, res) => {
     );
     // console.log(formdata);
 
-    const {mem2, mem3} = formdata;
+    const {mem2, mem3, mem4} = formdata;
     // console.log(findLeader, mem2, mem3);
     //**NOW LETS CHECK FOR GROUP COUNT TO CHECK THAT IF ALL MEMBERS HAS ACCEPTED THEN SEND PEOPOSAL TO INTERNAL ADVISOR */
     if (formdata.mem_count == 3) {
@@ -524,6 +646,180 @@ const updateStatus = async (req, res) => {
       console.log(member1, "i am memmber 1", member2, member3);
 
       //***if the group count is 2 */
+    } else if (formdata.mem_count == 4) {
+      if (mem2 == rollNo.toUpperCase()) {
+        let member3 = mem3;
+        if (mem3 != "" && mem4 != "") {
+          console.log("yes it is nt null");
+          const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has accepted the group invite</h4></div>`;
+          sendSingleMail(1, findLeader, OutputOF);
+          sendSingleMail(1, mem3, OutputOF);
+          sendSingleMail(1, mem4, OutputOF);
+        } else if (mem3 != "" && mem4 == "") {
+          console.log("it is null");
+          // const member3 = "ct-18008";
+          const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has accepted the group invite</h4></div>`;
+          sendSingleMail(1, findLeader, OutputOF);
+          sendSingleMail(1, mem3, OutputOF);
+        } else if (mem4 != "" && mem3 == "") {
+          console.log("it is null");
+          const member3 = "ct-18008";
+          const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has accepted the group invite</h4></div>`;
+          sendSingleMail(1, findLeader, OutputOF);
+          sendSingleMail(1, mem4, OutputOF);
+        } else if (mem3 != "" && mem4 == "") {
+          console.log("it is null");
+          const member3 = "ct-18008";
+          const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has accepted the group invite</h4></div>`;
+          sendSingleMail(1, findLeader, OutputOF);
+        }
+        console.log("dont sendMail to mem2,his status is oending");
+        // const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has accepted the group invite</h4></div>`;
+        // sendMail(3, findLeader, findLeader, member3, OutputOF);
+      } else if (mem3 == rollNo.toUpperCase()) {
+        let member2 = mem2;
+        if (mem2 != "" && mem4 != "") {
+          console.log("yes it is nt null");
+          const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has accepted the group invite</h4></div>`;
+          sendSingleMail(1, findLeader, OutputOF);
+          sendSingleMail(1, mem2, OutputOF);
+          sendSingleMail(1, mem4, OutputOF);
+        } else if (mem2 != "" && mem4 == "") {
+          console.log("it is null");
+          // const member3 = "ct-18008";
+          const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has accepted the group invite</h4></div>`;
+          sendSingleMail(1, findLeader, OutputOF);
+          sendSingleMail(1, mem2, OutputOF);
+        } else if (mem4 != "" && mem2 == "") {
+          console.log("it is null");
+          const member3 = "ct-18008";
+          const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has accepted the group invite</h4></div>`;
+          sendSingleMail(1, findLeader, OutputOF);
+          sendSingleMail(1, mem4, OutputOF);
+        } else if (mem2 != "" && mem4 == "") {
+          console.log("it is null");
+          const member3 = "ct-18008";
+          const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has accepted the group invite</h4></div>`;
+          sendSingleMail(1, findLeader, OutputOF);
+        }
+        // const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has accepted the group invit</h4></div>`;
+        // sendMail(3, findLeader, findLeader, member2, OutputOF);
+        console.log("dont sendMail to mem3,his status is oending");
+      } else if (mem4 == rollNo.toUpperCase()) {
+        if (mem2 != "" && mem3 != "") {
+          console.log("yes it is nt null");
+          const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has accepted the group invite</h4></div>`;
+          sendSingleMail(1, findLeader, OutputOF);
+          sendSingleMail(1, mem2, OutputOF);
+          sendSingleMail(1, mem3, OutputOF);
+        } else if (mem2 != "" && mem3 == "") {
+          console.log("it is null");
+          // const member3 = "ct-18008";
+          const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has accepted the group invite</h4></div>`;
+          sendSingleMail(1, findLeader, OutputOF);
+          sendSingleMail(1, mem2, OutputOF);
+        } else if (mem3 != "" && mem2 == "") {
+          console.log("it is null");
+          const member3 = "ct-18008";
+          const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has accepted the group invite</h4></div>`;
+          sendSingleMail(1, findLeader, OutputOF);
+          sendSingleMail(1, mem3, OutputOF);
+        } else if (mem2 != "" && mem3 == "") {
+          console.log("it is null");
+          const member3 = "ct-18008";
+          const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has accepted the group invite</h4></div>`;
+          sendSingleMail(1, findLeader, OutputOF);
+        }
+        console.log("dont sendMail to mem4,his status is oending");
+      }
+
+      const member1 = formdata.mem1;
+      const member2 = formdata.mem2;
+      const member3 = formdata.mem3;
+      const member4 = formdata.mem4;
+      const member1_status = await user.findOne(
+        {id: member1},
+        {isACCEPTED: 1, _id: 0}
+      );
+      const member2_status = await user.findOne(
+        {id: member2},
+        {isACCEPTED: 1, _id: 0}
+      );
+      const member3_status = await user.findOne(
+        {id: member3},
+        {isACCEPTED: 1, _id: 0}
+      );
+      const member4_status = await user.findOne(
+        {id: member4},
+        {isACCEPTED: 1, _id: 0}
+      );
+      console.log(
+        member1_status,
+        member2_status,
+        member3_status,
+        member4_status
+      );
+      if (
+        member1_status != null &&
+        member2_status != null &&
+        member3_status != null &&
+        member4_status != null
+      ) {
+        if (
+          member1_status.isACCEPTED &&
+          member2_status.isACCEPTED &&
+          member3_status.isACCEPTED &&
+          member4_status
+        ) {
+          console.log("all 4 members has accepted the invite");
+        } else {
+          console.log("not all the members has accepted");
+          const updateResponseCount = await user.updateOne(
+            {id: findLeader},
+            {ResponseCount: Result.ResponseCount + 1}
+          );
+
+          const fetchcount = await user.findOne(
+            {id: findLeader},
+            {_id: 0, ResponseCount: 1}
+          );
+          if (fetchcount.ResponseCount == formdata.mem_count) {
+            console.log("equal");
+            const OpenForm = await user.updateOne(
+              {id: findLeader},
+              {$set: {isSUBMIT: false}}
+            );
+            const setCount = await user.updateOne(
+              {_id: formid},
+              {$set: {ResponseCount: 0}}
+            );
+          }
+        }
+      } else {
+        console.log("not all the members has accepted");
+        const updateResponseCount = await user.updateOne(
+          {id: findLeader},
+          {ResponseCount: Result.ResponseCount + 1}
+        );
+
+        const fetchcount = await user.findOne(
+          {id: findLeader},
+          {_id: 0, ResponseCount: 1}
+        );
+        if (fetchcount.ResponseCount == formdata.mem_count) {
+          console.log("equal");
+          const OpenForm = await user.updateOne(
+            {id: findLeader},
+            {$set: {isSUBMIT: false}}
+          );
+          // const setCount = await user.updateOne(
+          //   {_id: formid},
+          //   {$set: {ResponseCount: 0}}
+          // );
+        }
+      }
+      // const mem3 =  await user.findOne({id:})
+      console.log(member1, "i am memmber 1", member2, member3);
     } else if (formdata.mem_count == 2) {
       console.log("group members are 2");
       const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has accepted the group invit</h4></div>`;
@@ -566,16 +862,7 @@ const updateStatus = async (req, res) => {
       {_id: formid},
       {mem_count: 1, _id: 0, mem2: 1, mem3: 1}
     );
-    const updaterejectOf = await form.updateOne(
-      {
-        _id: formid,
-      },
-      {$set: {reject: `${rollNo}`}},
-      {
-        new: true,
-      }
-    );
-    console.log("rejectonee", updaterejectOf, rollNo);
+
     if (formdata.mem_count == 2) {
       const memberTwo = formdata.mem2;
       console.log(formdata.mem_count, "2 member rejection");
@@ -624,6 +911,16 @@ const updateStatus = async (req, res) => {
       }
     } else if (formdata.mem_count == 3) {
       console.log("3 member rejection");
+      const updaterejectOf = await form.updateOne(
+        {
+          _id: formid,
+        },
+        {$set: {reject: `${rollNo}`}},
+        {
+          new: true,
+        }
+      );
+      console.log("rejectonee", updaterejectOf, rollNo);
       const lead = findStudent.groupRequest;
       //   //**INITIALLY UPDATE THE PARTICULAR STUDENT RECORD ON REJECTING THE INVITE */
       const updateformid = await user.updateOne(
@@ -732,6 +1029,186 @@ const updateStatus = async (req, res) => {
         // console.log(doc, "your response");
         console.log("everything updated in mem3 ");
       }
+    } else if (formdata.mem_count == 4) {
+      console.log("4 member rejection");
+      const lead = findStudent.groupRequest;
+      //   //**INITIALLY UPDATE THE PARTICULAR STUDENT RECORD ON REJECTING THE INVITE */
+      const updateformid = await user.updateOne(
+        {id: rollNo.toUpperCase()},
+        {$unset: {formid: ""}}
+      );
+      findStudent.groupRequest = "";
+      findStudent.isINVITE = false;
+      findStudent.isSUBMIT = false;
+      const doc1 = await findStudent.save();
+      ///DONE UPDATING OF PARTICULAR STUDENT RECORD
+      //********************************NOW TO UPDATE GROUP LEADER REMOVING MEBER FROM THE GROUP LEADER */
+      // findLeader.formdata.mem_count = 2;
+      const mem2 = formdata.mem2;
+      const mem3 = formdata.mem3;
+      const mem4 = formdata.mem4;
+      findLeader.ResponseCount = findLeader.ResponseCount + 1;
+      const doc = await findLeader.save();
+
+      const findResponseCount = await user.findOne(
+        {id: lead},
+        {_id: 0, ResponseCount: 1}
+      );
+      if (findResponseCount.ResponseCount <= 2) {
+        const updaterejectOf = await form.updateOne(
+          {
+            _id: formid,
+          },
+          {$set: {reject: `${rollNo}`}},
+          {
+            new: true,
+          }
+        );
+      } else if (findResponseCount.ResponseCount <= 3) {
+        const updaterejectOf = await form.updateOne(
+          {
+            _id: formid,
+          },
+          {$set: {reject1: `${rollNo}`}},
+          {
+            new: true,
+          }
+        );
+      }
+      if (formdata.mem_count == findResponseCount.ResponseCount) {
+        const OpenForm = await user.updateOne(
+          {id: lead},
+          {$set: {isSUBMIT: false}}
+        );
+        // const setCount = await user.updateOne(
+        //   {_id: formid},
+        //   {$set: {ResponseCount: 0}}
+        // );
+      }
+      if (rollNo.toUpperCase() == mem2) {
+        const updateMem2 = await form.updateOne(
+          {_id: formid},
+          {$set: {mem2: ""}}
+        );
+
+        if (mem3 != "" && mem4 != "") {
+          console.log("yes it is nt null");
+          const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has rejected the group invite</h4></div>`;
+          sendSingleMail(1, lead, OutputOF);
+          sendSingleMail(1, mem3, OutputOF);
+          sendSingleMail(1, mem4, OutputOF);
+        } else if (mem3 == "" && mem4 == "") {
+          console.log("it is null");
+          // const member3 = "ct-18008";
+          const RemoveFormid = await user.updateOne(
+            {id: lead},
+            {$unset: {formid: ""}}
+          );
+          const updateStatus = await user.updateOne(
+            {id: lead},
+            {$set: {isACCEPTED: false}}
+          );
+          const deleteFormField = await form.deleteOne({_id: formid});
+          const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has reected the group invite</h4></div>`;
+          sendSingleMail(1, lead, OutputOF);
+        } else if (mem3 != "" && mem4 == "") {
+          console.log("yes it is nt null");
+          const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has rejected the group invite</h4></div>`;
+          sendSingleMail(1, lead, OutputOF);
+          sendSingleMail(1, mem3, OutputOF);
+        } else if (mem4 != "" && mem3 == "") {
+          console.log("yes it is nt null");
+          const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has rejected the group invite</h4></div>`;
+          sendSingleMail(1, lead, OutputOF);
+          sendSingleMail(1, mem4, OutputOF);
+        }
+        // findLeader.isSUBMIT = false;
+
+        // // findLeader.groupRequest = "";
+        // const doc = await findLeader.save();
+        // const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has accepted the group invit</h4></div>`;
+        // sendMail(3, lead, lead, mem3, OutputOF);
+        // console.log(doc, "your response");
+        console.log("everything updated in mem2 rej");
+      } else if (rollNo.toUpperCase() == mem3) {
+        const updateMem3 = await form.updateOne(
+          {_id: formid},
+          {$set: {mem3: ""}}
+        );
+
+        if (mem2 != "" && mem4 != "") {
+          console.log("yes it is nt null");
+          const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has rejected the group invite</h4></div>`;
+          sendSingleMail(1, lead, OutputOF);
+          sendSingleMail(1, mem2, OutputOF);
+          sendSingleMail(1, mem4, OutputOF);
+        } else if (mem2 == "" && mem4 == "") {
+          console.log("it is null");
+          // const member3 = "ct-18008";
+          const RemoveFormid = await user.updateOne(
+            {id: lead},
+            {$unset: {formid: ""}}
+          );
+          const updateStatus = await user.updateOne(
+            {id: lead},
+            {$set: {isACCEPTED: false}}
+          );
+          const deleteFormField = await form.deleteOne({_id: formid});
+          const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has reected the group invite</h4></div>`;
+          sendSingleMail(1, lead, OutputOF);
+        } else if (mem2 != "" && mem4 == "") {
+          console.log("yes it is nt null");
+          const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has rejected the group invite</h4></div>`;
+          sendSingleMail(1, lead, OutputOF);
+          sendSingleMail(1, mem2, OutputOF);
+        } else if (mem4 != "" && mem2 == "") {
+          console.log("yes it is nt null");
+          const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has rejected the group invite</h4></div>`;
+          sendSingleMail(1, lead, OutputOF);
+          sendSingleMail(1, mem4, OutputOF);
+        }
+
+        console.log("everything updated in mem2 rej");
+      } else if (rollNo.toUpperCase() == mem4) {
+        const updateMem4 = await form.updateOne(
+          {_id: formid},
+          {$set: {mem3: ""}}
+        );
+
+        if (mem2 != "" && mem3 != "") {
+          console.log("yes it is nt null");
+          const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has rejected the group invite</h4></div>`;
+          sendSingleMail(1, lead, OutputOF);
+          sendSingleMail(1, mem2, OutputOF);
+          sendSingleMail(1, mem3, OutputOF);
+        } else if (mem2 == "" && mem3 == "") {
+          console.log("it is null");
+          // const member3 = "ct-18008";
+          const RemoveFormid = await user.updateOne(
+            {id: lead},
+            {$unset: {formid: ""}}
+          );
+          const updateStatus = await user.updateOne(
+            {id: lead},
+            {$set: {isACCEPTED: false}}
+          );
+          const deleteFormField = await form.deleteOne({_id: formid});
+          const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has reected the group invite</h4></div>`;
+          sendSingleMail(1, lead, OutputOF);
+        } else if (mem2 != "" && mem3 == "") {
+          console.log("yes it is nt null");
+          const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has rejected the group invite</h4></div>`;
+          sendSingleMail(1, lead, OutputOF);
+          sendSingleMail(1, mem2, OutputOF);
+        } else if (mem3 != "" && mem2 == "") {
+          console.log("yes it is nt null");
+          const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has rejected the group invite</h4></div>`;
+          sendSingleMail(1, lead, OutputOF);
+          sendSingleMail(1, mem3, OutputOF);
+        }
+
+        console.log("everything updated in mem2 rej");
+      }
     }
     res.set("Access-Control-Allow-Origin", "*");
     res.json({message: "yes you have rejected"});
@@ -746,6 +1223,7 @@ const updateStatus = async (req, res) => {
     const stu1_id = formdata.mem1;
     const stu2_id = formdata.mem2;
     const stu3_id = formdata.mem3;
+    const stu4_id = formdata.mem4;
     let student = [];
     if (formdata.mem_count == 2) {
       const stu1 = await user.findOne({id: stu1_id}, {_id: 0, s_tokens: 0});
@@ -786,7 +1264,7 @@ const updateStatus = async (req, res) => {
       const stu3 = await user.findOne({id: stu3_id}, {_id: 0, s_tokens: 0});
       const formdata = await form.findOne({_id: stu1.formid}, {_id: 0});
 
-      if (stu2 == !null && stu3 == !null) {
+      if (stu2 != null && stu3 != null) {
         console.log("both are not null");
         student = [
           ...student,
@@ -853,6 +1331,219 @@ const updateStatus = async (req, res) => {
             email: stu2.s_email,
             seatno: stu2.id,
             status: stu2.s_status,
+          },
+        ];
+      } else if (stu2 == null && stu3 == null) {
+        student = [
+          ...student,
+          {
+            name: stu1.s_name,
+            email: stu1.s_email,
+            seatno: stu1.id,
+            status: stu1.s_status,
+          },
+        ];
+      }
+      res.set("Access-Control-Allow-Origin", "*");
+      res.status(200).json({
+        student: student,
+        project_title: formdata.s_proj_title,
+        internal: formdata.s_internal,
+        external: formdata.s_external,
+        internal_designation: formdata.internal_designation,
+        external_designation: formdata.external_designation,
+        project_description: formdata.project_description,
+      });
+    } else if (formdata.mem_count == 4) {
+      const stu1 = await user.findOne({id: stu1_id}, {_id: 0, s_tokens: 0});
+      const stu2 = await user.findOne({id: stu2_id}, {_id: 0, s_tokens: 0});
+      const stu3 = await user.findOne({id: stu3_id}, {_id: 0, s_tokens: 0});
+      const stu4 = await user.findOne({id: stu4_id}, {_id: 0, s_tokens: 0});
+      const formdata = await form.findOne({_id: stu1.formid}, {_id: 0});
+
+      if (stu2 != null && stu3 != null && stu4 != null) {
+        console.log("both are not null");
+        student = [
+          ...student,
+          {
+            name: stu1.s_name,
+            email: stu1.s_email,
+            seatno: stu1.id,
+            status: stu1.s_status,
+          },
+        ];
+        student = [
+          ...student,
+          {
+            name: stu2.s_name,
+            email: stu2.s_email,
+            seatno: stu2.id,
+            status: stu2.s_status,
+          },
+        ];
+        student = [
+          ...student,
+          {
+            name: stu3.s_name,
+            email: stu3.s_email,
+            seatno: stu3.id,
+            status: stu3.s_status,
+          },
+        ];
+        student = [
+          ...student,
+          {
+            name: stu4.s_name,
+            email: stu4.s_email,
+            seatno: stu4.id,
+            status: stu4.s_status,
+          },
+        ];
+      } else if (stu2 == null && stu3 == null && stu4 != null) {
+        console.log("stu2 is null");
+        student = [
+          ...student,
+          {
+            name: stu1.s_name,
+            email: stu1.s_email,
+            seatno: stu1.id,
+            status: stu1.s_status,
+          },
+        ];
+        student = [
+          ...student,
+          {
+            name: stu4.s_name,
+            email: stu4.s_email,
+            seatno: stu4.id,
+            status: stu4.s_status,
+          },
+        ];
+      } else if (stu2 != null && stu3 == null && stu4 == null) {
+        console.log("stu2 is null");
+        student = [
+          ...student,
+          {
+            name: stu1.s_name,
+            email: stu1.s_email,
+            seatno: stu1.id,
+            status: stu1.s_status,
+          },
+        ];
+        student = [
+          ...student,
+          {
+            name: stu2.s_name,
+            email: stu2.s_email,
+            seatno: stu2.id,
+            status: stu2.s_status,
+          },
+        ];
+      } else if (stu2 == null && stu3 != null && stu4 == null) {
+        console.log("stu2 is null");
+        student = [
+          ...student,
+          {
+            name: stu1.s_name,
+            email: stu1.s_email,
+            seatno: stu1.id,
+            status: stu1.s_status,
+          },
+        ];
+        student = [
+          ...student,
+          {
+            name: stu3.s_name,
+            email: stu3.s_email,
+            seatno: stu3.id,
+            status: stu3.s_status,
+          },
+        ];
+      } else if (stu2 == null && stu3 != null && stu4 != null) {
+        console.log("stu2 is null");
+        student = [
+          ...student,
+          {
+            name: stu1.s_name,
+            email: stu1.s_email,
+            seatno: stu1.id,
+            status: stu1.s_status,
+          },
+        ];
+        student = [
+          ...student,
+          {
+            name: stu3.s_name,
+            email: stu3.s_email,
+            seatno: stu3.id,
+            status: stu3.s_status,
+          },
+        ];
+        student = [
+          ...student,
+          {
+            name: stu4.s_name,
+            email: stu4.s_email,
+            seatno: stu4.id,
+            status: stu4.s_status,
+          },
+        ];
+      } else if (stu2 != null && stu3 != null && stu4 == null) {
+        console.log("stu2 is null");
+        student = [
+          ...student,
+          {
+            name: stu1.s_name,
+            email: stu1.s_email,
+            seatno: stu1.id,
+            status: stu1.s_status,
+          },
+        ];
+        student = [
+          ...student,
+          {
+            name: stu3.s_name,
+            email: stu3.s_email,
+            seatno: stu3.id,
+            status: stu3.s_status,
+          },
+        ];
+        student = [
+          ...student,
+          {
+            name: stu2.s_name,
+            email: stu2.s_email,
+            seatno: stu2.id,
+            status: stu2.s_status,
+          },
+        ];
+      } else if (stu2 != null && stu3 == null && stu4 != null) {
+        console.log("stu2 is null");
+        student = [
+          ...student,
+          {
+            name: stu1.s_name,
+            email: stu1.s_email,
+            seatno: stu1.id,
+            status: stu1.s_status,
+          },
+        ];
+        student = [
+          ...student,
+          {
+            name: stu2.s_name,
+            email: stu2.s_email,
+            seatno: stu2.id,
+            status: stu2.s_status,
+          },
+        ];
+        student = [
+          ...student,
+          {
+            name: stu4.s_name,
+            email: stu4.s_email,
+            seatno: stu4.id,
+            status: stu4.s_status,
           },
         ];
       }
@@ -947,6 +1638,91 @@ const ProposalForm = async (req, res) => {
     ) {
       const updatestu2 = await user.updateOne(
         {id: formdata.mem2},
+        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+      );
+    }
+  } else if (formdata.mem_count == 4) {
+    if (
+      formdata.mem2.length > 0 &&
+      formdata.mem3.length > 0 &&
+      formdata.mem4.length > 0
+    ) {
+      const updatestu2 = await user.updateOne(
+        {id: formdata.mem2},
+        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+      );
+      const updatestu3 = await user.updateOne(
+        {id: formdata.mem3},
+        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+      );
+      const updatestu4 = await user.updateOne(
+        {id: formdata.mem4},
+        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+      );
+    } else if (
+      formdata.mem3.length > 0 &&
+      formdata.mem2.length == 0 &&
+      formdata.mem4.length == 0
+    ) {
+      const updatestu2 = await user.updateOne(
+        {id: formdata.mem3},
+        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+      );
+    } else if (
+      formdata.mem2.length > 0 &&
+      formdata.mem3.length == 0 &&
+      formdata.mem4.length == 0
+    ) {
+      const updatestu2 = await user.updateOne(
+        {id: formdata.mem2},
+        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+      );
+    } else if (
+      formdata.mem2.length == 0 &&
+      formdata.mem3.length == 0 &&
+      formdata.mem4.length > 0
+    ) {
+      const updatestu2 = await user.updateOne(
+        {id: formdata.mem4},
+        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+      );
+    } else if (
+      formdata.mem2.length > 0 &&
+      formdata.mem3.length > 0 &&
+      formdata.mem4.length == 0
+    ) {
+      const updatestu2 = await user.updateOne(
+        {id: formdata.mem2},
+        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+      );
+      const updatestu3 = await user.updateOne(
+        {id: formdata.mem3},
+        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+      );
+    } else if (
+      formdata.mem2.length > 0 &&
+      formdata.mem3.length == 0 &&
+      formdata.mem4.length > 0
+    ) {
+      const updatestu2 = await user.updateOne(
+        {id: formdata.mem2},
+        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+      );
+      const updatestu3 = await user.updateOne(
+        {id: formdata.mem4},
+        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+      );
+    } else if (
+      formdata.mem2.length == 0 &&
+      formdata.mem3.length > 0 &&
+      formdata.mem4.length > 0
+    ) {
+      const updatestu2 = await user.updateOne(
+        {id: formdata.mem4},
+        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+      );
+      const updatestu3 = await user.updateOne(
+        {id: formdata.mem3},
         {$set: {proposalid: doc1._id, isPROPOSAL: true}}
       );
     }

@@ -21,6 +21,10 @@ const FormSchema = new mongoose.Schema({
     type: String,
     uppercase: true,
   },
+  mem4: {
+    type: String,
+    uppercase: true,
+  },
   s_internal: {
     type: String,
     trim: true,
@@ -50,6 +54,11 @@ const FormSchema = new mongoose.Schema({
     trim: true,
   },
   reject: {
+    type: String,
+    uppercase: true,
+    default: "",
+  },
+  reject1: {
     type: String,
     uppercase: true,
     default: "",
