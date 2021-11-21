@@ -54,142 +54,142 @@ const signup = async (req, res) => {
   }
 };
 
-//for form data
-const formdata = async (req, res) => {
-  //getting values from client
+// //for form data
+// const formdata = async (req, res) => {
+//   //getting values from client
 
-  try {
-    // console.log(req.body);
-    const {
-      id,
-      s_leader,
-      s_organization,
-      s_internal,
-      s_external,
-      s_proj_title,
-      s_status,
-      stu1_id,
-      stu2_id,
-      stu3_id,
-      s_name1,
-      s_name2,
-      s_name3,
-      group_count,
-    } = req.body;
-    const leaderfinal = await user.find({id: s_leader}, {s_name: 1});
-    const ryu = await user.findOne({id: s_leader});
+//   try {
+//     // console.log(req.body);
+//     const {
+//       id,
+//       s_leader,
+//       s_organization,
+//       s_internal,
+//       s_external,
+//       s_proj_title,
+//       s_status,
+//       stu1_id,
+//       stu2_id,
+//       stu3_id,
+//       s_name1,
+//       s_name2,
+//       s_name3,
+//       group_count,
+//     } = req.body;
+//     const leaderfinal = await user.find({id: s_leader}, {s_name: 1});
+//     const ryu = await user.findOne({id: s_leader});
 
-    const groupcount = Number(group_count);
+//     const groupcount = Number(group_count);
 
-    ryu.formdata = {
-      id: stu1_id,
-      mem_count: groupcount,
-      s_organization,
-      mem1: stu1_id,
-      mem2: stu2_id,
-      mem3: stu3_id,
-      s_internal,
-      s_external,
-      s_proj_title,
-    };
-    const doc1 = await ryu.save();
-    console.log(doc1);
+//     ryu.formdata = {
+//       id: stu1_id,
+//       mem_count: groupcount,
+//       s_organization,
+//       mem1: stu1_id,
+//       mem2: stu2_id,
+//       mem3: stu3_id,
+//       s_internal,
+//       s_external,
+//       s_proj_title,
+//     };
+//     const doc1 = await ryu.save();
+//     console.log(doc1);
 
-    if (group_count == 1) {
-      const status_res1 = await user.updateOne(
-        {id: stu1_id},
-        {$set: {isSUBMIT: true, isACCEPTED: true, groupRequest: stu1_id}}
-      );
-    }
-    if (group_count == 2) {
-      if (s_leader == stu1_id.toUpperCase()) {
-        const status_res1 = await user.updateOne(
-          {id: stu1_id},
-          {$set: {isSUBMIT: true, isACCEPTED: true, groupRequest: stu1_id}}
-        );
-        const status_res2 = await user.updateOne(
-          {id: stu2_id},
-          {$set: {isSUBMIT: true, isINVITE: true, groupRequest: stu1_id}}
-        );
+//     if (group_count == 1) {
+//       const status_res1 = await user.updateOne(
+//         {id: stu1_id},
+//         {$set: {isSUBMIT: true, isACCEPTED: true, groupRequest: stu1_id}}
+//       );
+//     }
+//     if (group_count == 2) {
+//       if (s_leader == stu1_id.toUpperCase()) {
+//         const status_res1 = await user.updateOne(
+//           {id: stu1_id},
+//           {$set: {isSUBMIT: true, isACCEPTED: true, groupRequest: stu1_id}}
+//         );
+//         const status_res2 = await user.updateOne(
+//           {id: stu2_id},
+//           {$set: {isSUBMIT: true, isINVITE: true, groupRequest: stu1_id}}
+//         );
 
-        //okay functionality
+//         //okay functionality
 
-        // console.log("leader is student 1");
-      } else if (s_leader == stu2_id.toUpperCase()) {
-        const status_res1 = await user.updateOne(
-          {id: stu1_id},
-          {$set: {isSUBMIT: true, isINVITE: true, groupRequest: stu2_id}}
-        );
-        const status_res2 = await user.updateOne(
-          {id: stu2_id},
-          {$set: {isSUBMIT: true, isACCEPTED: true, groupRequest: stu2_id}}
-        );
-        // console.log("leader is student 2");
-        // console.log(status_res1);
-      }
-      const count = 2;
-      //***sending mail function */
-      const OutputOF = `<div>
-      <h1>Hello Group Members!</h1><br/><h4>You have been invited for the fyp project group formation by ${s_leader} Go and Check dashboard</h4></div>`;
-      sendMail(count, stu1_id, stu2_id, stu3_id, s_leader, OutputOF);
-    } else if (group_count == 3) {
-      if (s_leader == stu1_id.toUpperCase()) {
-        const status_res1 = await user.updateOne(
-          {id: stu1_id},
-          {$set: {isSUBMIT: true, isACCEPTED: true, groupRequest: stu1_id}}
-        );
-        const status_res2 = await user.updateOne(
-          {id: stu2_id},
-          {$set: {isSUBMIT: true, isINVITE: true, groupRequest: stu1_id}}
-        );
-        const status_res3 = await user.updateOne(
-          {id: stu3_id},
-          {$set: {isSUBMIT: true, isINVITE: true, groupRequest: stu1_id}}
-        );
-        // console.log("leader is student 1");
-      }
-      // else if (s_leader == stu2_id.toUpperCase()) {
-      //   const status_res1 = await user.updateOne(
-      //     {id: stu1_id},
-      //     {$set: {isSUBMIT: true, groupRequest: stu2_id}}
-      //   );
-      //   const status_res2 = await user.updateOne(
-      //     {id: stu2_id},
-      //     {$set: {isSUBMIT: true, isACCEPTED: true, groupRequest: stu2_id}}
-      //   );
-      //   const status_res3 = await user.updateOne(
-      //     {id: stu3_id},
-      //     {$set: {isSUBMIT: true, groupRequest: stu2_id}}
-      //   );
-      //   // console.log("leader is student 2");
-      // } else if (s_leader == stu3_id.toUpperCase()) {
-      //   const status_res1 = await user.updateOne(
-      //     {id: stu1_id},
-      //     {$set: {isSUBMIT: true, groupRequest: stu3_id}}
-      //   );
-      //   const status_res2 = await user.updateOne(
-      //     {id: stu2_id},
-      //     {$set: {isSUBMIT: true, groupRequest: stu3_id}}
-      //   );
-      //   const status_res3 = await user.updateOne(
-      //     {id: stu3_id},
-      //     {$set: {isSUBMIT: true, isACCEPTED: true, groupRequest: stu3_id}}
-      //   );
-      // }
+//         // console.log("leader is student 1");
+//       } else if (s_leader == stu2_id.toUpperCase()) {
+//         const status_res1 = await user.updateOne(
+//           {id: stu1_id},
+//           {$set: {isSUBMIT: true, isINVITE: true, groupRequest: stu2_id}}
+//         );
+//         const status_res2 = await user.updateOne(
+//           {id: stu2_id},
+//           {$set: {isSUBMIT: true, isACCEPTED: true, groupRequest: stu2_id}}
+//         );
+//         // console.log("leader is student 2");
+//         // console.log(status_res1);
+//       }
+//       const count = 2;
+//       //***sending mail function */
+//       const OutputOF = `<div>
+//       <h1>Hello Group Members!</h1><br/><h4>You have been invited for the fyp project group formation by ${s_leader} Go and Check dashboard</h4></div>`;
+//       sendMail(count, stu1_id, stu2_id, stu3_id, s_leader, OutputOF);
+//     } else if (group_count == 3) {
+//       if (s_leader == stu1_id.toUpperCase()) {
+//         const status_res1 = await user.updateOne(
+//           {id: stu1_id},
+//           {$set: {isSUBMIT: true, isACCEPTED: true, groupRequest: stu1_id}}
+//         );
+//         const status_res2 = await user.updateOne(
+//           {id: stu2_id},
+//           {$set: {isSUBMIT: true, isINVITE: true, groupRequest: stu1_id}}
+//         );
+//         const status_res3 = await user.updateOne(
+//           {id: stu3_id},
+//           {$set: {isSUBMIT: true, isINVITE: true, groupRequest: stu1_id}}
+//         );
+//         // console.log("leader is student 1");
+//       }
+//       // else if (s_leader == stu2_id.toUpperCase()) {
+//       //   const status_res1 = await user.updateOne(
+//       //     {id: stu1_id},
+//       //     {$set: {isSUBMIT: true, groupRequest: stu2_id}}
+//       //   );
+//       //   const status_res2 = await user.updateOne(
+//       //     {id: stu2_id},
+//       //     {$set: {isSUBMIT: true, isACCEPTED: true, groupRequest: stu2_id}}
+//       //   );
+//       //   const status_res3 = await user.updateOne(
+//       //     {id: stu3_id},
+//       //     {$set: {isSUBMIT: true, groupRequest: stu2_id}}
+//       //   );
+//       //   // console.log("leader is student 2");
+//       // } else if (s_leader == stu3_id.toUpperCase()) {
+//       //   const status_res1 = await user.updateOne(
+//       //     {id: stu1_id},
+//       //     {$set: {isSUBMIT: true, groupRequest: stu3_id}}
+//       //   );
+//       //   const status_res2 = await user.updateOne(
+//       //     {id: stu2_id},
+//       //     {$set: {isSUBMIT: true, groupRequest: stu3_id}}
+//       //   );
+//       //   const status_res3 = await user.updateOne(
+//       //     {id: stu3_id},
+//       //     {$set: {isSUBMIT: true, isACCEPTED: true, groupRequest: stu3_id}}
+//       //   );
+//       // }
 
-      //   //*sendMail
-      const OutputOF = `<div>
-      <h1>Hello Group Members!</h1><br/><h4>You have been invited for the fyp project group formation by ${s_leader} Go and Check dashboard</h4></div>`;
-      sendMail(group_count, stu1_id, stu2_id, stu3_id, s_leader, OutputOF);
-    }
-    // console.log(mail2, mail1, mail3);
-    res.set("Access-Control-Allow-Origin", "*");
-    res.send("Sucess form");
-  } catch (error) {
-    res.set("Access-Control-Allow-Origin", "*");
-    res.status(400).send("error hay");
-  }
-};
+//       //   //*sendMail
+//       const OutputOF = `<div>
+//       <h1>Hello Group Members!</h1><br/><h4>You have been invited for the fyp project group formation by ${s_leader} Go and Check dashboard</h4></div>`;
+//       sendMail(group_count, stu1_id, stu2_id, stu3_id, s_leader, OutputOF);
+//     }
+//     // console.log(mail2, mail1, mail3);
+//     res.set("Access-Control-Allow-Origin", "*");
+//     res.send("Sucess form");
+//   } catch (error) {
+//     res.set("Access-Control-Allow-Origin", "*");
+//     res.status(400).send("error hay");
+//   }
+// };
 //for login
 const login = async (req, res) => {
   try {
@@ -678,12 +678,7 @@ const getformdata = async (req, res) => {
   const data = await user.findOne({id: rollNo.toUpperCase()}, {_id: 0});
   console.log(data, "data");
   const formid = await data.formid;
-  if (
-    formid == null ||
-    formid.length == 0 ||
-    formdata == null ||
-    formdata.length == 0
-  ) {
+  if (formid == null || formid.length == 0) {
     res.set("Access-Control-Allow-Origin", "*");
     res.status(200).json({
       student: [],
@@ -694,10 +689,11 @@ const getformdata = async (req, res) => {
     });
   } else {
     const formdata = await form.findOne({_id: formid}, {_id: 0});
+    console.log(formdata.reject, ">>fordata");
     const stu1_id = formdata.mem1;
     const stu2_id = formdata.mem2;
     const stu3_id = formdata.mem3;
-
+    const stu4_id = formdata.mem4;
     let student = [];
     if (formdata.mem_count == 1) {
       const stu1 = await user.findOne({id: stu1_id}, {_id: 0, s_tokens: 0});
@@ -870,7 +866,8 @@ const getformdata = async (req, res) => {
       });
     } else if (formdata.mem_count == 4) {
       let reject = [];
-      console.log(formdata.reject.length, "reject");
+      console.log("enyteerd");
+      console.log(formdata, "reject");
       if (formdata.reject.length > 0) {
         // reject = formdata.reject
         console.log(" i not run if id is not");
@@ -909,7 +906,7 @@ const getformdata = async (req, res) => {
       const stu2 = await user.findOne({id: stu2_id}, {_id: 0, s_tokens: 0});
       const stu3 = await user.findOne({id: stu3_id}, {_id: 0, s_tokens: 0});
       const stu4 = await user.findOne({id: stu4_id}, {_id: 0, s_tokens: 0});
-      const formdata = await form.findOne({_id: stu1.formid}, {_id: 0});
+      // const formdata = await form.findOne({_id: stu1.formid}, {_id: 0});
 
       if (stu2 != null && stu3 != null && stu4 != null) {
         console.log("both are not null");
@@ -1140,7 +1137,7 @@ module.exports = {
   signup,
   login,
   about,
-  formdata,
+
   userdata,
   usernames,
   student_data,

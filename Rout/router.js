@@ -19,8 +19,11 @@ const {formdata, updateStatus, ProposalForm} = require("./Form");
 
 const authy = async (req, res, next) => {
   try {
-    console.log("Authy",req.headers.authorization)
-    const verifyuser = await jwt.verify(req.headers.authorization, process.env.SECRET);
+    console.log("Authy", req.headers.authorization);
+    const verifyuser = await jwt.verify(
+      req.headers.authorization,
+      process.env.SECRET
+    );
     const mainuser = await student.findOne({
       _id: verifyuser._id,
       // "tokens.token": req.cookies.jwt,

@@ -6,7 +6,7 @@ const formdata = async (req, res) => {
   //getting values from client
 
   try {
-    console.log(req.body);
+    console.log(req.body, "req");
     const {
       s_leader,
       s_organization,
@@ -18,19 +18,18 @@ const formdata = async (req, res) => {
       stu2_id,
       stu3_id,
       stu4_id,
-      s_name1,
-      s_name2,
-      s_name3,
+
       internal_designation,
       external_designation,
       group_count,
     } = req.body;
-    // const leaderfinal = await user.find({id: s_leader}, {s_name: 1});
+    const leaderfinal = await user.find({id: s_leader}, {s_name: 1});
     // const ryu = await user.findOne({id: s_leader});
-
+    console.log(leaderfinal);
     //***start of resubmissiion tracing */
-
+    console.log("i am running");
     const CHECKACCEPT = await user.findOne({id: stu1_id}, {_id: 0});
+    console.log(`checkaccept`, CHECKACCEPT);
     if (CHECKACCEPT.isACCEPTED == true) {
       if (group_count == 3) {
         console.log("Resubmiting and group count is 3");
@@ -146,7 +145,7 @@ const formdata = async (req, res) => {
 
       const doc1 = await SubmitForm.save();
 
-      // console.log(doc1);
+      console.log(doc1, "the doc");
 
       if (group_count == 1) {
         const status_res1 = await user.updateOne(
@@ -305,18 +304,19 @@ const formdata = async (req, res) => {
               },
             }
           );
-          // console.log("leader is student 1");
+          console.log(status_res3, status_res4, "leader is student 1");
         }
-
+        console.log("Stidemt messages");
         const OutputOF = `<div>
       <h1>Hello Group Members!</h1><br/><h4>You have been invited for the fyp project group formation by ${s_leader} Go and Check dashboard</h4></div>`;
-        sendSingleMail(group_count, stu1_id, OutputOF);
-        sendSingleMail(group_count, stu2_id, OutputOF);
-        sendSingleMail(group_count, stu3_id, OutputOF);
-        sendSingleMail(group_count, stu4_id, OutputOF);
+        // sendSingleMail(group_count, stu1_id, OutputOF);
+        // sendSingleMail(group_count, stu2_id, OutputOF);
+        // sendSingleMail(group_count, stu3_id, OutputOF);
+        // sendSingleMail(group_count, stu4_id, OutputOF);
+        // res.send("mai shi ho");
       }
     }
-
+    console.log("bhar agaia");
     // ***Response data */
     // const form_id = CHECKACCEPT.formid;
     if (group_count == 1) {
@@ -428,12 +428,20 @@ const formdata = async (req, res) => {
         // project_description: formdata.project_description,
       });
     } else if (group_count == 4) {
+      console.log("reached here");
       let student = [];
+      console.log(stu1_id, stu2_id, stu3_id, stu4_id);
       const stu1 = await user.findOne({id: stu1_id}, {_id: 0, s_tokens: 0});
+      console.log(stu1, "1");
       const stu2 = await user.findOne({id: stu2_id}, {_id: 0, s_tokens: 0});
+      console.log(stu2, "2");
       const stu3 = await user.findOne({id: stu3_id}, {_id: 0, s_tokens: 0});
+      console.log(stu3, "3");
       const stu4 = await user.findOne({id: stu4_id}, {_id: 0, s_tokens: 0});
+      console.log(stu4, "4");
+      // console.log(stu1, stu2, stu3, stu4, "st>>");
       const formdata = await form.findOne({_id: stu1.formid}, {_id: 0});
+      console.log(formdata, "the form data");
       student = [
         ...student,
         {
@@ -470,6 +478,20 @@ const formdata = async (req, res) => {
           status: stu4.s_status,
         },
       ];
+      console.log(
+        {
+          student: student,
+          project_title: formdata.s_proj_title,
+          internal: formdata.s_internal,
+          external: formdata.s_external,
+          mem_count: formdata.mem_count,
+          isPROPOSAL: stu1.isPROPOSAL,
+          internal_designation: formdata.internal_designation,
+          external_designation: formdata.external_designation,
+          rejected: [],
+        },
+        "han bai kaisa laaaag"
+      );
       res.set("Access-Control-Allow-Origin", "*");
       res.status(200).json({
         student: student,
@@ -1064,6 +1086,7 @@ const updateStatus = async (req, res) => {
             new: true,
           }
         );
+        console.log(updaterejectOf, "<=2");
       } else if (findResponseCount.ResponseCount <= 3) {
         const updaterejectOf = await form.updateOne(
           {
@@ -1074,6 +1097,7 @@ const updateStatus = async (req, res) => {
             new: true,
           }
         );
+        console.log(updaterejectOf, "<=3");
       }
       if (formdata.mem_count == findResponseCount.ResponseCount) {
         const OpenForm = await user.updateOne(
