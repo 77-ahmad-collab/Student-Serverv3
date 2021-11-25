@@ -31,30 +31,54 @@ const formdata = async (req, res) => {
     const CHECKACCEPT = await user.findOne({id: stu1_id}, {_id: 0});
     console.log(`checkaccept`, CHECKACCEPT);
     if (CHECKACCEPT.isACCEPTED == true) {
-      if (group_count == 3) {
-        console.log("Resubmiting and group count is 3");
-        console.log("This student is resubmitting the form");
-        const updateResponseCount = await user.updateOne(
-          {id: stu1_id},
-          {ResponseCount: 2}
-        );
+      if (group_count == 4) {
+        console.log("Resubmiting and group count is 4");
         const leader = await user.findOne({id: stu1_id});
         const formid = await leader.formid;
-        console.log(formid);
-        const updateformOf = await form.updateOne(
-          {_id: formid},
-          {$set: {reject: ""}}
-        );
         const formdata = await form.findOne({_id: formid});
         const {mem2, mem3} = formdata;
-        if (mem2 == "") {
-          const updateForm = await form.updateOne(
+        console.log(mem2, mem3, "check in a 4 of rsub");
+        if (leader.ResponseCount == 3) {
+          console.log("hello i am here");
+          if (mem2 == "") {
+            const updateForm = await form.updateOne(
+              {_id: formid},
+              {$set: {mem2: stu3_id}}
+            );
+            const status_res = await user.updateOne(
+              {id: stu3_id},
+              {
+                $set: {
+                  isSUBMIT: true,
+                  isINVITE: true,
+                  groupRequest: stu1_id,
+                  formid: formid,
+                },
+              }
+            );
+          } else if (mem3 == "") {
+            const updateForm = await form.updateOne(
+              {_id: formid},
+              {$set: {mem3: stu3_id}}
+            );
+            const status_res = await user.updateOne(
+              {id: stu3_id},
+              {
+                $set: {
+                  isSUBMIT: true,
+                  isINVITE: true,
+                  groupRequest: stu1_id,
+                  formid: formid,
+                },
+              }
+            );
+          }
+          const updateForm1 = await form.updateOne(
             {_id: formid},
-            {$set: {mem2: stu3_id}}
+            {$set: {mem4: stu4_id, reject: "", reject1: "", mem_count: 4}}
           );
-
-          const status_res = await user.updateOne(
-            {id: stu3_id},
+          const status_res1 = await user.updateOne(
+            {id: stu4_id},
             {
               $set: {
                 isSUBMIT: true,
@@ -64,37 +88,378 @@ const formdata = async (req, res) => {
               },
             }
           );
-          const updateLeader = await user.updateOne(
+          const updateResponseCount = await user.updateOne(
             {id: stu1_id},
-            {$set: {isSUBMIT: true}}
+            {ResponseCount: 2}
           );
-          const OutputOF = `<div>
-      <h1>Hello Group Members!</h1><br/><h4>You have been invited for the fyp project group formation by ${s_leader} Go and Check dashboard</h4></div>`;
-          sendMail(group_count, stu1_id, stu2_id, stu3_id, OutputOF);
-        } else if (mem3 == "") {
-          const updateForm = await form.updateOne(
-            {_id: formid},
-            {$set: {mem3: stu3_id}}
-          );
-
-          const status_res = await user.updateOne(
-            {id: stu3_id},
-            {
-              $set: {
-                isSUBMIT: true,
-                isINVITE: true,
-                groupRequest: stu1_id,
-                formid: formid,
-              },
+          console.log("till now things doen");
+        } else if (leader.ResponseCount == 4) {
+          let count = 0;
+          if (formdata.reject.length > 0) {
+            count = 1;
+          }
+          if (formdata.reject1.length > 0) {
+            count = 2;
+          }
+          if (count == 1) {
+            if (mem2 == "") {
+              const updateForm = await form.updateOne(
+                {_id: formid},
+                {$set: {mem2: stu4_id}}
+              );
+              const status_res = await user.updateOne(
+                {id: stu4_id},
+                {
+                  $set: {
+                    isSUBMIT: true,
+                    isINVITE: true,
+                    groupRequest: stu1_id,
+                    formid: formid,
+                  },
+                }
+              );
+            } else if (mem3 == "") {
+              const updateForm = await form.updateOne(
+                {_id: formid},
+                {$set: {mem3: stu4_id}}
+              );
+              const status_res = await user.updateOne(
+                {id: stu4_id},
+                {
+                  $set: {
+                    isSUBMIT: true,
+                    isINVITE: true,
+                    groupRequest: stu1_id,
+                    formid: formid,
+                  },
+                }
+              );
+            } else if (mem4 == "") {
+              const updateForm = await form.updateOne(
+                {_id: formid},
+                {$set: {mem4: stu4_id}}
+              );
+              const status_res = await user.updateOne(
+                {id: stu4_id},
+                {
+                  $set: {
+                    isSUBMIT: true,
+                    isINVITE: true,
+                    groupRequest: stu1_id,
+                    formid: formid,
+                  },
+                }
+              );
             }
-          );
-          const updateLeader = await user.updateOne(
+            const updateForm1 = await form.updateOne(
+              {_id: formid},
+              {$set: {reject: "", reject1: "", mem_count: 4}}
+            );
+          } else if (count == 2) {
+            if (mem2 == "" && mem3 == "") {
+              const updateForm = await form.updateOne(
+                {_id: formid},
+                {$set: {mem2: stu3_id}}
+              );
+              const status_res = await user.updateOne(
+                {id: stu3_id},
+                {
+                  $set: {
+                    isSUBMIT: true,
+                    isINVITE: true,
+                    groupRequest: stu1_id,
+                    formid: formid,
+                  },
+                }
+              );
+              const updateForm1 = await form.updateOne(
+                {_id: formid},
+                {$set: {mem3: stu4_id}}
+              );
+              const status_res1 = await user.updateOne(
+                {id: stu4_id},
+                {
+                  $set: {
+                    isSUBMIT: true,
+                    isINVITE: true,
+                    groupRequest: stu1_id,
+                    formid: formid,
+                  },
+                }
+              );
+            } else if (mem2 == "" && mem4 == "") {
+              const updateForm = await form.updateOne(
+                {_id: formid},
+                {$set: {mem2: stu3_id}}
+              );
+              const status_res = await user.updateOne(
+                {id: stu3_id},
+                {
+                  $set: {
+                    isSUBMIT: true,
+                    isINVITE: true,
+                    groupRequest: stu1_id,
+                    formid: formid,
+                  },
+                }
+              );
+              const updateForm1 = await form.updateOne(
+                {_id: formid},
+                {$set: {mem4: stu4_id}}
+              );
+              const status_res1 = await user.updateOne(
+                {id: stu4_id},
+                {
+                  $set: {
+                    isSUBMIT: true,
+                    isINVITE: true,
+                    groupRequest: stu1_id,
+                    formid: formid,
+                  },
+                }
+              );
+            } else if (mem3 == "" && mem4 == "") {
+              const updateForm = await form.updateOne(
+                {_id: formid},
+                {$set: {mem3: stu3_id}}
+              );
+              const status_res = await user.updateOne(
+                {id: stu3_id},
+                {
+                  $set: {
+                    isSUBMIT: true,
+                    isINVITE: true,
+                    groupRequest: stu1_id,
+                    formid: formid,
+                  },
+                }
+              );
+              const updateForm1 = await form.updateOne(
+                {_id: formid},
+                {$set: {mem4: stu4_id}}
+              );
+              const status_res1 = await user.updateOne(
+                {id: stu4_id},
+                {
+                  $set: {
+                    isSUBMIT: true,
+                    isINVITE: true,
+                    groupRequest: stu1_id,
+                    formid: formid,
+                  },
+                }
+              );
+            }
+            const updateForm1 = await form.updateOne(
+              {_id: formid},
+              {$set: {reject: "", reject1: "", mem_count: 4}}
+            );
+          }
+        }
+      } else if (group_count == 3) {
+        console.log("This student is resubmitting the form");
+        const leader = await user.findOne({id: stu1_id});
+        console.log(leader, "leader");
+        const formid = await leader.formid;
+        const formdata = await form.findOne({_id: formid});
+        if (leader.ResponseCount == 3) {
+          console.log("Resubmiting for 3 and group count is 3");
+          const updateResponseCount = await user.updateOne(
             {id: stu1_id},
-            {$set: {isSUBMIT: true}}
+            {ResponseCount: 2}
           );
-          const OutputOF = `<div>
+          console.log(formid);
+          // integerate this functionality at the end
+          const updateformOf = await form.updateOne(
+            {_id: formid},
+            {$set: {reject: ""}}
+          );
+          // const updateformOf1 = await form.updateOne(
+          //   {_id: formid},
+          //   {$set: {reject1: ""}}
+          // );
+          const {mem2, mem3} = formdata;
+
+          if (mem2 == "") {
+            const updateForm = await form.updateOne(
+              {_id: formid},
+              {$set: {mem2: stu3_id}}
+            );
+
+            //  const updateForm1 = await form.updateOne(
+            //    {_id: formid},
+            //    {$set: {mem2: stu3_id}}
+            // //  );
+            const status_res = await user.updateOne(
+              {id: stu3_id},
+              {
+                $set: {
+                  isSUBMIT: true,
+                  isINVITE: true,
+                  groupRequest: stu1_id,
+                  formid: formid,
+                },
+              }
+            );
+            const updateLeader = await user.updateOne(
+              {id: stu1_id},
+              {$set: {isSUBMIT: true}}
+            );
+            const OutputOF = `<div>
       <h1>Hello Group Members!</h1><br/><h4>You have been invited for the fyp project group formation by ${s_leader} Go and Check dashboard</h4></div>`;
-          sendMail(group_count, stu1_id, stu2_id, stu3_id, OutputOF);
+            sendMail(group_count, stu1_id, stu2_id, stu3_id, OutputOF);
+          } else if (mem3 == "") {
+            const updateForm = await form.updateOne(
+              {_id: formid},
+              {$set: {mem3: stu3_id}}
+            );
+
+            const status_res = await user.updateOne(
+              {id: stu3_id},
+              {
+                $set: {
+                  isSUBMIT: true,
+                  isINVITE: true,
+                  groupRequest: stu1_id,
+                  formid: formid,
+                },
+              }
+            );
+            const updateLeader = await user.updateOne(
+              {id: stu1_id},
+              {$set: {isSUBMIT: true}}
+            );
+            const OutputOF = `<div>
+      <h1>Hello Group Members!</h1><br/><h4>You have been invited for the fyp project group formation by ${s_leader} Go and Check dashboard</h4></div>`;
+            sendMail(group_count, stu1_id, stu2_id, stu3_id, OutputOF);
+          }
+        } else if (leader.ResponseCount == 4) {
+          console.log(
+            "Resubmiting for 3 again but previpus;y and group count is 4"
+          );
+          const updateResponseCount = await user.updateOne(
+            {id: stu1_id},
+            {ResponseCount: 2}
+          );
+          console.log(formid, "form id");
+          // integerate this functionality at the end
+          // const updateformOf = await form.updateOne(
+          //   {_id: formid},
+          //   {$set: {reject: ""}}
+          // );
+          // const updateformOf1 = await form.updateOne(
+          //   {_id: formid},
+          //   {$set: {reject1: ""}}
+          // );
+          const {mem2, mem3, mem4, reject, reject1} = formdata;
+
+          console.log(
+            mem2,
+            mem3,
+            mem4,
+            reject.length,
+            reject1.length,
+            "meessage"
+          );
+          let countof = 0;
+          if (reject.length > 0) {
+            console.log(reject.length, ">>");
+            countof = 1;
+            console.log(countof, "inside countof");
+            // if (user1 == mem2) {
+            //   indicatior1 = "mem2";
+            // } else if (user1 == mem3) {
+            //   indicatior1 = "mem3";
+            // } else if (user1 == mem4) {
+            //   indicator = "mem4";
+            // }
+          }
+          if (reject1.length > 0) {
+            countof = 2;
+            //  if (user2 == mem2) {
+            //    indicatior2 = "mem2";
+            //  } else if (user2 == mem3) {
+            //    indicatior2 = "mem3";
+            //  } else if (user2 == mem4) {
+            //    indicator2 = "mem4";
+            //  }
+          }
+          console.log("the count", countof);
+          if (countof == 1) {
+            if (mem2 == "" || mem3 == "" || mem4 == "") {
+              const updateForm = await form.updateOne(
+                {_id: formid},
+                {
+                  $set: {
+                    mem2: stu2_id,
+                    mem3: stu3_id,
+                    reject: "",
+                    reject1: "",
+                    mem_count: 3,
+                  },
+                }
+              );
+              const updateLeader = await user.updateOne(
+                {id: stu1_id},
+                {$set: {isSUBMIT: true}}
+              );
+              console.log("in that resubmission case everyone has accepted");
+              //  const updateForm1 = await form.updateOne(
+              //    {_id: formid},
+              //    {$set: {mem2: stu3_id}}
+              // //  );
+              // const status_res = await user.updateOne(
+              //   {id: stu3_id},
+              //   {
+              //     $set: {
+              //       isSUBMIT: true,
+              //       isINVITE: true,
+              //       groupRequest: stu1_id,
+              //       formid: formid,
+              //     },
+              //   }
+              // );
+              const OutputOF = `<div>
+      <h1>Hello Group Members!</h1><br/><h4>You have been invited for the fyp project group formation by ${s_leader} Go and Check dashboard</h4></div>`;
+              sendMail(group_count, stu1_id, stu2_id, stu3_id, OutputOF);
+            }
+          } else if (countof == 2) {
+            if (mem2 == "") {
+              const updateForm = await form.updateOne(
+                {_id: formid},
+                {$set: {mem2: stu3_id, reject: "", reject1: "", mem_count: 3}}
+              );
+              const status_res = await user.updateOne(
+                {id: stu3_id},
+                {
+                  $set: {
+                    isSUBMIT: true,
+                    isINVITE: true,
+                    groupRequest: stu1_id,
+                    formid: formid,
+                    s_status: "Accepted",
+                  },
+                }
+              );
+            } else if (mem3 == "") {
+              const updateForm = await form.updateOne(
+                {_id: formid},
+                {$set: {mem3: stu3_id, reject: "", reject1: "", mem_count: 3}}
+              );
+              const status_res = await user.updateOne(
+                {id: stu3_id},
+                {
+                  $set: {
+                    isSUBMIT: true,
+                    isINVITE: true,
+                    groupRequest: stu1_id,
+                    formid: formid,
+                    s_status: "Accepted",
+                  },
+                }
+              );
+            }
+          }
         }
       } else if (group_count == 2) {
         const updateLeader = await user.updateOne(
@@ -1069,13 +1434,15 @@ const updateStatus = async (req, res) => {
       const mem2 = formdata.mem2;
       const mem3 = formdata.mem3;
       const mem4 = formdata.mem4;
+      console.log(mem4);
       findLeader.ResponseCount = findLeader.ResponseCount + 1;
       const doc = await findLeader.save();
-
+      console.log("the doc");
       const findResponseCount = await user.findOne(
         {id: lead},
         {_id: 0, ResponseCount: 1}
       );
+      console.log(findResponseCount, "the response count");
       if (findResponseCount.ResponseCount <= 2) {
         const updaterejectOf = await form.updateOne(
           {
@@ -1102,7 +1469,7 @@ const updateStatus = async (req, res) => {
       if (formdata.mem_count == findResponseCount.ResponseCount) {
         const OpenForm = await user.updateOne(
           {id: lead},
-          {$set: {isSUBMIT: false}}
+          {$set: {isSUBMIT: false, isACCEPTED: false}}
         );
         // const setCount = await user.updateOne(
         //   {_id: formid},
@@ -1196,9 +1563,9 @@ const updateStatus = async (req, res) => {
       } else if (rollNo.toUpperCase() == mem4) {
         const updateMem4 = await form.updateOne(
           {_id: formid},
-          {$set: {mem3: ""}}
+          {$set: {mem4: ""}}
         );
-
+        console.log("updateMem4", "agg lagi", updateMem4);
         if (mem2 != "" && mem3 != "") {
           console.log("yes it is nt null");
           const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has rejected the group invite</h4></div>`;
