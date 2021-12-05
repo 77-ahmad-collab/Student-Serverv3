@@ -1176,6 +1176,7 @@ const updateStatus = async (req, res) => {
               {id: findLeader},
               {$set: {isSUBMIT: false}}
             );
+            console.log(OpenForm, "open it");
             const setCount = await user.updateOne(
               {_id: formid},
               {$set: {ResponseCount: 0}}
@@ -1247,7 +1248,7 @@ const updateStatus = async (req, res) => {
     console.log(formid, "form id");
     const formdata = await form.findOne(
       {_id: formid},
-      {mem_count: 1, _id: 0, mem2: 1, mem3: 1}
+      {mem_count: 1, _id: 0, mem2: 1, mem3: 1, mem4: 1, reject: 1, reject1: 1}
     );
 
     if (formdata.mem_count == 2) {
@@ -1443,7 +1444,8 @@ const updateStatus = async (req, res) => {
         {_id: 0, ResponseCount: 1}
       );
       console.log(findResponseCount, "the response count");
-      if (findResponseCount.ResponseCount <= 2) {
+
+      if (formdata.reject.length == 0 || formdata.reject == "") {
         const updaterejectOf = await form.updateOne(
           {
             _id: formid,
@@ -1453,8 +1455,7 @@ const updateStatus = async (req, res) => {
             new: true,
           }
         );
-        console.log(updaterejectOf, "<=2");
-      } else if (findResponseCount.ResponseCount <= 3) {
+      } else {
         const updaterejectOf = await form.updateOne(
           {
             _id: formid,
@@ -1464,13 +1465,14 @@ const updateStatus = async (req, res) => {
             new: true,
           }
         );
-        console.log(updaterejectOf, "<=3");
       }
+
       if (formdata.mem_count == findResponseCount.ResponseCount) {
         const OpenForm = await user.updateOne(
           {id: lead},
           {$set: {isSUBMIT: false, isACCEPTED: false}}
         );
+        console.log(OpenForm, "open it");
         // const setCount = await user.updateOne(
         //   {_id: formid},
         //   {$set: {ResponseCount: 0}}
