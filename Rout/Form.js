@@ -535,7 +535,7 @@ const formdata = async (req, res) => {
               $set: {
                 isSUBMIT: true,
                 isACCEPTED: true,
-                isPROPOSALSUBMIT: true,
+                // isPROPOSALSUBMIT: true,
                 groupRequest: stu1_id,
                 formid: doc1._id,
                 s_status: "Accepted",
@@ -548,7 +548,7 @@ const formdata = async (req, res) => {
               $set: {
                 isSUBMIT: true,
                 isINVITE: true,
-                isPROPOSALSUBMIT: true,
+                // isPROPOSALSUBMIT: true,
                 groupRequest: stu1_id,
                 formid: doc1._id,
                 s_status: "Pending",
@@ -574,7 +574,7 @@ const formdata = async (req, res) => {
               $set: {
                 isSUBMIT: true,
                 isACCEPTED: true,
-                isPROPOSALSUBMIT: true,
+                // isPROPOSALSUBMIT: true,
                 groupRequest: stu1_id,
                 ResponseCount: 1,
                 formid: doc1._id,
@@ -588,7 +588,7 @@ const formdata = async (req, res) => {
               $set: {
                 isSUBMIT: true,
                 isINVITE: true,
-                isPROPOSALSUBMIT: true,
+                // isPROPOSALSUBMIT: true,
                 groupRequest: stu1_id,
                 formid: doc1._id,
                 s_status: "Pending",
@@ -601,7 +601,7 @@ const formdata = async (req, res) => {
               $set: {
                 isSUBMIT: true,
                 isINVITE: true,
-                isPROPOSALSUBMIT: true,
+                // isPROPOSALSUBMIT: true,
                 groupRequest: stu1_id,
                 formid: doc1._id,
                 s_status: "Pending",
@@ -622,7 +622,7 @@ const formdata = async (req, res) => {
               $set: {
                 isSUBMIT: true,
                 isACCEPTED: true,
-                isPROPOSALSUBMIT: true,
+                // isPROPOSALSUBMIT: true,
                 groupRequest: stu1_id,
                 ResponseCount: 1,
                 formid: doc1._id,
@@ -636,7 +636,7 @@ const formdata = async (req, res) => {
               $set: {
                 isSUBMIT: true,
                 isINVITE: true,
-                isPROPOSALSUBMIT: true,
+                // isPROPOSALSUBMIT: true,
                 groupRequest: stu1_id,
                 formid: doc1._id,
                 s_status: "Pending",
@@ -649,7 +649,7 @@ const formdata = async (req, res) => {
               $set: {
                 isSUBMIT: true,
                 isINVITE: true,
-                isPROPOSALSUBMIT: true,
+                // isPROPOSALSUBMIT: true,
                 groupRequest: stu1_id,
                 formid: doc1._id,
                 s_status: "Pending",
@@ -662,7 +662,7 @@ const formdata = async (req, res) => {
               $set: {
                 isSUBMIT: true,
                 isINVITE: true,
-                isPROPOSALSUBMIT: true,
+                // isPROPOSALSUBMIT: true,
                 groupRequest: stu1_id,
                 formid: doc1._id,
                 s_status: "Pending",
@@ -910,7 +910,7 @@ const updateStatus = async (req, res) => {
     const responsecount = Result.ResponseCount;
     const formdata = await form.findOne(
       {_id: formid},
-      {_id: 0, mem_count: 1, mem1: 1, mem2: 1, mem3: 1, mem_count: 1}
+      {_id: 0, mem_count: 1, mem1: 1, mem2: 1, mem3: 1, mem4: 1, mem_count: 1}
     );
     // console.log(formdata);
 
@@ -983,6 +983,10 @@ const updateStatus = async (req, res) => {
           member3_status.isACCEPTED
         ) {
           console.log("all 3 members has accepted the invite");
+          const Result = await user.updateOne(
+            {id: findLeader},
+            {isPROPOSALSUBMIT: true}
+          );
         } else {
           console.log("not all the members has accepted");
           const updateResponseCount = await user.updateOne(
@@ -1017,8 +1021,9 @@ const updateStatus = async (req, res) => {
           {id: findLeader},
           {_id: 0, ResponseCount: 1}
         );
+
         if (fetchcount.ResponseCount == formdata.mem_count) {
-          console.log("equal");
+          console.log("equal hai -------------s");
           const OpenForm = await user.updateOne(
             {id: findLeader},
             {$set: {isSUBMIT: false}}
@@ -1039,26 +1044,26 @@ const updateStatus = async (req, res) => {
         if (mem3 != "" && mem4 != "") {
           console.log("yes it is nt null");
           const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has accepted the group invite</h4></div>`;
-          sendSingleMail(1, findLeader, OutputOF);
-          sendSingleMail(1, mem3, OutputOF);
-          sendSingleMail(1, mem4, OutputOF);
+          // sendSingleMail(1, findLeader, OutputOF);
+          // sendSingleMail(1, mem3, OutputOF);
+          // sendSingleMail(1, mem4, OutputOF);
         } else if (mem3 != "" && mem4 == "") {
           console.log("it is null");
           // const member3 = "ct-18008";
           const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has accepted the group invite</h4></div>`;
-          sendSingleMail(1, findLeader, OutputOF);
-          sendSingleMail(1, mem3, OutputOF);
+          // sendSingleMail(1, findLeader, OutputOF);
+          // sendSingleMail(1, mem3, OutputOF);
         } else if (mem4 != "" && mem3 == "") {
           console.log("it is null");
           const member3 = "ct-18008";
           const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has accepted the group invite</h4></div>`;
-          sendSingleMail(1, findLeader, OutputOF);
-          sendSingleMail(1, mem4, OutputOF);
+          // sendSingleMail(1, findLeader, OutputOF);
+          // sendSingleMail(1, mem4, OutputOF);
         } else if (mem3 != "" && mem4 == "") {
           console.log("it is null");
           const member3 = "ct-18008";
           const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has accepted the group invite</h4></div>`;
-          sendSingleMail(1, findLeader, OutputOF);
+          // sendSingleMail(1, findLeader, OutputOF);
         }
         console.log("dont sendMail to mem2,his status is oending");
         // const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has accepted the group invite</h4></div>`;
@@ -1068,26 +1073,26 @@ const updateStatus = async (req, res) => {
         if (mem2 != "" && mem4 != "") {
           console.log("yes it is nt null");
           const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has accepted the group invite</h4></div>`;
-          sendSingleMail(1, findLeader, OutputOF);
-          sendSingleMail(1, mem2, OutputOF);
-          sendSingleMail(1, mem4, OutputOF);
+          // sendSingleMail(1, findLeader, OutputOF);
+          // sendSingleMail(1, mem2, OutputOF);
+          // sendSingleMail(1, mem4, OutputOF);
         } else if (mem2 != "" && mem4 == "") {
           console.log("it is null");
           // const member3 = "ct-18008";
           const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has accepted the group invite</h4></div>`;
-          sendSingleMail(1, findLeader, OutputOF);
-          sendSingleMail(1, mem2, OutputOF);
+          // sendSingleMail(1, findLeader, OutputOF);
+          // sendSingleMail(1, mem2, OutputOF);
         } else if (mem4 != "" && mem2 == "") {
           console.log("it is null");
           const member3 = "ct-18008";
           const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has accepted the group invite</h4></div>`;
-          sendSingleMail(1, findLeader, OutputOF);
-          sendSingleMail(1, mem4, OutputOF);
+          // sendSingleMail(1, findLeader, OutputOF);
+          // sendSingleMail(1, mem4, OutputOF);
         } else if (mem2 != "" && mem4 == "") {
           console.log("it is null");
           const member3 = "ct-18008";
           const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has accepted the group invite</h4></div>`;
-          sendSingleMail(1, findLeader, OutputOF);
+          // sendSingleMail(1, findLeader, OutputOF);
         }
         // const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has accepted the group invit</h4></div>`;
         // sendMail(3, findLeader, findLeader, member2, OutputOF);
@@ -1096,26 +1101,26 @@ const updateStatus = async (req, res) => {
         if (mem2 != "" && mem3 != "") {
           console.log("yes it is nt null");
           const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has accepted the group invite</h4></div>`;
-          sendSingleMail(1, findLeader, OutputOF);
-          sendSingleMail(1, mem2, OutputOF);
-          sendSingleMail(1, mem3, OutputOF);
+          // sendSingleMail(1, findLeader, OutputOF);
+          // sendSingleMail(1, mem2, OutputOF);
+          // sendSingleMail(1, mem3, OutputOF);
         } else if (mem2 != "" && mem3 == "") {
           console.log("it is null");
           // const member3 = "ct-18008";
           const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has accepted the group invite</h4></div>`;
-          sendSingleMail(1, findLeader, OutputOF);
-          sendSingleMail(1, mem2, OutputOF);
+          // sendSingleMail(1, findLeader, OutputOF);
+          // sendSingleMail(1, mem2, OutputOF);
         } else if (mem3 != "" && mem2 == "") {
           console.log("it is null");
           const member3 = "ct-18008";
           const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has accepted the group invite</h4></div>`;
-          sendSingleMail(1, findLeader, OutputOF);
-          sendSingleMail(1, mem3, OutputOF);
+          // sendSingleMail(1, findLeader, OutputOF);
+          // sendSingleMail(1, mem3, OutputOF);
         } else if (mem2 != "" && mem3 == "") {
           console.log("it is null");
           const member3 = "ct-18008";
           const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has accepted the group invite</h4></div>`;
-          sendSingleMail(1, findLeader, OutputOF);
+          // sendSingleMail(1, findLeader, OutputOF);
         }
         console.log("dont sendMail to mem4,his status is oending");
       }
@@ -1124,6 +1129,7 @@ const updateStatus = async (req, res) => {
       const member2 = formdata.mem2;
       const member3 = formdata.mem3;
       const member4 = formdata.mem4;
+      console.log(formdata, "formdata in between");
       const member1_status = await user.findOne(
         {id: member1},
         {isACCEPTED: 1, _id: 0}
@@ -1159,6 +1165,10 @@ const updateStatus = async (req, res) => {
           member4_status
         ) {
           console.log("all 4 members has accepted the invite");
+          const Result = await user.updateOne(
+            {id: findLeader},
+            {isPROPOSALSUBMIT: true}
+          );
         } else {
           console.log("not all the members has accepted");
           const updateResponseCount = await user.updateOne(
@@ -1225,6 +1235,10 @@ const updateStatus = async (req, res) => {
       //********************************CHECKING EACH GROUP MEMBERS STATUS TO GO AHEAD */
       if (member1_status.isACCEPTED && member2_status.isACCEPTED) {
         console.log("all 2 members has accepted the invite");
+        const Result = await user.updateOne(
+          {id: findLeader},
+          {isPROPOSALSUBMIT: true}
+        );
       } else {
         console.log("not all the members has accepted");
       }
@@ -1352,8 +1366,8 @@ const updateStatus = async (req, res) => {
         if (mem3 != "") {
           console.log("yes it is nt null");
           const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has rejected the group invite</h4></div>`;
-          sendSingleMail(1, lead, OutputOF);
-          sendSingleMail(1, mem3, OutputOF);
+          // sendSingleMail(1, lead, OutputOF);
+          // sendSingleMail(1, mem3, OutputOF);
         } else {
           console.log("it is null");
           // const member3 = "ct-18008";
@@ -1367,7 +1381,7 @@ const updateStatus = async (req, res) => {
           );
           const deleteFormField = await form.deleteOne({_id: formid});
           const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has reected the group invite</h4></div>`;
-          sendSingleMail(1, lead, OutputOF);
+          // sendSingleMail(1, lead, OutputOF);
         }
         // findLeader.isSUBMIT = false;
 
@@ -1388,8 +1402,8 @@ const updateStatus = async (req, res) => {
         if (mem2 != "") {
           console.log("yes it is nt null");
           const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has rejected the group invite</h4></div>`;
-          sendSingleMail(1, lead, OutputOF);
-          sendSingleMail(1, mem2, OutputOF);
+          // sendSingleMail(1, lead, OutputOF);
+          // sendSingleMail(1, mem2, OutputOF);
         } else {
           console.log("it is null");
           const RemoveFormid = await user.updateOne(
@@ -1403,7 +1417,7 @@ const updateStatus = async (req, res) => {
           const deleteFormField = await form.deleteOne({_id: formid});
 
           const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has rejected the group invite</h4></div>`;
-          sendSingleMail(1, lead, OutputOF);
+          // sendSingleMail(1, lead, OutputOF);
           //  member2 = "ct-18008";
         }
 
@@ -1487,9 +1501,9 @@ const updateStatus = async (req, res) => {
         if (mem3 != "" && mem4 != "") {
           console.log("yes it is nt null");
           const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has rejected the group invite</h4></div>`;
-          sendSingleMail(1, lead, OutputOF);
-          sendSingleMail(1, mem3, OutputOF);
-          sendSingleMail(1, mem4, OutputOF);
+          // sendSingleMail(1, lead, OutputOF);
+          // sendSingleMail(1, mem3, OutputOF);
+          // sendSingleMail(1, mem4, OutputOF);
         } else if (mem3 == "" && mem4 == "") {
           console.log("it is null");
           // const member3 = "ct-18008";
@@ -1503,17 +1517,17 @@ const updateStatus = async (req, res) => {
           );
           const deleteFormField = await form.deleteOne({_id: formid});
           const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has reected the group invite</h4></div>`;
-          sendSingleMail(1, lead, OutputOF);
+          // sendSingleMail(1, lead, OutputOF);
         } else if (mem3 != "" && mem4 == "") {
           console.log("yes it is nt null");
           const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has rejected the group invite</h4></div>`;
-          sendSingleMail(1, lead, OutputOF);
-          sendSingleMail(1, mem3, OutputOF);
+          // sendSingleMail(1, lead, OutputOF);
+          // sendSingleMail(1, mem3, OutputOF);
         } else if (mem4 != "" && mem3 == "") {
           console.log("yes it is nt null");
           const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has rejected the group invite</h4></div>`;
-          sendSingleMail(1, lead, OutputOF);
-          sendSingleMail(1, mem4, OutputOF);
+          // sendSingleMail(1, lead, OutputOF);
+          // sendSingleMail(1, mem4, OutputOF);
         }
         // findLeader.isSUBMIT = false;
 
@@ -1532,9 +1546,9 @@ const updateStatus = async (req, res) => {
         if (mem2 != "" && mem4 != "") {
           console.log("yes it is nt null");
           const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has rejected the group invite</h4></div>`;
-          sendSingleMail(1, lead, OutputOF);
-          sendSingleMail(1, mem2, OutputOF);
-          sendSingleMail(1, mem4, OutputOF);
+          // sendSingleMail(1, lead, OutputOF);
+          // sendSingleMail(1, mem2, OutputOF);
+          // sendSingleMail(1, mem4, OutputOF);
         } else if (mem2 == "" && mem4 == "") {
           console.log("it is null");
           // const member3 = "ct-18008";
@@ -1548,17 +1562,17 @@ const updateStatus = async (req, res) => {
           );
           const deleteFormField = await form.deleteOne({_id: formid});
           const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has reected the group invite</h4></div>`;
-          sendSingleMail(1, lead, OutputOF);
+          // sendSingleMail(1, lead, OutputOF);
         } else if (mem2 != "" && mem4 == "") {
           console.log("yes it is nt null");
           const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has rejected the group invite</h4></div>`;
-          sendSingleMail(1, lead, OutputOF);
-          sendSingleMail(1, mem2, OutputOF);
+          // sendSingleMail(1, lead, OutputOF);
+          // sendSingleMail(1, mem2, OutputOF);
         } else if (mem4 != "" && mem2 == "") {
           console.log("yes it is nt null");
           const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has rejected the group invite</h4></div>`;
-          sendSingleMail(1, lead, OutputOF);
-          sendSingleMail(1, mem4, OutputOF);
+          // sendSingleMail(1, lead, OutputOF);
+          // sendSingleMail(1, mem4, OutputOF);
         }
 
         console.log("everything updated in mem2 rej");
@@ -1571,9 +1585,9 @@ const updateStatus = async (req, res) => {
         if (mem2 != "" && mem3 != "") {
           console.log("yes it is nt null");
           const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has rejected the group invite</h4></div>`;
-          sendSingleMail(1, lead, OutputOF);
-          sendSingleMail(1, mem2, OutputOF);
-          sendSingleMail(1, mem3, OutputOF);
+          // sendSingleMail(1, lead, OutputOF);
+          // sendSingleMail(1, mem2, OutputOF);
+          // sendSingleMail(1, mem3, OutputOF);
         } else if (mem2 == "" && mem3 == "") {
           console.log("it is null");
           // const member3 = "ct-18008";
@@ -1587,17 +1601,17 @@ const updateStatus = async (req, res) => {
           );
           const deleteFormField = await form.deleteOne({_id: formid});
           const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has reected the group invite</h4></div>`;
-          sendSingleMail(1, lead, OutputOF);
+          // sendSingleMail(1, lead, OutputOF);
         } else if (mem2 != "" && mem3 == "") {
           console.log("yes it is nt null");
           const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has rejected the group invite</h4></div>`;
-          sendSingleMail(1, lead, OutputOF);
-          sendSingleMail(1, mem2, OutputOF);
+          // sendSingleMail(1, lead, OutputOF);
+          // sendSingleMail(1, mem2, OutputOF);
         } else if (mem3 != "" && mem2 == "") {
           console.log("yes it is nt null");
           const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has rejected the group invite</h4></div>`;
-          sendSingleMail(1, lead, OutputOF);
-          sendSingleMail(1, mem3, OutputOF);
+          // sendSingleMail(1, lead, OutputOF);
+          // sendSingleMail(1, mem3, OutputOF);
         }
 
         console.log("everything updated in mem2 rej");
@@ -1999,23 +2013,23 @@ const ProposalForm = async (req, res) => {
     if (formdata.mem2.length > 0) {
       const updatestu2 = await user.updateOne(
         {id: formdata.mem2},
-        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+        {$set: {proposalid: doc1._id}}
       );
     } else if (formdata.mem3.length > 0) {
       const updatestu2 = await user.updateOne(
         {id: formdata.mem3},
-        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+        {$set: {proposalid: doc1._id}}
       );
     }
   } else if (formdata.mem_count == 3) {
     if (formdata.mem2.length > 0 && formdata.mem3.length > 0) {
       const updatestu2 = await user.updateOne(
         {id: formdata.mem2},
-        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+        {$set: {proposalid: doc1._id}}
       );
       const updatestu3 = await user.updateOne(
         {id: formdata.mem3},
-        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+        {$set: {proposalid: doc1._id}}
       );
     } else if (
       (formdata.mem3.length > 0 && formdata.mem2.length == 0) ||
@@ -2023,7 +2037,7 @@ const ProposalForm = async (req, res) => {
     ) {
       const updatestu2 = await user.updateOne(
         {id: formdata.mem3},
-        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+        {$set: {proposalid: doc1._id}}
       );
     } else if (
       (formdata.mem2.length > 0 && formdata.mem3.length == 0) ||
@@ -2031,7 +2045,7 @@ const ProposalForm = async (req, res) => {
     ) {
       const updatestu2 = await user.updateOne(
         {id: formdata.mem2},
-        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+        {$set: {proposalid: doc1._id}}
       );
     }
   } else if (formdata.mem_count == 4) {
@@ -2042,15 +2056,15 @@ const ProposalForm = async (req, res) => {
     ) {
       const updatestu2 = await user.updateOne(
         {id: formdata.mem2},
-        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+        {$set: {proposalid: doc1._id}}
       );
       const updatestu3 = await user.updateOne(
         {id: formdata.mem3},
-        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+        {$set: {proposalid: doc1._id}}
       );
       const updatestu4 = await user.updateOne(
         {id: formdata.mem4},
-        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+        {$set: {proposalid: doc1._id}}
       );
     } else if (
       formdata.mem3.length > 0 &&
@@ -2059,7 +2073,7 @@ const ProposalForm = async (req, res) => {
     ) {
       const updatestu2 = await user.updateOne(
         {id: formdata.mem3},
-        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+        {$set: {proposalid: doc1._id}}
       );
     } else if (
       formdata.mem2.length > 0 &&
@@ -2068,7 +2082,7 @@ const ProposalForm = async (req, res) => {
     ) {
       const updatestu2 = await user.updateOne(
         {id: formdata.mem2},
-        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+        {$set: {proposalid: doc1._id}}
       );
     } else if (
       formdata.mem2.length == 0 &&
@@ -2077,7 +2091,7 @@ const ProposalForm = async (req, res) => {
     ) {
       const updatestu2 = await user.updateOne(
         {id: formdata.mem4},
-        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+        {$set: {proposalid: doc1._id}}
       );
     } else if (
       formdata.mem2.length > 0 &&
@@ -2086,11 +2100,11 @@ const ProposalForm = async (req, res) => {
     ) {
       const updatestu2 = await user.updateOne(
         {id: formdata.mem2},
-        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+        {$set: {proposalid: doc1._id}}
       );
       const updatestu3 = await user.updateOne(
         {id: formdata.mem3},
-        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+        {$set: {proposalid: doc1._id}}
       );
     } else if (
       formdata.mem2.length > 0 &&
@@ -2099,11 +2113,11 @@ const ProposalForm = async (req, res) => {
     ) {
       const updatestu2 = await user.updateOne(
         {id: formdata.mem2},
-        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+        {$set: {proposalid: doc1._id}}
       );
       const updatestu3 = await user.updateOne(
         {id: formdata.mem4},
-        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+        {$set: {proposalid: doc1._id}}
       );
     } else if (
       formdata.mem2.length == 0 &&
@@ -2112,11 +2126,11 @@ const ProposalForm = async (req, res) => {
     ) {
       const updatestu2 = await user.updateOne(
         {id: formdata.mem4},
-        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+        {$set: {proposalid: doc1._id}}
       );
       const updatestu3 = await user.updateOne(
         {id: formdata.mem3},
-        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+        {$set: {proposalid: doc1._id}}
       );
     }
   }

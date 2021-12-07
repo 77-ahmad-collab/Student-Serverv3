@@ -68,5 +68,5 @@ app.use(express.urlencoded({extended: false}));
 app.use("/", router);
 
 app.listen(PORT, () => {
-  console.log("app is listening on port 5000");
+  console.log(`app is listening on port ${PORT}`);
 });
