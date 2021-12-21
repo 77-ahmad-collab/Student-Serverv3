@@ -705,6 +705,7 @@ const getformdata = async (req, res) => {
           email: stu1.s_email,
           seatno: stu1.id,
           status: stu1.s_status,
+          contact: stu1.s_contact,
         },
       ];
       res.set("Access-Control-Allow-Origin", "*");
@@ -731,6 +732,7 @@ const getformdata = async (req, res) => {
           email: stu1.s_email,
           seatno: stu1.id,
           status: stu1.s_status,
+          contact: stu1.s_contact,
         },
       ];
       student = [
@@ -740,6 +742,7 @@ const getformdata = async (req, res) => {
           email: stu2.s_email,
           seatno: stu2.id,
           status: stu2.s_status,
+          contact: stu2.s_contact,
         },
       ];
       res.set("Access-Control-Allow-Origin", "*");
@@ -789,6 +792,7 @@ const getformdata = async (req, res) => {
             email: stu1.s_email,
             seatno: stu1.id,
             status: stu1.s_status,
+            contact: stu1.s_contact,
           },
         ];
         student = [
@@ -798,6 +802,7 @@ const getformdata = async (req, res) => {
             email: stu2.s_email,
             seatno: stu2.id,
             status: stu2.s_status,
+            contact: stu2.s_contact,
           },
         ];
         student = [
@@ -807,6 +812,7 @@ const getformdata = async (req, res) => {
             email: stu3.s_email,
             seatno: stu3.id,
             status: stu3.s_status,
+            contact: stu3.s_contact,
           },
         ];
       } else if (stu2 == null) {
@@ -818,6 +824,7 @@ const getformdata = async (req, res) => {
             email: stu1.s_email,
             seatno: stu1.id,
             status: stu1.s_status,
+            contact: stu1.s_contact,
           },
         ];
         student = [
@@ -827,6 +834,7 @@ const getformdata = async (req, res) => {
             email: stu3.s_email,
             seatno: stu3.id,
             status: stu3.s_status,
+            contact: stu3.s_contact,
           },
         ];
       } else if (stu3 == null) {
@@ -838,6 +846,7 @@ const getformdata = async (req, res) => {
             email: stu1.s_email,
             seatno: stu1.id,
             status: stu1.s_status,
+            contact: stu1.s_contact,
           },
         ];
         student = [
@@ -847,6 +856,7 @@ const getformdata = async (req, res) => {
             email: stu2.s_email,
             seatno: stu2.id,
             status: stu2.s_status,
+            contact: stu2.s_contact,
           },
         ];
       }
@@ -918,6 +928,7 @@ const getformdata = async (req, res) => {
             email: stu1.s_email,
             seatno: stu1.id,
             status: stu1.s_status,
+            contact: stu1.s_contact,
           },
         ];
         student = [
@@ -927,6 +938,7 @@ const getformdata = async (req, res) => {
             email: stu2.s_email,
             seatno: stu2.id,
             status: stu2.s_status,
+            contact: stu2.s_contact,
           },
         ];
         student = [
@@ -936,6 +948,7 @@ const getformdata = async (req, res) => {
             email: stu3.s_email,
             seatno: stu3.id,
             status: stu3.s_status,
+            contact: stu3.s_contact,
           },
         ];
         student = [
@@ -945,6 +958,7 @@ const getformdata = async (req, res) => {
             email: stu4.s_email,
             seatno: stu4.id,
             status: stu4.s_status,
+            contact: stu4.s_contact,
           },
         ];
       } else if (stu2 == null && stu3 == null && stu4 != null) {
@@ -956,6 +970,7 @@ const getformdata = async (req, res) => {
             email: stu1.s_email,
             seatno: stu1.id,
             status: stu1.s_status,
+            contact: stu1.s_contact,
           },
         ];
         student = [
@@ -965,6 +980,7 @@ const getformdata = async (req, res) => {
             email: stu4.s_email,
             seatno: stu4.id,
             status: stu4.s_status,
+            contact: stu4.s_contact,
           },
         ];
       } else if (stu2 != null && stu3 == null && stu4 == null) {
@@ -976,6 +992,7 @@ const getformdata = async (req, res) => {
             email: stu1.s_email,
             seatno: stu1.id,
             status: stu1.s_status,
+            contact: stu1.s_contact,
           },
         ];
         student = [
@@ -985,6 +1002,7 @@ const getformdata = async (req, res) => {
             email: stu2.s_email,
             seatno: stu2.id,
             status: stu2.s_status,
+            contact: stu2.s_contact,
           },
         ];
       } else if (stu2 == null && stu3 != null && stu4 == null) {
@@ -996,6 +1014,7 @@ const getformdata = async (req, res) => {
             email: stu1.s_email,
             seatno: stu1.id,
             status: stu1.s_status,
+            contact: stu1.s_contact,
           },
         ];
         student = [
@@ -1005,6 +1024,7 @@ const getformdata = async (req, res) => {
             email: stu3.s_email,
             seatno: stu3.id,
             status: stu3.s_status,
+            contact: stu3.s_contact,
           },
         ];
       } else if (stu2 == null && stu3 != null && stu4 != null) {
@@ -1016,6 +1036,7 @@ const getformdata = async (req, res) => {
             email: stu1.s_email,
             seatno: stu1.id,
             status: stu1.s_status,
+            contact: stu1.s_contact,
           },
         ];
         student = [
@@ -1025,6 +1046,7 @@ const getformdata = async (req, res) => {
             email: stu3.s_email,
             seatno: stu3.id,
             status: stu3.s_status,
+            contact: stu3.s_contact,
           },
         ];
         student = [
@@ -1034,6 +1056,7 @@ const getformdata = async (req, res) => {
             email: stu4.s_email,
             seatno: stu4.id,
             status: stu4.s_status,
+            contact: stu4.s_contact,
           },
         ];
       } else if (stu2 != null && stu3 != null && stu4 == null) {
@@ -1045,6 +1068,7 @@ const getformdata = async (req, res) => {
             email: stu1.s_email,
             seatno: stu1.id,
             status: stu1.s_status,
+            contact: stu1.s_contact,
           },
         ];
         student = [
@@ -1054,6 +1078,7 @@ const getformdata = async (req, res) => {
             email: stu3.s_email,
             seatno: stu3.id,
             status: stu3.s_status,
+            contact: stu3.s_contact,
           },
         ];
         student = [
@@ -1063,6 +1088,7 @@ const getformdata = async (req, res) => {
             email: stu2.s_email,
             seatno: stu2.id,
             status: stu2.s_status,
+            contact: stu2.s_contact,
           },
         ];
       } else if (stu2 != null && stu3 == null && stu4 != null) {
@@ -1074,6 +1100,7 @@ const getformdata = async (req, res) => {
             email: stu1.s_email,
             seatno: stu1.id,
             status: stu1.s_status,
+            contact: stu1.s_contact,
           },
         ];
         student = [
@@ -1083,6 +1110,7 @@ const getformdata = async (req, res) => {
             email: stu2.s_email,
             seatno: stu2.id,
             status: stu2.s_status,
+            contact: stu2.s_contact,
           },
         ];
         student = [
@@ -1092,6 +1120,7 @@ const getformdata = async (req, res) => {
             email: stu4.s_email,
             seatno: stu4.id,
             status: stu4.s_status,
+            contact: stu4.s_contact,
           },
         ];
       }
