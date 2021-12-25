@@ -53,6 +53,7 @@ const formdata = async (req, res) => {
                   isINVITE: true,
                   groupRequest: stu1_id,
                   formid: formid,
+                  s_status: "pending",
                 },
               }
             );
@@ -69,6 +70,7 @@ const formdata = async (req, res) => {
                   isINVITE: true,
                   groupRequest: stu1_id,
                   formid: formid,
+                  s_status: "pending",
                 },
               }
             );
@@ -85,6 +87,7 @@ const formdata = async (req, res) => {
                 isINVITE: true,
                 groupRequest: stu1_id,
                 formid: formid,
+                s_status: "Pending",
               },
             }
           );
@@ -115,6 +118,7 @@ const formdata = async (req, res) => {
                     isINVITE: true,
                     groupRequest: stu1_id,
                     formid: formid,
+                    s_status: "Pending",
                   },
                 }
               );
@@ -131,6 +135,7 @@ const formdata = async (req, res) => {
                     isINVITE: true,
                     groupRequest: stu1_id,
                     formid: formid,
+                    s_status: "Pending",
                   },
                 }
               );
@@ -147,6 +152,7 @@ const formdata = async (req, res) => {
                     isINVITE: true,
                     groupRequest: stu1_id,
                     formid: formid,
+                    s_status: "Pending",
                   },
                 }
               );
@@ -169,6 +175,7 @@ const formdata = async (req, res) => {
                     isINVITE: true,
                     groupRequest: stu1_id,
                     formid: formid,
+                    s_status: "Pending",
                   },
                 }
               );
@@ -184,6 +191,7 @@ const formdata = async (req, res) => {
                     isINVITE: true,
                     groupRequest: stu1_id,
                     formid: formid,
+                    s_status: "Pending",
                   },
                 }
               );
@@ -200,6 +208,7 @@ const formdata = async (req, res) => {
                     isINVITE: true,
                     groupRequest: stu1_id,
                     formid: formid,
+                    s_status: "Pending",
                   },
                 }
               );
@@ -215,6 +224,7 @@ const formdata = async (req, res) => {
                     isINVITE: true,
                     groupRequest: stu1_id,
                     formid: formid,
+                    s_status: "Pending",
                   },
                 }
               );
@@ -231,6 +241,7 @@ const formdata = async (req, res) => {
                     isINVITE: true,
                     groupRequest: stu1_id,
                     formid: formid,
+                    s_status: "Pending",
                   },
                 }
               );
@@ -246,6 +257,7 @@ const formdata = async (req, res) => {
                     isINVITE: true,
                     groupRequest: stu1_id,
                     formid: formid,
+                    s_status: "Pending",
                   },
                 }
               );
@@ -298,6 +310,7 @@ const formdata = async (req, res) => {
                   isINVITE: true,
                   groupRequest: stu1_id,
                   formid: formid,
+                  s_status: "Pending",
                 },
               }
             );
@@ -322,6 +335,7 @@ const formdata = async (req, res) => {
                   isINVITE: true,
                   groupRequest: stu1_id,
                   formid: formid,
+                  s_status: "Pending",
                 },
               }
             );
@@ -331,7 +345,7 @@ const formdata = async (req, res) => {
             );
             const OutputOF = `<div>
       <h1>Hello Group Members!</h1><br/><h4>You have been invited for the fyp project group formation by ${s_leader} Go and Check dashboard</h4></div>`;
-            sendMail(group_count, stu1_id, stu2_id, stu3_id, OutputOF);
+            // sendMail(group_count, stu1_id, stu2_id, stu3_id, OutputOF);
           }
         } else if (leader.ResponseCount == 4) {
           console.log(
@@ -437,7 +451,7 @@ const formdata = async (req, res) => {
                     isINVITE: true,
                     groupRequest: stu1_id,
                     formid: formid,
-                    s_status: "Accepted",
+                    s_status: "Pending",
                   },
                 }
               );
@@ -454,7 +468,7 @@ const formdata = async (req, res) => {
                     isINVITE: true,
                     groupRequest: stu1_id,
                     formid: formid,
-                    s_status: "Accepted",
+                    s_status: "Pending",
                   },
                 }
               );
