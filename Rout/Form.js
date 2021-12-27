@@ -2027,23 +2027,23 @@ const ProposalForm = async (req, res) => {
     if (formdata.mem2.length > 0) {
       const updatestu2 = await user.updateOne(
         {id: formdata.mem2},
-        {$set: {proposalid: doc1._id}}
+        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
       );
     } else if (formdata.mem3.length > 0) {
       const updatestu2 = await user.updateOne(
         {id: formdata.mem3},
-        {$set: {proposalid: doc1._id}}
+        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
       );
     }
   } else if (formdata.mem_count == 3) {
     if (formdata.mem2.length > 0 && formdata.mem3.length > 0) {
       const updatestu2 = await user.updateOne(
         {id: formdata.mem2},
-        {$set: {proposalid: doc1._id}}
+        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
       );
       const updatestu3 = await user.updateOne(
         {id: formdata.mem3},
-        {$set: {proposalid: doc1._id}}
+        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
       );
     } else if (
       (formdata.mem3.length > 0 && formdata.mem2.length == 0) ||
@@ -2051,7 +2051,7 @@ const ProposalForm = async (req, res) => {
     ) {
       const updatestu2 = await user.updateOne(
         {id: formdata.mem3},
-        {$set: {proposalid: doc1._id}}
+        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
       );
     } else if (
       (formdata.mem2.length > 0 && formdata.mem3.length == 0) ||
@@ -2059,7 +2059,7 @@ const ProposalForm = async (req, res) => {
     ) {
       const updatestu2 = await user.updateOne(
         {id: formdata.mem2},
-        {$set: {proposalid: doc1._id}}
+        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
       );
     }
   } else if (formdata.mem_count == 4) {
@@ -2070,15 +2070,15 @@ const ProposalForm = async (req, res) => {
     ) {
       const updatestu2 = await user.updateOne(
         {id: formdata.mem2},
-        {$set: {proposalid: doc1._id}}
+        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
       );
       const updatestu3 = await user.updateOne(
         {id: formdata.mem3},
-        {$set: {proposalid: doc1._id}}
+        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
       );
       const updatestu4 = await user.updateOne(
         {id: formdata.mem4},
-        {$set: {proposalid: doc1._id}}
+        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
       );
     } else if (
       formdata.mem3.length > 0 &&
@@ -2087,7 +2087,7 @@ const ProposalForm = async (req, res) => {
     ) {
       const updatestu2 = await user.updateOne(
         {id: formdata.mem3},
-        {$set: {proposalid: doc1._id}}
+        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
       );
     } else if (
       formdata.mem2.length > 0 &&
@@ -2096,7 +2096,7 @@ const ProposalForm = async (req, res) => {
     ) {
       const updatestu2 = await user.updateOne(
         {id: formdata.mem2},
-        {$set: {proposalid: doc1._id}}
+        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
       );
     } else if (
       formdata.mem2.length == 0 &&
@@ -2105,7 +2105,7 @@ const ProposalForm = async (req, res) => {
     ) {
       const updatestu2 = await user.updateOne(
         {id: formdata.mem4},
-        {$set: {proposalid: doc1._id}}
+        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
       );
     } else if (
       formdata.mem2.length > 0 &&
@@ -2114,11 +2114,11 @@ const ProposalForm = async (req, res) => {
     ) {
       const updatestu2 = await user.updateOne(
         {id: formdata.mem2},
-        {$set: {proposalid: doc1._id}}
+        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
       );
       const updatestu3 = await user.updateOne(
         {id: formdata.mem3},
-        {$set: {proposalid: doc1._id}}
+        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
       );
     } else if (
       formdata.mem2.length > 0 &&
@@ -2127,11 +2127,11 @@ const ProposalForm = async (req, res) => {
     ) {
       const updatestu2 = await user.updateOne(
         {id: formdata.mem2},
-        {$set: {proposalid: doc1._id}}
+        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
       );
       const updatestu3 = await user.updateOne(
         {id: formdata.mem4},
-        {$set: {proposalid: doc1._id}}
+        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
       );
     } else if (
       formdata.mem2.length == 0 &&
@@ -2140,11 +2140,11 @@ const ProposalForm = async (req, res) => {
     ) {
       const updatestu2 = await user.updateOne(
         {id: formdata.mem4},
-        {$set: {proposalid: doc1._id}}
+        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
       );
       const updatestu3 = await user.updateOne(
         {id: formdata.mem3},
-        {$set: {proposalid: doc1._id}}
+        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
       );
     }
   }
