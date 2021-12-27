@@ -928,7 +928,7 @@ const updateStatus = async (req, res) => {
     );
     // console.log(formdata);
 
-    const {mem2, mem3, mem4} = formdata;
+    const {mem1, mem2, mem3, mem4} = formdata;
     // console.log(findLeader, mem2, mem3);
     //**NOW LETS CHECK FOR GROUP COUNT TO CHECK THAT IF ALL MEMBERS HAS ACCEPTED THEN SEND PEOPOSAL TO INTERNAL ADVISOR */
     if (formdata.mem_count == 3) {
@@ -998,7 +998,15 @@ const updateStatus = async (req, res) => {
         ) {
           console.log("all 3 members has accepted the invite");
           const Result = await user.updateOne(
-            {id: findLeader},
+            {id: member1},
+            {isPROPOSALSUBMIT: true}
+          );
+          const updateofstu2 = await user.updateOne(
+            {id: member2},
+            {isPROPOSALSUBMIT: true}
+          );
+          const updateofstu3 = await user.updateOne(
+            {id: member3},
             {isPROPOSALSUBMIT: true}
           );
         } else {
@@ -1180,7 +1188,19 @@ const updateStatus = async (req, res) => {
         ) {
           console.log("all 4 members has accepted the invite");
           const Result = await user.updateOne(
-            {id: findLeader},
+            {id: member1},
+            {isPROPOSALSUBMIT: true}
+          );
+          const updateofstu2 = await user.updateOne(
+            {id: member2},
+            {isPROPOSALSUBMIT: true}
+          );
+          const updateofstu3 = await user.updateOne(
+            {id: member3},
+            {isPROPOSALSUBMIT: true}
+          );
+          const updateofstu4 = await user.updateOne(
+            {id: member4},
             {isPROPOSALSUBMIT: true}
           );
         } else {
@@ -1250,7 +1270,11 @@ const updateStatus = async (req, res) => {
       if (member1_status.isACCEPTED && member2_status.isACCEPTED) {
         console.log("all 2 members has accepted the invite");
         const Result = await user.updateOne(
-          {id: findLeader},
+          {id: member1},
+          {isPROPOSALSUBMIT: true}
+        );
+        const updateofstu2 = await user.updateOne(
+          {id: member2},
           {isPROPOSALSUBMIT: true}
         );
       } else {
