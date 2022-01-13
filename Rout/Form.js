@@ -1,6 +1,8 @@
 const user = require("../models/StudentSchema");
 const form = require("../models/FormSchema");
 const proposal = require("../models/ProposalSchema");
+const internalAdvisor = require("../models/InternalAdvisorSchema");
+const advisorForm = require("../models/AdvisorFormScehma");
 const {sendMail, sendSingleMail} = require("./sendMail");
 const formdata = async (req, res) => {
   //getting values from client
@@ -31,204 +33,37 @@ const formdata = async (req, res) => {
     const CHECKACCEPT = await user.findOne({id: stu1_id}, {_id: 0});
     console.log(`checkaccept`, CHECKACCEPT);
     if (CHECKACCEPT.isACCEPTED == true) {
-      if (group_count == 4) {
-        console.log("Resubmiting and group count is 4");
-        const leader = await user.findOne({id: stu1_id});
-        const formid = await leader.formid;
-        const formdata = await form.findOne({_id: formid});
-        const {mem2, mem3} = formdata;
-        console.log(mem2, mem3, "check in a 4 of rsub");
-        if (leader.ResponseCount == 3) {
-          console.log("hello i am here");
-          if (mem2 == "") {
-            const updateForm = await form.updateOne(
-              {_id: formid},
-              {$set: {mem2: stu3_id}}
-            );
-            const status_res = await user.updateOne(
-              {id: stu3_id},
-              {
-                $set: {
-                  isSUBMIT: true,
-                  isINVITE: true,
-                  groupRequest: stu1_id,
-                  formid: formid,
-                  s_status: "pending",
-                },
-              }
-            );
-          } else if (mem3 == "") {
-            const updateForm = await form.updateOne(
-              {_id: formid},
-              {$set: {mem3: stu3_id}}
-            );
-            const status_res = await user.updateOne(
-              {id: stu3_id},
-              {
-                $set: {
-                  isSUBMIT: true,
-                  isINVITE: true,
-                  groupRequest: stu1_id,
-                  formid: formid,
-                  s_status: "pending",
-                },
-              }
-            );
-          }
-          const updateForm1 = await form.updateOne(
-            {_id: formid},
-            {$set: {mem4: stu4_id, reject: "", reject1: "", mem_count: 4}}
-          );
-          const status_res1 = await user.updateOne(
-            {id: stu4_id},
-            {
-              $set: {
-                isSUBMIT: true,
-                isINVITE: true,
-                groupRequest: stu1_id,
-                formid: formid,
-                s_status: "Pending",
-              },
-            }
-          );
-          const updateResponseCount = await user.updateOne(
-            {id: stu1_id},
-            {ResponseCount: 2}
-          );
-          console.log("till now things doen");
-        } else if (leader.ResponseCount == 4) {
-          let count = 0;
-          if (formdata.reject.length > 0) {
-            count = 1;
-          }
-          if (formdata.reject1.length > 0) {
-            count = 2;
-          }
-          if (count == 1) {
+      const groupleader = await user.findOne({id: stu1_id});
+      const studentformid = await leader.formid;
+      const studentformdata = await form.findOne({_id: studentformid});
+      if (studentformdata.internalAdvisor_status == "UNCLEAR") {
+        if (group_count == 4) {
+          console.log("Resubmiting and group count is 4");
+          const leader = await user.findOne({id: stu1_id});
+          const formid = await leader.formid;
+          const formdata = await form.findOne({_id: formid});
+          const {mem2, mem3} = formdata;
+          console.log(mem2, mem3, "check in a 4 of rsub");
+          if (leader.ResponseCount == 3) {
+            console.log("hello i am here");
             if (mem2 == "") {
               const updateForm = await form.updateOne(
                 {_id: formid},
-                {$set: {mem2: stu4_id}}
+                {$set: {mem2: stu3_id}}
               );
               const status_res = await user.updateOne(
-                {id: stu4_id},
+                {id: stu3_id},
                 {
                   $set: {
                     isSUBMIT: true,
                     isINVITE: true,
                     groupRequest: stu1_id,
                     formid: formid,
-                    s_status: "Pending",
+                    s_status: "pending",
                   },
                 }
               );
             } else if (mem3 == "") {
-              const updateForm = await form.updateOne(
-                {_id: formid},
-                {$set: {mem3: stu4_id}}
-              );
-              const status_res = await user.updateOne(
-                {id: stu4_id},
-                {
-                  $set: {
-                    isSUBMIT: true,
-                    isINVITE: true,
-                    groupRequest: stu1_id,
-                    formid: formid,
-                    s_status: "Pending",
-                  },
-                }
-              );
-            } else if (mem4 == "") {
-              const updateForm = await form.updateOne(
-                {_id: formid},
-                {$set: {mem4: stu4_id}}
-              );
-              const status_res = await user.updateOne(
-                {id: stu4_id},
-                {
-                  $set: {
-                    isSUBMIT: true,
-                    isINVITE: true,
-                    groupRequest: stu1_id,
-                    formid: formid,
-                    s_status: "Pending",
-                  },
-                }
-              );
-            }
-            const updateForm1 = await form.updateOne(
-              {_id: formid},
-              {$set: {reject: "", reject1: "", mem_count: 4}}
-            );
-          } else if (count == 2) {
-            if (mem2 == "" && mem3 == "") {
-              const updateForm = await form.updateOne(
-                {_id: formid},
-                {$set: {mem2: stu3_id}}
-              );
-              const status_res = await user.updateOne(
-                {id: stu3_id},
-                {
-                  $set: {
-                    isSUBMIT: true,
-                    isINVITE: true,
-                    groupRequest: stu1_id,
-                    formid: formid,
-                    s_status: "Pending",
-                  },
-                }
-              );
-              const updateForm1 = await form.updateOne(
-                {_id: formid},
-                {$set: {mem3: stu4_id}}
-              );
-              const status_res1 = await user.updateOne(
-                {id: stu4_id},
-                {
-                  $set: {
-                    isSUBMIT: true,
-                    isINVITE: true,
-                    groupRequest: stu1_id,
-                    formid: formid,
-                    s_status: "Pending",
-                  },
-                }
-              );
-            } else if (mem2 == "" && mem4 == "") {
-              const updateForm = await form.updateOne(
-                {_id: formid},
-                {$set: {mem2: stu3_id}}
-              );
-              const status_res = await user.updateOne(
-                {id: stu3_id},
-                {
-                  $set: {
-                    isSUBMIT: true,
-                    isINVITE: true,
-                    groupRequest: stu1_id,
-                    formid: formid,
-                    s_status: "Pending",
-                  },
-                }
-              );
-              const updateForm1 = await form.updateOne(
-                {_id: formid},
-                {$set: {mem4: stu4_id}}
-              );
-              const status_res1 = await user.updateOne(
-                {id: stu4_id},
-                {
-                  $set: {
-                    isSUBMIT: true,
-                    isINVITE: true,
-                    groupRequest: stu1_id,
-                    formid: formid,
-                    s_status: "Pending",
-                  },
-                }
-              );
-            } else if (mem3 == "" && mem4 == "") {
               const updateForm = await form.updateOne(
                 {_id: formid},
                 {$set: {mem3: stu3_id}}
@@ -241,16 +76,240 @@ const formdata = async (req, res) => {
                     isINVITE: true,
                     groupRequest: stu1_id,
                     formid: formid,
-                    s_status: "Pending",
+                    s_status: "pending",
                   },
                 }
               );
+            }
+            const updateForm1 = await form.updateOne(
+              {_id: formid},
+              {$set: {mem4: stu4_id, reject: "", reject1: "", mem_count: 4}}
+            );
+            const status_res1 = await user.updateOne(
+              {id: stu4_id},
+              {
+                $set: {
+                  isSUBMIT: true,
+                  isINVITE: true,
+                  groupRequest: stu1_id,
+                  formid: formid,
+                  s_status: "Pending",
+                },
+              }
+            );
+            const updateResponseCount = await user.updateOne(
+              {id: stu1_id},
+              {ResponseCount: 2}
+            );
+            console.log("till now things doen");
+          } else if (leader.ResponseCount == 4) {
+            let count = 0;
+            if (formdata.reject.length > 0) {
+              count = 1;
+            }
+            if (formdata.reject1.length > 0) {
+              count = 2;
+            }
+            if (count == 1) {
+              if (mem2 == "") {
+                const updateForm = await form.updateOne(
+                  {_id: formid},
+                  {$set: {mem2: stu4_id}}
+                );
+                const status_res = await user.updateOne(
+                  {id: stu4_id},
+                  {
+                    $set: {
+                      isSUBMIT: true,
+                      isINVITE: true,
+                      groupRequest: stu1_id,
+                      formid: formid,
+                      s_status: "Pending",
+                    },
+                  }
+                );
+              } else if (mem3 == "") {
+                const updateForm = await form.updateOne(
+                  {_id: formid},
+                  {$set: {mem3: stu4_id}}
+                );
+                const status_res = await user.updateOne(
+                  {id: stu4_id},
+                  {
+                    $set: {
+                      isSUBMIT: true,
+                      isINVITE: true,
+                      groupRequest: stu1_id,
+                      formid: formid,
+                      s_status: "Pending",
+                    },
+                  }
+                );
+              } else if (mem4 == "") {
+                const updateForm = await form.updateOne(
+                  {_id: formid},
+                  {$set: {mem4: stu4_id}}
+                );
+                const status_res = await user.updateOne(
+                  {id: stu4_id},
+                  {
+                    $set: {
+                      isSUBMIT: true,
+                      isINVITE: true,
+                      groupRequest: stu1_id,
+                      formid: formid,
+                      s_status: "Pending",
+                    },
+                  }
+                );
+              }
               const updateForm1 = await form.updateOne(
                 {_id: formid},
-                {$set: {mem4: stu4_id}}
+                {$set: {reject: "", reject1: "", mem_count: 4}}
               );
-              const status_res1 = await user.updateOne(
-                {id: stu4_id},
+            } else if (count == 2) {
+              if (mem2 == "" && mem3 == "") {
+                const updateForm = await form.updateOne(
+                  {_id: formid},
+                  {$set: {mem2: stu3_id}}
+                );
+                const status_res = await user.updateOne(
+                  {id: stu3_id},
+                  {
+                    $set: {
+                      isSUBMIT: true,
+                      isINVITE: true,
+                      groupRequest: stu1_id,
+                      formid: formid,
+                      s_status: "Pending",
+                    },
+                  }
+                );
+                const updateForm1 = await form.updateOne(
+                  {_id: formid},
+                  {$set: {mem3: stu4_id}}
+                );
+                const status_res1 = await user.updateOne(
+                  {id: stu4_id},
+                  {
+                    $set: {
+                      isSUBMIT: true,
+                      isINVITE: true,
+                      groupRequest: stu1_id,
+                      formid: formid,
+                      s_status: "Pending",
+                    },
+                  }
+                );
+              } else if (mem2 == "" && mem4 == "") {
+                const updateForm = await form.updateOne(
+                  {_id: formid},
+                  {$set: {mem2: stu3_id}}
+                );
+                const status_res = await user.updateOne(
+                  {id: stu3_id},
+                  {
+                    $set: {
+                      isSUBMIT: true,
+                      isINVITE: true,
+                      groupRequest: stu1_id,
+                      formid: formid,
+                      s_status: "Pending",
+                    },
+                  }
+                );
+                const updateForm1 = await form.updateOne(
+                  {_id: formid},
+                  {$set: {mem4: stu4_id}}
+                );
+                const status_res1 = await user.updateOne(
+                  {id: stu4_id},
+                  {
+                    $set: {
+                      isSUBMIT: true,
+                      isINVITE: true,
+                      groupRequest: stu1_id,
+                      formid: formid,
+                      s_status: "Pending",
+                    },
+                  }
+                );
+              } else if (mem3 == "" && mem4 == "") {
+                const updateForm = await form.updateOne(
+                  {_id: formid},
+                  {$set: {mem3: stu3_id}}
+                );
+                const status_res = await user.updateOne(
+                  {id: stu3_id},
+                  {
+                    $set: {
+                      isSUBMIT: true,
+                      isINVITE: true,
+                      groupRequest: stu1_id,
+                      formid: formid,
+                      s_status: "Pending",
+                    },
+                  }
+                );
+                const updateForm1 = await form.updateOne(
+                  {_id: formid},
+                  {$set: {mem4: stu4_id}}
+                );
+                const status_res1 = await user.updateOne(
+                  {id: stu4_id},
+                  {
+                    $set: {
+                      isSUBMIT: true,
+                      isINVITE: true,
+                      groupRequest: stu1_id,
+                      formid: formid,
+                      s_status: "Pending",
+                    },
+                  }
+                );
+              }
+              const updateForm1 = await form.updateOne(
+                {_id: formid},
+                {$set: {reject: "", reject1: "", mem_count: 4}}
+              );
+            }
+          }
+        } else if (group_count == 3) {
+          console.log("This student is resubmitting the form");
+          const leader = await user.findOne({id: stu1_id});
+          console.log(leader, "leader");
+          const formid = await leader.formid;
+          const formdata = await form.findOne({_id: formid});
+          if (leader.ResponseCount == 3) {
+            console.log("Resubmiting for 3 and group count is 3");
+            const updateResponseCount = await user.updateOne(
+              {id: stu1_id},
+              {ResponseCount: 2}
+            );
+            console.log(formid);
+            // integerate this functionality at the end
+            const updateformOf = await form.updateOne(
+              {_id: formid},
+              {$set: {reject: ""}}
+            );
+            // const updateformOf1 = await form.updateOne(
+            //   {_id: formid},
+            //   {$set: {reject1: ""}}
+            // );
+            const {mem2, mem3} = formdata;
+
+            if (mem2 == "") {
+              const updateForm = await form.updateOne(
+                {_id: formid},
+                {$set: {mem2: stu3_id}}
+              );
+
+              //  const updateForm1 = await form.updateOne(
+              //    {_id: formid},
+              //    {$set: {mem2: stu3_id}}
+              // //  );
+              const status_res = await user.updateOne(
+                {id: stu3_id},
                 {
                   $set: {
                     isSUBMIT: true,
@@ -258,158 +317,6 @@ const formdata = async (req, res) => {
                     groupRequest: stu1_id,
                     formid: formid,
                     s_status: "Pending",
-                  },
-                }
-              );
-            }
-            const updateForm1 = await form.updateOne(
-              {_id: formid},
-              {$set: {reject: "", reject1: "", mem_count: 4}}
-            );
-          }
-        }
-      } else if (group_count == 3) {
-        console.log("This student is resubmitting the form");
-        const leader = await user.findOne({id: stu1_id});
-        console.log(leader, "leader");
-        const formid = await leader.formid;
-        const formdata = await form.findOne({_id: formid});
-        if (leader.ResponseCount == 3) {
-          console.log("Resubmiting for 3 and group count is 3");
-          const updateResponseCount = await user.updateOne(
-            {id: stu1_id},
-            {ResponseCount: 2}
-          );
-          console.log(formid);
-          // integerate this functionality at the end
-          const updateformOf = await form.updateOne(
-            {_id: formid},
-            {$set: {reject: ""}}
-          );
-          // const updateformOf1 = await form.updateOne(
-          //   {_id: formid},
-          //   {$set: {reject1: ""}}
-          // );
-          const {mem2, mem3} = formdata;
-
-          if (mem2 == "") {
-            const updateForm = await form.updateOne(
-              {_id: formid},
-              {$set: {mem2: stu3_id}}
-            );
-
-            //  const updateForm1 = await form.updateOne(
-            //    {_id: formid},
-            //    {$set: {mem2: stu3_id}}
-            // //  );
-            const status_res = await user.updateOne(
-              {id: stu3_id},
-              {
-                $set: {
-                  isSUBMIT: true,
-                  isINVITE: true,
-                  groupRequest: stu1_id,
-                  formid: formid,
-                  s_status: "Pending",
-                },
-              }
-            );
-            const updateLeader = await user.updateOne(
-              {id: stu1_id},
-              {$set: {isSUBMIT: true}}
-            );
-            const OutputOF = `<div>
-      <h1>Hello Group Members!</h1><br/><h4>You have been invited for the fyp project group formation by ${s_leader} Go and Check dashboard</h4></div>`;
-            sendMail(group_count, stu1_id, stu2_id, stu3_id, OutputOF);
-          } else if (mem3 == "") {
-            const updateForm = await form.updateOne(
-              {_id: formid},
-              {$set: {mem3: stu3_id}}
-            );
-
-            const status_res = await user.updateOne(
-              {id: stu3_id},
-              {
-                $set: {
-                  isSUBMIT: true,
-                  isINVITE: true,
-                  groupRequest: stu1_id,
-                  formid: formid,
-                  s_status: "Pending",
-                },
-              }
-            );
-            const updateLeader = await user.updateOne(
-              {id: stu1_id},
-              {$set: {isSUBMIT: true}}
-            );
-            const OutputOF = `<div>
-      <h1>Hello Group Members!</h1><br/><h4>You have been invited for the fyp project group formation by ${s_leader} Go and Check dashboard</h4></div>`;
-            // sendMail(group_count, stu1_id, stu2_id, stu3_id, OutputOF);
-          }
-        } else if (leader.ResponseCount == 4) {
-          console.log(
-            "Resubmiting for 3 again but previpus;y and group count is 4"
-          );
-          const updateResponseCount = await user.updateOne(
-            {id: stu1_id},
-            {ResponseCount: 2}
-          );
-          console.log(formid, "form id");
-          // integerate this functionality at the end
-          // const updateformOf = await form.updateOne(
-          //   {_id: formid},
-          //   {$set: {reject: ""}}
-          // );
-          // const updateformOf1 = await form.updateOne(
-          //   {_id: formid},
-          //   {$set: {reject1: ""}}
-          // );
-          const {mem2, mem3, mem4, reject, reject1} = formdata;
-
-          console.log(
-            mem2,
-            mem3,
-            mem4,
-            reject.length,
-            reject1.length,
-            "meessage"
-          );
-          let countof = 0;
-          if (reject.length > 0) {
-            console.log(reject.length, ">>");
-            countof = 1;
-            console.log(countof, "inside countof");
-            // if (user1 == mem2) {
-            //   indicatior1 = "mem2";
-            // } else if (user1 == mem3) {
-            //   indicatior1 = "mem3";
-            // } else if (user1 == mem4) {
-            //   indicator = "mem4";
-            // }
-          }
-          if (reject1.length > 0) {
-            countof = 2;
-            //  if (user2 == mem2) {
-            //    indicatior2 = "mem2";
-            //  } else if (user2 == mem3) {
-            //    indicatior2 = "mem3";
-            //  } else if (user2 == mem4) {
-            //    indicator2 = "mem4";
-            //  }
-          }
-          console.log("the count", countof);
-          if (countof == 1) {
-            if (mem2 == "" || mem3 == "" || mem4 == "") {
-              const updateForm = await form.updateOne(
-                {_id: formid},
-                {
-                  $set: {
-                    mem2: stu2_id,
-                    mem3: stu3_id,
-                    reject: "",
-                    reject1: "",
-                    mem_count: 3,
                   },
                 }
               );
@@ -417,49 +324,15 @@ const formdata = async (req, res) => {
                 {id: stu1_id},
                 {$set: {isSUBMIT: true}}
               );
-              console.log("in that resubmission case everyone has accepted");
-              //  const updateForm1 = await form.updateOne(
-              //    {_id: formid},
-              //    {$set: {mem2: stu3_id}}
-              // //  );
-              // const status_res = await user.updateOne(
-              //   {id: stu3_id},
-              //   {
-              //     $set: {
-              //       isSUBMIT: true,
-              //       isINVITE: true,
-              //       groupRequest: stu1_id,
-              //       formid: formid,
-              //     },
-              //   }
-              // );
               const OutputOF = `<div>
-      <h1>Hello Group Members!</h1><br/><h4>You have been invited for the fyp project group formation by ${s_leader} Go and Check dashboard</h4></div>`;
+         <h1>Hello Group Members!</h1><br/><h4>You have been invited for the fyp project group formation by ${s_leader} Go and Check dashboard</h4></div>`;
               sendMail(group_count, stu1_id, stu2_id, stu3_id, OutputOF);
-            }
-          } else if (countof == 2) {
-            if (mem2 == "") {
-              const updateForm = await form.updateOne(
-                {_id: formid},
-                {$set: {mem2: stu3_id, reject: "", reject1: "", mem_count: 3}}
-              );
-              const status_res = await user.updateOne(
-                {id: stu3_id},
-                {
-                  $set: {
-                    isSUBMIT: true,
-                    isINVITE: true,
-                    groupRequest: stu1_id,
-                    formid: formid,
-                    s_status: "Pending",
-                  },
-                }
-              );
             } else if (mem3 == "") {
               const updateForm = await form.updateOne(
                 {_id: formid},
-                {$set: {mem3: stu3_id, reject: "", reject1: "", mem_count: 3}}
+                {$set: {mem3: stu3_id}}
               );
+
               const status_res = await user.updateOne(
                 {id: stu3_id},
                 {
@@ -472,29 +345,180 @@ const formdata = async (req, res) => {
                   },
                 }
               );
+              const updateLeader = await user.updateOne(
+                {id: stu1_id},
+                {$set: {isSUBMIT: true}}
+              );
+              const OutputOF = `<div>
+         <h1>Hello Group Members!</h1><br/><h4>You have been invited for the fyp project group formation by ${s_leader} Go and Check dashboard</h4></div>`;
+              // sendMail(group_count, stu1_id, stu2_id, stu3_id, OutputOF);
+            }
+          } else if (leader.ResponseCount == 4) {
+            console.log(
+              "Resubmiting for 3 again but previpus;y and group count is 4"
+            );
+            const updateResponseCount = await user.updateOne(
+              {id: stu1_id},
+              {ResponseCount: 2}
+            );
+            console.log(formid, "form id");
+            // integerate this functionality at the end
+            // const updateformOf = await form.updateOne(
+            //   {_id: formid},
+            //   {$set: {reject: ""}}
+            // );
+            // const updateformOf1 = await form.updateOne(
+            //   {_id: formid},
+            //   {$set: {reject1: ""}}
+            // );
+            const {mem2, mem3, mem4, reject, reject1} = formdata;
+
+            console.log(
+              mem2,
+              mem3,
+              mem4,
+              reject.length,
+              reject1.length,
+              "meessage"
+            );
+            let countof = 0;
+            if (reject.length > 0) {
+              console.log(reject.length, ">>");
+              countof = 1;
+              console.log(countof, "inside countof");
+              // if (user1 == mem2) {
+              //   indicatior1 = "mem2";
+              // } else if (user1 == mem3) {
+              //   indicatior1 = "mem3";
+              // } else if (user1 == mem4) {
+              //   indicator = "mem4";
+              // }
+            }
+            if (reject1.length > 0) {
+              countof = 2;
+              //  if (user2 == mem2) {
+              //    indicatior2 = "mem2";
+              //  } else if (user2 == mem3) {
+              //    indicatior2 = "mem3";
+              //  } else if (user2 == mem4) {
+              //    indicator2 = "mem4";
+              //  }
+            }
+            console.log("the count", countof);
+            if (countof == 1) {
+              if (mem2 == "" || mem3 == "" || mem4 == "") {
+                const updateForm = await form.updateOne(
+                  {_id: formid},
+                  {
+                    $set: {
+                      mem2: stu2_id,
+                      mem3: stu3_id,
+                      reject: "",
+                      reject1: "",
+                      mem_count: 3,
+                    },
+                  }
+                );
+                const updateLeader = await user.updateOne(
+                  {id: stu1_id},
+                  {$set: {isSUBMIT: true}}
+                );
+                console.log("in that resubmission case everyone has accepted");
+                //  const updateForm1 = await form.updateOne(
+                //    {_id: formid},
+                //    {$set: {mem2: stu3_id}}
+                // //  );
+                // const status_res = await user.updateOne(
+                //   {id: stu3_id},
+                //   {
+                //     $set: {
+                //       isSUBMIT: true,
+                //       isINVITE: true,
+                //       groupRequest: stu1_id,
+                //       formid: formid,
+                //     },
+                //   }
+                // );
+                const OutputOF = `<div>
+         <h1>Hello Group Members!</h1><br/><h4>You have been invited for the fyp project group formation by ${s_leader} Go and Check dashboard</h4></div>`;
+                sendMail(group_count, stu1_id, stu2_id, stu3_id, OutputOF);
+              }
+            } else if (countof == 2) {
+              if (mem2 == "") {
+                const updateForm = await form.updateOne(
+                  {_id: formid},
+                  {$set: {mem2: stu3_id, reject: "", reject1: "", mem_count: 3}}
+                );
+                const status_res = await user.updateOne(
+                  {id: stu3_id},
+                  {
+                    $set: {
+                      isSUBMIT: true,
+                      isINVITE: true,
+                      groupRequest: stu1_id,
+                      formid: formid,
+                      s_status: "Pending",
+                    },
+                  }
+                );
+              } else if (mem3 == "") {
+                const updateForm = await form.updateOne(
+                  {_id: formid},
+                  {$set: {mem3: stu3_id, reject: "", reject1: "", mem_count: 3}}
+                );
+                const status_res = await user.updateOne(
+                  {id: stu3_id},
+                  {
+                    $set: {
+                      isSUBMIT: true,
+                      isINVITE: true,
+                      groupRequest: stu1_id,
+                      formid: formid,
+                      s_status: "Pending",
+                    },
+                  }
+                );
+              }
             }
           }
-        }
-      } else if (group_count == 2) {
-        const updateLeader = await user.updateOne(
-          {id: stu1_id},
-          {$set: {isSUBMIT: true}}
-        );
-        const leader = await user.findOne({id: stu1_id});
-        const formid = await leader.formid;
-        const formdata = await form.findOne({_id: formid});
-        const mem2 = await formdata.mem2;
-        const mem3 = await formdata.mem3;
+        } else if (group_count == 2) {
+          const updateLeader = await user.updateOne(
+            {id: stu1_id},
+            {$set: {isSUBMIT: true}}
+          );
+          const leader = await user.findOne({id: stu1_id});
+          const formid = await leader.formid;
+          const formdata = await form.findOne({_id: formid});
+          const mem2 = await formdata.mem2;
+          const mem3 = await formdata.mem3;
 
-        if (mem2 == "") {
-          const updateformdata = await form.updateOne(
+          if (mem2 == "") {
+            const updateformdata = await form.updateOne(
+              {_id: formid},
+              {$set: {mem2: mem3, mem3: ""}}
+            );
+          }
+          const updateForm = await form.updateOne(
             {_id: formid},
-            {$set: {mem2: mem3, mem3: ""}}
+            {$set: {mem_count: 2}}
           );
         }
-        const updateForm = await form.updateOne(
-          {_id: formid},
-          {$set: {mem_count: 2}}
+      } else if (studentformdata.internalAdvisor_status == "REJECT") {
+        const SubmitFormAgain = await form.updateOne(
+          {studentformid},
+          {
+            mem_count: groupcount,
+            s_organization,
+            mem1: stu1_id,
+            mem2: stu2_id,
+            mem3: stu3_id,
+            mem4: stu4_id,
+            s_proj_title,
+            s_internal,
+            s_external,
+            internal_designation,
+            external_designation,
+          }
         );
       }
     } else {
@@ -533,13 +557,53 @@ const formdata = async (req, res) => {
             $set: {
               isSUBMIT: true,
               isACCEPTED: true,
-              isPROPOSALSUBMIT: true,
+              // {isPROPOSALSUBMIT: true} //MYINDICATION
               groupRequest: stu1_id,
               formid: doc1._id,
               s_status: "Accepted",
             },
           }
         );
+        // new logic begins===========
+        const updatetheformadvisor = await form.updateOne(
+          {_id: doc1._id},
+          {internalAdvisor_status: "PENDING"}
+        );
+        const findinternal = await internalAdvisor.findOne({name: s_internal});
+        console.log(findinternal, "=====>>>internal");
+        if (findinternal.advisorformid == "NONE") {
+          const addAdvisorformdata = await new advisorForm({
+            name: "saleem bajwa",
+            pending: [`${stu1_id}`],
+            accepted: [],
+            rejected: [],
+          });
+
+          const savestate = await addAdvisorformdata.save();
+          console.log(savestate, "======>>advisor form dta");
+          const updateADvisorformid = await internalAdvisor.updateOne(
+            {
+              name: "Dr shariq",
+            },
+            {advisorformid: savestate._id}
+          );
+        } else {
+          console.log("entered else case======");
+          const previousState = await advisorForm.findOne({
+            _id: findinternal.advisorformid,
+          });
+
+          const updateInteral = await advisorForm.updateOne(
+            {_id: findinternal.advisorformid},
+            {
+              pending: [...previousState.pending, stu1_id],
+              accepted: [...previousState.accepted],
+              rejected: [...previousState.rejected],
+            }
+          );
+          console.log(updateInteral, ">>>intrenal uoadted when have groups");
+        }
+        // new logic ends
       }
       if (group_count == 2) {
         if (s_leader == stu1_id.toUpperCase()) {
@@ -549,7 +613,7 @@ const formdata = async (req, res) => {
               $set: {
                 isSUBMIT: true,
                 isACCEPTED: true,
-                // isPROPOSALSUBMIT: true,
+
                 groupRequest: stu1_id,
                 formid: doc1._id,
                 s_status: "Accepted",
@@ -562,7 +626,7 @@ const formdata = async (req, res) => {
               $set: {
                 isSUBMIT: true,
                 isINVITE: true,
-                // isPROPOSALSUBMIT: true,
+
                 groupRequest: stu1_id,
                 formid: doc1._id,
                 s_status: "Pending",
@@ -588,7 +652,7 @@ const formdata = async (req, res) => {
               $set: {
                 isSUBMIT: true,
                 isACCEPTED: true,
-                // isPROPOSALSUBMIT: true,
+
                 groupRequest: stu1_id,
                 ResponseCount: 1,
                 formid: doc1._id,
@@ -602,7 +666,7 @@ const formdata = async (req, res) => {
               $set: {
                 isSUBMIT: true,
                 isINVITE: true,
-                // isPROPOSALSUBMIT: true,
+
                 groupRequest: stu1_id,
                 formid: doc1._id,
                 s_status: "Pending",
@@ -924,11 +988,20 @@ const updateStatus = async (req, res) => {
     const responsecount = Result.ResponseCount;
     const formdata = await form.findOne(
       {_id: formid},
-      {_id: 0, mem_count: 1, mem1: 1, mem2: 1, mem3: 1, mem4: 1, mem_count: 1}
+      {
+        _id: 1,
+        mem_count: 1,
+        mem1: 1,
+        mem2: 1,
+        mem3: 1,
+        mem4: 1,
+        mem_count: 1,
+        s_internal: 1,
+      }
     );
     // console.log(formdata);
 
-    const {mem1, mem2, mem3, mem4} = formdata;
+    const {mem1, mem2, mem3, mem4, _id} = formdata;
     // console.log(findLeader, mem2, mem3);
     //**NOW LETS CHECK FOR GROUP COUNT TO CHECK THAT IF ALL MEMBERS HAS ACCEPTED THEN SEND PEOPOSAL TO INTERNAL ADVISOR */
     if (formdata.mem_count == 3) {
@@ -939,13 +1012,13 @@ const updateStatus = async (req, res) => {
         if (mem3 != "") {
           console.log("yes it is nt null");
           const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has accepted the group invite</h4></div>`;
-          sendSingleMail(1, findLeader, OutputOF);
-          sendSingleMail(1, mem3, OutputOF);
+          // sendSingleMail(1, findLeader, OutputOF);
+          // sendSingleMail(1, mem3, OutputOF);
         } else {
           console.log("it is null");
           const member3 = "ct-18008";
           const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has accepted the group invite</h4></div>`;
-          sendSingleMail(1, findLeader, OutputOF);
+          // sendSingleMail(1, findLeader, OutputOF);
         }
         console.log("dont sendMail to mem2,his status is oending");
         // const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has accepted the group invite</h4></div>`;
@@ -955,12 +1028,12 @@ const updateStatus = async (req, res) => {
         if (mem2 != "") {
           console.log("yes it is nt null");
           const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has accepted the group invite</h4></div>`;
-          sendSingleMail(1, findLeader, OutputOF);
-          sendSingleMail(1, mem2, OutputOF);
+          // sendSingleMail(1, findLeader, OutputOF);
+          // sendSingleMail(1, mem2, OutputOF);
         } else {
           console.log("it is null");
           const OutputOF = `<div><h4>It is to inform you guys that ${rollNo} has accepted the group invite</h4></div>`;
-          sendSingleMail(1, findLeader, OutputOF);
+          // sendSingleMail(1, findLeader, OutputOF);
           member2 = "ct-18008";
         }
 
@@ -974,7 +1047,7 @@ const updateStatus = async (req, res) => {
       const member3 = formdata.mem3;
       const member1_status = await user.findOne(
         {id: member1},
-        {isACCEPTED: 1, _id: 0}
+        {isACCEPTED: 1, _id: 0, groupRequest: 1}
       );
       const member2_status = await user.findOne(
         {id: member2},
@@ -998,17 +1071,62 @@ const updateStatus = async (req, res) => {
         ) {
           console.log("all 3 members has accepted the invite");
           const Result = await user.updateOne(
-            {id: member1},
-            {isPROPOSALSUBMIT: true}
+            {id: member1}
+            // {isPROPOSALSUBMIT: true} //MYINDICATION
           );
           const updateofstu2 = await user.updateOne(
-            {id: member2},
-            {isPROPOSALSUBMIT: true}
+            {id: member2}
+            // {isPROPOSALSUBMIT: true} //MYINDICATION
           );
           const updateofstu3 = await user.updateOne(
-            {id: member3},
-            {isPROPOSALSUBMIT: true}
+            {id: member3}
+            // {isPROPOSALSUBMIT: true} //MYINDICATION
           );
+          // new logic begins===========
+          const updatetheformadvisor = await form.updateOne(
+            {_id: _id},
+            {internalAdvisor_status: "PENDING"}
+          );
+          const findinternal = await internalAdvisor.findOne({
+            name: formdata.s_internal,
+          });
+          console.log(findinternal, "=====>>>internal");
+          if (findinternal.advisorformid == "NONE") {
+            const addAdvisorformdata = await new advisorForm({
+              name: "saleem bajwa",
+              pending: [`${member1_status.groupRequest}`],
+              accepted: [],
+              rejected: [],
+            });
+
+            const savestate = await addAdvisorformdata.save();
+            console.log(savestate, "======>>advisor form dta");
+            const updateADvisorformid = await internalAdvisor.updateOne(
+              {
+                name: formdata.s_internal,
+              },
+              {advisorformid: savestate._id}
+            );
+          } else {
+            console.log("entered else case======");
+            const previousState = await advisorForm.findOne({
+              _id: findinternal.advisorformid,
+            });
+
+            const updateInteral = await advisorForm.updateOne(
+              {_id: findinternal.advisorformid},
+              {
+                pending: [
+                  ...previousState.pending,
+                  member1_status.groupRequest,
+                ],
+                accepted: [...previousState.accepted],
+                rejected: [...previousState.rejected],
+              }
+            );
+            console.log(updateInteral, ">>>intrenal uoadted when have groups");
+          }
+          // new logic ends
         } else {
           console.log("not all the members has accepted");
           const updateResponseCount = await user.updateOne(
@@ -1154,7 +1272,7 @@ const updateStatus = async (req, res) => {
       console.log(formdata, "formdata in between");
       const member1_status = await user.findOne(
         {id: member1},
-        {isACCEPTED: 1, _id: 0}
+        {isACCEPTED: 1, _id: 0, groupRequest: 1}
       );
       const member2_status = await user.findOne(
         {id: member2},
@@ -1188,21 +1306,66 @@ const updateStatus = async (req, res) => {
         ) {
           console.log("all 4 members has accepted the invite");
           const Result = await user.updateOne(
-            {id: member1},
-            {isPROPOSALSUBMIT: true}
+            {id: member1}
+            // {isPROPOSALSUBMIT: true} //MYINDICATION
           );
           const updateofstu2 = await user.updateOne(
-            {id: member2},
-            {isPROPOSALSUBMIT: true}
+            {id: member2}
+            // {isPROPOSALSUBMIT: true} //MYINDICATION
           );
           const updateofstu3 = await user.updateOne(
-            {id: member3},
-            {isPROPOSALSUBMIT: true}
+            {id: member3}
+            // {isPROPOSALSUBMIT: true} //MYINDICATION
           );
           const updateofstu4 = await user.updateOne(
-            {id: member4},
-            {isPROPOSALSUBMIT: true}
+            {id: member4}
+            // {isPROPOSALSUBMIT: true} //MYINDICATION
           );
+          // new logic begins===========
+          const updatetheformadvisor = await form.updateOne(
+            {_id: _id},
+            {internalAdvisor_status: "PENDING"}
+          );
+          const findinternal = await internalAdvisor.findOne({
+            name: formdata.s_internal,
+          });
+          console.log(findinternal, "=====>>>internal");
+          if (findinternal.advisorformid == "NONE") {
+            const addAdvisorformdata = await new advisorForm({
+              name: "saleem baj",
+              pending: [`${member1_status.groupRequest}`],
+              accepted: [],
+              rejected: [],
+            });
+
+            const savestate = await addAdvisorformdata.save();
+            console.log(savestate, "======>>advisor form dta");
+            const updateADvisorformid = await internalAdvisor.updateOne(
+              {
+                name: formdata.s_internal,
+              },
+              {advisorformid: savestate._id}
+            );
+          } else {
+            console.log("entered else case======");
+            const previousState = await advisorForm.findOne({
+              _id: findinternal.advisorformid,
+            });
+
+            const updateInteral = await advisorForm.updateOne(
+              {_id: findinternal.advisorformid},
+              {
+                pending: [
+                  ...previousState.pending,
+                  member1_status.groupRequest,
+                ],
+                accepted: [...previousState.accepted],
+                rejected: [...previousState.rejected],
+              }
+            );
+            console.log(updateInteral, ">>>intrenal uoadted when have groups");
+          }
+          // new logic ends
         } else {
           console.log("not all the members has accepted");
           const updateResponseCount = await user.updateOne(
@@ -1270,13 +1433,51 @@ const updateStatus = async (req, res) => {
       if (member1_status.isACCEPTED && member2_status.isACCEPTED) {
         console.log("all 2 members has accepted the invite");
         const Result = await user.updateOne(
-          {id: member1},
-          {isPROPOSALSUBMIT: true}
+          {id: member1}
+          // {isPROPOSALSUBMIT: true} //MYINDICATION
         );
         const updateofstu2 = await user.updateOne(
-          {id: member2},
-          {isPROPOSALSUBMIT: true}
+          {id: member2}
+          // {isPROPOSALSUBMIT: true} //MYINDICATION
         );
+        // new logic begins===========
+        const findinternal = await internalAdvisor.findOne({
+          name: formdata.s_internal,
+        });
+        console.log(findinternal, "=====>>>internal");
+        if (findinternal.advisorformid == "NONE") {
+          const addAdvisorformdata = await new advisorForm({
+            name: "saleem bajwa",
+            pending: [`${member1_status.groupRequest}`],
+            accepted: [],
+            rejected: [],
+          });
+
+          const savestate = await addAdvisorformdata.save();
+          console.log(savestate, "======>>advisor form dta");
+          const updateADvisorformid = await internalAdvisor.updateOne(
+            {
+              name: formdata.s_internal,
+            },
+            {advisorformid: savestate._id}
+          );
+        } else {
+          console.log("entered else case======");
+          const previousState = await advisorForm.findOne({
+            _id: findinternal.advisorformid,
+          });
+
+          const updateInteral = await advisorForm.updateOne(
+            {_id: findinternal.advisorformid},
+            {
+              pending: [...previousState.pending, stu1_id],
+              accepted: [...previousState.accepted],
+              rejected: [...previousState.rejected],
+            }
+          );
+          console.log(updateInteral, ">>>intrenal uoadted when have groups");
+        }
+        // new logic ends
       } else {
         console.log("not all the members has accepted");
       }

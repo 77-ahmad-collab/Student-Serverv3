@@ -63,6 +63,14 @@ const FormSchema = new mongoose.Schema({
     uppercase: true,
     default: "",
   },
+  internalAdvisor_status: {
+    type: String,
+    trim: true,
+    default: "UNCLEAR",
+  },
+  internalAdvisor_remarks: {
+    type: [String],
+  },
 });
 
 const form = mongoose.model("formdata", FormSchema);

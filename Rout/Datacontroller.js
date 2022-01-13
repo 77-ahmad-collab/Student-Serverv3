@@ -334,7 +334,10 @@ const userdata = async (req, res) => {
 //***** CONTROLLER FOR FETCHING ALL STUDENT NAME */
 
 const usernames = async (req, res) => {
-  const result = await user.find({}, {id: 1, _id: 0});
+  const result = await user.find(
+    {isSUBMIT: false},
+    {id: 1, _id: 0, isSUBMIT: 1}
+  );
   // console.log(result);
   res.set("Access-Control-Allow-Origin", "*");
   res.send(result);
