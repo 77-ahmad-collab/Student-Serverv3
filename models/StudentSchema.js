@@ -82,6 +82,10 @@ const studentSchema = new mongoose.Schema({
     trim: true,
     default: 0,
   },
+  internal: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 studentSchema.pre("save", async function (req, res, next) {

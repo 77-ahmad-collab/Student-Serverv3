@@ -1,9 +1,11 @@
 const mongoose = require("mongoose");
 const AdvisorFormSchema = new mongoose.Schema({
-  name: String,
   pending: [String],
   accepted: [String],
   rejected: [String],
+  proposalPending: [String],
+  proposalAccepted: [String],
+  proposalRejected: [String],
 });
 const AdvisorForm = mongoose.model(
   "AdvisorForm",

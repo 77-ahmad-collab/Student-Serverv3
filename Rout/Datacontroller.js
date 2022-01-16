@@ -397,83 +397,74 @@ const sendMail = async (
   if (count == 2) {
     ///*****START FOR NODE MAIL  */
     // create reusable transporter object using the default SMTP transport
-
     // console.log(mail1, mail2, "heh");
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      host: "smtp.gmail.com",
-      auth: {
-        user: "ahmaq098@gmail.com",
-        pass: process.env.PASSWORD,
-      },
-      tls: {
-        // do not fail on invalid certs
-        rejectUnauthorized: false,
-      },
-    });
-
-    // send mail with defined transport object
-    const list = [
-      `${mail2.s_email}`,
-      `${count == 3 ? `${mail3.s_email}` : ""}`,
-    ];
-    const mailOptions = {
-      from: "ahmaq098@gmail.com",
-      to: list,
-      subject: "FYP PROJECT INVITIATION",
-      text: "check mail!",
-      html: OutputOF,
-    };
-
-    transporter.sendMail(mailOptions, function (error, info) {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log("Email sent: " + info.response);
-      }
-    });
-
+    // const transporter = nodemailer.createTransport({
+    //   service: "gmail",
+    //   host: "smtp.gmail.com",
+    //   auth: {
+    //     user: "ahmaq098@gmail.com",
+    //     pass: process.env.PASSWORD,
+    //   },
+    //   tls: {
+    //     // do not fail on invalid certs
+    //     rejectUnauthorized: false,
+    //   },
+    // });
+    // // send mail with defined transport object
+    // const list = [
+    //   `${mail2.s_email}`,
+    //   `${count == 3 ? `${mail3.s_email}` : ""}`,
+    // ];
+    // const mailOptions = {
+    //   from: "ahmaq098@gmail.com",
+    //   to: list,
+    //   subject: "FYP PROJECT INVITIATION",
+    //   text: "check mail!",
+    //   html: OutputOF,
+    // };
+    // transporter.sendMail(mailOptions, function (error, info) {
+    //   if (error) {
+    //     console.log(error);
+    //   } else {
+    //     console.log("Email sent: " + info.response);
+    //   }
+    // });
     //***END OD NODE MAIL */
     // res.send("mail sended");
   } else if (count == 3) {
     ///*****START FOR NODE MAIL if group members are 3 */
     // create reusable transporter object using the default SMTP transport
-
     // console.log(mail1, mail2, "heh");
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      host: "smtp.gmail.com",
-      auth: {
-        user: "ahmaq098@gmail.com",
-        pass: process.env.PASSWORD,
-      },
-      tls: {
-        // do not fail on invalid certs
-        rejectUnauthorized: false,
-      },
-    });
-
-    const OutputOf = `<div>
-      <h1>Hello Group Members!</h1><br/><h4>You have been invited for the fyp project group formation by ${s_leader} Go and Check dashboard</h4></div>`;
-
-    // send mail with defined transport object
-    const list = [`${mail2.s_email}`, `${mail3.s_email}`];
-    const mailOptions = {
-      from: "ahmaq098@gmail.com",
-      to: list,
-      subject: "FYP PROJECT INVITIATION",
-      text: "check mail!",
-      html: OutputOf,
-    };
-
-    transporter.sendMail(mailOptions, function (error, info) {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log("Email sent: " + info.response);
-      }
-    });
-
+    // const transporter = nodemailer.createTransport({
+    //   service: "gmail",
+    //   host: "smtp.gmail.com",
+    //   auth: {
+    //     user: "ahmaq098@gmail.com",
+    //     pass: process.env.PASSWORD,
+    //   },
+    //   tls: {
+    //     // do not fail on invalid certs
+    //     rejectUnauthorized: false,
+    //   },
+    // });
+    // const OutputOf = `<div>
+    //   <h1>Hello Group Members!</h1><br/><h4>You have been invited for the fyp project group formation by ${s_leader} Go and Check dashboard</h4></div>`;
+    // // send mail with defined transport object
+    // const list = [`${mail2.s_email}`, `${mail3.s_email}`];
+    // const mailOptions = {
+    //   from: "ahmaq098@gmail.com",
+    //   to: list,
+    //   subject: "FYP PROJECT INVITIATION",
+    //   text: "check mail!",
+    //   html: OutputOf,
+    // };
+    // transporter.sendMail(mailOptions, function (error, info) {
+    //   if (error) {
+    //     console.log(error);
+    //   } else {
+    //     console.log("Email sent: " + info.response);
+    //   }
+    // });
     //***END OD NODE MAIL */
   }
 };
@@ -627,21 +618,20 @@ const updateStatus = async (req, res) => {
 };
 
 const testmai = async (req, res, next) => {
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    host: "smtp.gmail.com",
-    auth: {
-      user: "ahmaq098@gmail.com",
-      pass: process.env.PASSWORD,
-    },
-    tls: {
-      // do not fail on invalid certs
-      rejectUnauthorized: false,
-    },
-  });
+  // const transporter = nodemailer.createTransport({
+  //   service: "gmail",
+  //   host: "smtp.gmail.com",
+  //   auth: {
+  //     user: "ahmaq098@gmail.com",
+  //     pass: process.env.PASSWORD,
+  //   },
+  //   tls: {
+  //     // do not fail on invalid certs
+  //     rejectUnauthorized: false,
+  //   },
+  // });
   // const transporter = nodemailer.createTransport({
   //   service: "hotmail",
-
   //   auth: {
   //     user: "ahmaddddd56@outlook.com",
   //     pass: "1712ahmad",
@@ -651,28 +641,26 @@ const testmai = async (req, res, next) => {
   //     rejectUnauthorized: false,
   //   },
   // });
-  const OutputOf = `<div>
-      <h1>Hello Group Members!</h1><br/><h4>You have been invited for the fyp project group formation by Go and Check dashboard</h4></div>`;
-
-  // send mail with defined transport object
-  const list = [`ahmed4100353@cloud.neduet.edu.pk`, `mzlapq639@gmail.com`];
-  const mailOptions = {
-    from: "ahmaq098@gmail.com",
-    to: list,
-    subject: "FYP PROJECT INVITIATION",
-    text: "check mail!",
-    html: OutputOf,
-  };
-
-  transporter.sendMail(mailOptions, function (error, info) {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log("Email sent: " + info.response);
-    }
-  });
-  res.set("Access-Control-Allow-Origin", "*");
-  res.send("mail");
+  // const OutputOf = `<div>
+  //     <h1>Hello Group Members!</h1><br/><h4>You have been invited for the fyp project group formation by Go and Check dashboard</h4></div>`;
+  // // send mail with defined transport object
+  // const list = [`ahmed4100353@cloud.neduet.edu.pk`, `mzlapq639@gmail.com`];
+  // const mailOptions = {
+  //   from: "ahmaq098@gmail.com",
+  //   to: list,
+  //   subject: "FYP PROJECT INVITIATION",
+  //   text: "check mail!",
+  //   html: OutputOf,
+  // };
+  // transporter.sendMail(mailOptions, function (error, info) {
+  //   if (error) {
+  //     console.log(error);
+  //   } else {
+  //     console.log("Email sent: " + info.response);
+  //   }
+  // });
+  // res.set("Access-Control-Allow-Origin", "*");
+  // res.send("mail");
 };
 
 const getformdata = async (req, res) => {
@@ -717,6 +705,8 @@ const getformdata = async (req, res) => {
         project_title: formdata.s_proj_title,
         internal: formdata.s_internal,
         external: formdata.s_external,
+        proposal_status: formdata.proposal_status,
+        internalAdvisor_status: formdata.internalAdvisor_status,
         project_description: formdata.project_description,
         internal_designation: formdata.internal_designation,
         external_designation: formdata.external_designation,
@@ -754,6 +744,8 @@ const getformdata = async (req, res) => {
         project_title: formdata.s_proj_title,
         internal: formdata.s_internal,
         external: formdata.s_external,
+        proposal_status: formdata.proposal_status,
+        internalAdvisor_status: formdata.internalAdvisor_status,
         project_description: formdata.project_description,
         internal_designation: formdata.internal_designation,
         external_designation: formdata.external_designation,
@@ -872,6 +864,8 @@ const getformdata = async (req, res) => {
         internal: formdata.s_internal,
         external: formdata.s_external,
         project_description: formdata.project_description,
+        proposal_status: formdata.proposal_status,
+        internalAdvisor_status: formdata.internalAdvisor_status,
         internal_designation: formdata.internal_designation,
         external_designation: formdata.external_designation,
         mem_count: formdata.mem_count,
@@ -1133,6 +1127,8 @@ const getformdata = async (req, res) => {
         project_title: formdata.s_proj_title,
         internal: formdata.s_internal,
         external: formdata.s_external,
+        proposal_status: formdata.proposal_status,
+        internalAdvisor_status: formdata.internalAdvisor_status,
         internal_designation: formdata.internal_designation,
         external_designation: formdata.external_designation,
         project_description: formdata.project_description,

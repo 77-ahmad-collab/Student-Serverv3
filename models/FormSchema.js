@@ -68,7 +68,15 @@ const FormSchema = new mongoose.Schema({
     trim: true,
     default: "UNCLEAR",
   },
+  proposal_status: {
+    type: String,
+    trim: true,
+    default: "UNCLEAR",
+  },
   internalAdvisor_remarks: {
+    type: [String],
+  },
+  proposal_remarks: {
     type: [String],
   },
 });
