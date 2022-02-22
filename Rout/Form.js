@@ -523,11 +523,12 @@ const formdata = async (req, res) => {
       //   );
       // }
     } else if (CHECKACCEPT.internal == true) {
+      console.log(group_count, "in internak true");
       const updateResponseCount = await user.updateOne(
         {id: stu1_id},
-        {ResponseCount: 1}
+        {ResponseCount: Number(group_count)}
       );
-
+      console.log(">>filer", updateResponseCount, ">>filer");
       const groupcount = Number(group_count);
 
       const SubmitForm = await form.updateOne(
@@ -625,7 +626,7 @@ const formdata = async (req, res) => {
             {
               $set: {
                 isSUBMIT: true,
-                isINVITE: true,
+                // isINVITE: true,
                 internal: false,
                 groupRequest: stu1_id,
                 s_status: "Pending",
@@ -664,7 +665,7 @@ const formdata = async (req, res) => {
             {
               $set: {
                 isSUBMIT: true,
-                isINVITE: true,
+                // isINVITE: true,
                 internal: false,
 
                 groupRequest: stu1_id,
@@ -677,7 +678,7 @@ const formdata = async (req, res) => {
             {
               $set: {
                 isSUBMIT: true,
-                isINVITE: true,
+                // isINVITE: true,
                 // isPROPOSALSUBMIT: true,
                 groupRequest: stu1_id,
                 internal: false,
@@ -712,7 +713,7 @@ const formdata = async (req, res) => {
             {
               $set: {
                 isSUBMIT: true,
-                isINVITE: true,
+                // isINVITE: true,
                 // isPROPOSALSUBMIT: true,
                 groupRequest: stu1_id,
                 internal: false,
@@ -725,7 +726,7 @@ const formdata = async (req, res) => {
             {
               $set: {
                 isSUBMIT: true,
-                isINVITE: true,
+                // isINVITE: true,
                 // isPROPOSALSUBMIT: true,
                 groupRequest: stu1_id,
                 internal: false,
@@ -738,7 +739,7 @@ const formdata = async (req, res) => {
             {
               $set: {
                 isSUBMIT: true,
-                isINVITE: true,
+                // isINVITE: true,
                 // isPROPOSALSUBMIT: true,
                 groupRequest: stu1_id,
                 internal: false,
@@ -757,6 +758,24 @@ const formdata = async (req, res) => {
         // sendSingleMail(group_count, stu4_id, OutputOF);
         // res.send("mai shi ho");
       }
+      const findinternal = await internalAdvisor.findOne({name: s_internal});
+      console.log(findinternal, "#####=====>>>internal");
+      const previousState = await advisorForm.findOne({
+        _id: findinternal.advisorformid,
+      });
+      console.log("####====", previousState.rejected, "####====");
+      const filterRejected = previousState.rejected.filter(
+        (val) => val != stu1_id.toUpperCase()
+      );
+      const updateInteral = await advisorForm.updateOne(
+        {_id: findinternal.advisorformid},
+        {
+          pending: [...previousState.pending, stu1_id],
+          accepted: [...previousState.accepted],
+          rejected: filterRejected,
+        }
+      );
+      console.log(updateInteral, ">>>intrenal uoadted when have groups");
     } else {
       console.log("first time");
       const updateResponseCount = await user.updateOne(
@@ -881,7 +900,7 @@ const formdata = async (req, res) => {
       <h1>Hello Group Members!</h1><br/><h4>You have been invited for the fyp project group formation by ${s_leader} Go and Check dashboard</h4></div>`;
         // sendMail(count, stu1_id, stu2_id, stu3_id, OutputOF);
       } else if (group_count == 3) {
-        console.log("entering the case of ");
+        console.log("entering the case of #$ ");
         if (s_leader == stu1_id.toUpperCase()) {
           const status_res1 = await user.updateOne(
             {id: stu1_id},
@@ -2632,7 +2651,9 @@ const ProposalForm = async (req, res) => {
   const previousState = await advisorForm.findOne({
     _id: findinternal.advisorformid,
   });
-
+  const filterProposalRejected = previousState.proposalRejected.filter(
+    (val) => val != rollNo
+  );
   const updateInternal = await advisorForm.updateOne(
     {_id: findinternal.advisorformid},
     {
@@ -2641,7 +2662,7 @@ const ProposalForm = async (req, res) => {
       rejected: [...previousState.rejected],
       proposalPending: [...previousState.proposalPending, rollNo],
       proposalAccepted: [...previousState.proposalAccepted],
-      proposalRejected: [...previousState.proposalRejected],
+      proposalRejected: filterProposalRejected,
     }
   );
   console.log(updateInternal);
