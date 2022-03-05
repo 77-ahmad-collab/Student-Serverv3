@@ -522,7 +522,7 @@ const formdata = async (req, res) => {
       //     }
       //   );
       // }
-    } else if (CHECKACCEPT.internal == true) {
+    } else if (CHECKACCEPT.internal == "do not enter") {
       console.log(group_count, "in internak true");
       const updateResponseCount = await user.updateOne(
         {id: stu1_id},

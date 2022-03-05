@@ -1141,16 +1141,25 @@ const getformdata = async (req, res) => {
 };
 
 const getProposalData = async (req, res) => {
+  console.log(req.params.rollNo);
   const student = await user.findOne({id: req.params.rollNo});
+  console.log(student);
   if (
     student.proposalid ||
     student.proposalid != null ||
     student.proposalid.length > 0
   ) {
-    const proposaldata = await proposal.findOne(
+    const myproposaldata = await proposal.findOne(
       {_id: student.proposalid},
       {_id: 0}
     );
+    const proposaldata = {
+      ...myproposaldata._doc,
+      studentName: student.s_name,
+      studentEmail: student.s_email,
+      studentRollNo: student.id,
+    };
+    console.log(proposaldata);
     res.set("Access-Control-Allow-Origin", "*");
     res.json(proposaldata);
   } else {
