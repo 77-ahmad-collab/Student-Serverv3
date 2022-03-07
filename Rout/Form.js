@@ -2482,204 +2482,208 @@ const updateStatus = async (req, res) => {
 };
 
 const ProposalForm = async (req, res) => {
-  console.log(req.body);
-  const {
-    category,
-    characteristics,
-    outline,
-    objectives,
-    scope,
-    methodology,
-    exp_outcomes,
-    exp_budget,
-    gant_chart,
-    alignment,
-    co_supervisor,
-    rollNo,
-    internal,
-  } = req.body;
-  const submitproposal = await new proposal({
-    category,
-    characteristics,
-    outline,
-    objectives,
-    scope,
-    methodology,
-    exp_outcomes,
-    exp_budget,
-    gant_chart,
-    alignment,
-    co_supervisor,
-  });
-  const doc1 = await submitproposal.save();
-  console.log(doc1, "your form is submitted");
-  const leader = await user.findOne({id: rollNo.toUpperCase()});
-  const formid = leader.formid;
-  const formdata = await form.findOne({_id: formid});
+  try{
+    console.log(req.body);
+    const {
+      category,
+      characteristics,
+      outline,
+      objectives,
+      scope,
+      methodology,
+      exp_outcomes,
+      exp_budget,
+      gant_chart,
+      alignment,
+      co_supervisor,
+      rollNo,
+      internal,
+    } = req.body;
+    const submitproposal = await new proposal({
+      category,
+      characteristics,
+      outline,
+      objectives,
+      scope,
+      methodology,
+      exp_outcomes,
+      exp_budget,
+      gant_chart,
+      alignment,
+      co_supervisor,
+    });
+    const doc1 = await submitproposal.save();
+    console.log(doc1, "your form is submitted");
+    const leader = await user.findOne({id: rollNo.toUpperCase()});
+    const formid = leader.formid;
+    const formdata = await form.findOne({_id: formid});
 
-  const updatestu1 = await user.updateOne(
-    {id: rollNo},
-    {$set: {proposalid: doc1._id, isPROPOSAL: true}}
-  );
-  if (formdata.mem_count == 2) {
-    if (formdata.mem2.length > 0) {
-      const updatestu2 = await user.updateOne(
-        {id: formdata.mem2},
-        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
-      );
-    } else if (formdata.mem3.length > 0) {
-      const updatestu2 = await user.updateOne(
-        {id: formdata.mem3},
-        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
-      );
+    const updatestu1 = await user.updateOne(
+      {id: rollNo},
+      {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+    );
+    if (formdata.mem_count == 2) {
+      if (formdata.mem2.length > 0) {
+        const updatestu2 = await user.updateOne(
+          {id: formdata.mem2},
+          {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+        );
+      } else if (formdata.mem3.length > 0) {
+        const updatestu2 = await user.updateOne(
+          {id: formdata.mem3},
+          {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+        );
+      }
+    } else if (formdata.mem_count == 3) {
+      if (formdata.mem2.length > 0 && formdata.mem3.length > 0) {
+        const updatestu2 = await user.updateOne(
+          {id: formdata.mem2},
+          {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+        );
+        const updatestu3 = await user.updateOne(
+          {id: formdata.mem3},
+          {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+        );
+      } else if (
+        (formdata.mem3.length > 0 && formdata.mem2.length == 0) ||
+        formdata.mem2.length == ""
+      ) {
+        const updatestu2 = await user.updateOne(
+          {id: formdata.mem3},
+          {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+        );
+      } else if (
+        (formdata.mem2.length > 0 && formdata.mem3.length == 0) ||
+        formdata.mem3.length == ""
+      ) {
+        const updatestu2 = await user.updateOne(
+          {id: formdata.mem2},
+          {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+        );
+      }
+    } else if (formdata.mem_count == 4) {
+      if (
+        formdata.mem2.length > 0 &&
+        formdata.mem3.length > 0 &&
+        formdata.mem4.length > 0
+      ) {
+        const updatestu2 = await user.updateOne(
+          {id: formdata.mem2},
+          {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+        );
+        const updatestu3 = await user.updateOne(
+          {id: formdata.mem3},
+          {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+        );
+        const updatestu4 = await user.updateOne(
+          {id: formdata.mem4},
+          {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+        );
+      } else if (
+        formdata.mem3.length > 0 &&
+        formdata.mem2.length == 0 &&
+        formdata.mem4.length == 0
+      ) {
+        const updatestu2 = await user.updateOne(
+          {id: formdata.mem3},
+          {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+        );
+      } else if (
+        formdata.mem2.length > 0 &&
+        formdata.mem3.length == 0 &&
+        formdata.mem4.length == 0
+      ) {
+        const updatestu2 = await user.updateOne(
+          {id: formdata.mem2},
+          {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+        );
+      } else if (
+        formdata.mem2.length == 0 &&
+        formdata.mem3.length == 0 &&
+        formdata.mem4.length > 0
+      ) {
+        const updatestu2 = await user.updateOne(
+          {id: formdata.mem4},
+          {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+        );
+      } else if (
+        formdata.mem2.length > 0 &&
+        formdata.mem3.length > 0 &&
+        formdata.mem4.length == 0
+      ) {
+        const updatestu2 = await user.updateOne(
+          {id: formdata.mem2},
+          {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+        );
+        const updatestu3 = await user.updateOne(
+          {id: formdata.mem3},
+          {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+        );
+      } else if (
+        formdata.mem2.length > 0 &&
+        formdata.mem3.length == 0 &&
+        formdata.mem4.length > 0
+      ) {
+        const updatestu2 = await user.updateOne(
+          {id: formdata.mem2},
+          {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+        );
+        const updatestu3 = await user.updateOne(
+          {id: formdata.mem4},
+          {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+        );
+      } else if (
+        formdata.mem2.length == 0 &&
+        formdata.mem3.length > 0 &&
+        formdata.mem4.length > 0
+      ) {
+        const updatestu2 = await user.updateOne(
+          {id: formdata.mem4},
+          {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+        );
+        const updatestu3 = await user.updateOne(
+          {id: formdata.mem3},
+          {$set: {proposalid: doc1._id, isPROPOSAL: true}}
+        );
+      }
     }
-  } else if (formdata.mem_count == 3) {
-    if (formdata.mem2.length > 0 && formdata.mem3.length > 0) {
-      const updatestu2 = await user.updateOne(
-        {id: formdata.mem2},
-        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
-      );
-      const updatestu3 = await user.updateOne(
-        {id: formdata.mem3},
-        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
-      );
-    } else if (
-      (formdata.mem3.length > 0 && formdata.mem2.length == 0) ||
-      formdata.mem2.length == ""
-    ) {
-      const updatestu2 = await user.updateOne(
-        {id: formdata.mem3},
-        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
-      );
-    } else if (
-      (formdata.mem2.length > 0 && formdata.mem3.length == 0) ||
-      formdata.mem3.length == ""
-    ) {
-      const updatestu2 = await user.updateOne(
-        {id: formdata.mem2},
-        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
-      );
-    }
-  } else if (formdata.mem_count == 4) {
-    if (
-      formdata.mem2.length > 0 &&
-      formdata.mem3.length > 0 &&
-      formdata.mem4.length > 0
-    ) {
-      const updatestu2 = await user.updateOne(
-        {id: formdata.mem2},
-        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
-      );
-      const updatestu3 = await user.updateOne(
-        {id: formdata.mem3},
-        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
-      );
-      const updatestu4 = await user.updateOne(
-        {id: formdata.mem4},
-        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
-      );
-    } else if (
-      formdata.mem3.length > 0 &&
-      formdata.mem2.length == 0 &&
-      formdata.mem4.length == 0
-    ) {
-      const updatestu2 = await user.updateOne(
-        {id: formdata.mem3},
-        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
-      );
-    } else if (
-      formdata.mem2.length > 0 &&
-      formdata.mem3.length == 0 &&
-      formdata.mem4.length == 0
-    ) {
-      const updatestu2 = await user.updateOne(
-        {id: formdata.mem2},
-        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
-      );
-    } else if (
-      formdata.mem2.length == 0 &&
-      formdata.mem3.length == 0 &&
-      formdata.mem4.length > 0
-    ) {
-      const updatestu2 = await user.updateOne(
-        {id: formdata.mem4},
-        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
-      );
-    } else if (
-      formdata.mem2.length > 0 &&
-      formdata.mem3.length > 0 &&
-      formdata.mem4.length == 0
-    ) {
-      const updatestu2 = await user.updateOne(
-        {id: formdata.mem2},
-        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
-      );
-      const updatestu3 = await user.updateOne(
-        {id: formdata.mem3},
-        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
-      );
-    } else if (
-      formdata.mem2.length > 0 &&
-      formdata.mem3.length == 0 &&
-      formdata.mem4.length > 0
-    ) {
-      const updatestu2 = await user.updateOne(
-        {id: formdata.mem2},
-        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
-      );
-      const updatestu3 = await user.updateOne(
-        {id: formdata.mem4},
-        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
-      );
-    } else if (
-      formdata.mem2.length == 0 &&
-      formdata.mem3.length > 0 &&
-      formdata.mem4.length > 0
-    ) {
-      const updatestu2 = await user.updateOne(
-        {id: formdata.mem4},
-        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
-      );
-      const updatestu3 = await user.updateOne(
-        {id: formdata.mem3},
-        {$set: {proposalid: doc1._id, isPROPOSAL: true}}
-      );
-    }
+    const findinternal = await internalAdvisor.findOne({name: internal});
+    console.log(findinternal, "=====>>>internal=====", internal);
+    const previousState = await advisorForm.findOne({
+      _id: findinternal.advisorformid,
+    });
+    const filterProposalRejected = previousState.proposalRejected.filter(
+      (val) => val != rollNo
+    );
+    const updateInternal = await advisorForm.updateOne(
+      {_id: findinternal.advisorformid},
+      {
+        pending: [...previousState.pending],
+        accepted: [...previousState.accepted],
+        rejected: [...previousState.rejected],
+        proposalPending: [...previousState.proposalPending, rollNo],
+        proposalAccepted: [...previousState.proposalAccepted],
+        proposalRejected: filterProposalRejected,
+      }
+    );
+    console.log(updateInternal);
+    res.set("Access-Control-Allow-Origin", "*");
+    res.json({
+      category,
+      characteristics,
+      outline,
+      objectives,
+      scope,
+      methodology,
+      exp_outcomes,
+      exp_budget,
+      gant_chart,
+      alignment,
+      co_supervisor,
+    });
+    console.log(updatestu1);
+  }catch(error){
+    return error
   }
-  const findinternal = await internalAdvisor.findOne({name: internal});
-  console.log(findinternal, "=====>>>internal=====", internal);
-  const previousState = await advisorForm.findOne({
-    _id: findinternal.advisorformid,
-  });
-  const filterProposalRejected = previousState.proposalRejected.filter(
-    (val) => val != rollNo
-  );
-  const updateInternal = await advisorForm.updateOne(
-    {_id: findinternal.advisorformid},
-    {
-      pending: [...previousState.pending],
-      accepted: [...previousState.accepted],
-      rejected: [...previousState.rejected],
-      proposalPending: [...previousState.proposalPending, rollNo],
-      proposalAccepted: [...previousState.proposalAccepted],
-      proposalRejected: filterProposalRejected,
-    }
-  );
-  console.log(updateInternal);
-  res.set("Access-Control-Allow-Origin", "*");
-  res.json({
-    category,
-    characteristics,
-    outline,
-    objectives,
-    scope,
-    methodology,
-    exp_outcomes,
-    exp_budget,
-    gant_chart,
-    alignment,
-    co_supervisor,
-  });
-  console.log(updatestu1);
 };
 module.exports = {formdata, updateStatus, ProposalForm};
