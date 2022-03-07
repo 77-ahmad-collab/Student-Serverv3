@@ -2482,7 +2482,7 @@ const updateStatus = async (req, res) => {
 };
 
 const ProposalForm = async (req, res) => {
-  try{
+  try {
     console.log(req.body);
     const {
       category,
@@ -2499,6 +2499,7 @@ const ProposalForm = async (req, res) => {
       rollNo,
       internal,
     } = req.body;
+    console.log(req.body.internal, "internak");
     const submitproposal = await new proposal({
       category,
       characteristics,
@@ -2682,8 +2683,8 @@ const ProposalForm = async (req, res) => {
       co_supervisor,
     });
     console.log(updatestu1);
-  }catch(error){
-    return error
+  } catch (error) {
+    return error;
   }
 };
 module.exports = {formdata, updateStatus, ProposalForm};
