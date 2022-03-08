@@ -1153,11 +1153,14 @@ const getProposalData = async (req, res) => {
       {_id: student.proposalid},
       {_id: 0}
     );
+    const formdata = await form.findOne({_id: student.formid});
+
     const proposaldata = {
       ...myproposaldata._doc,
       studentName: student.s_name,
       studentEmail: student.s_email,
       studentRollNo: student.id,
+      title: formdata.s_proj_title,
     };
     console.log(proposaldata);
     res.set("Access-Control-Allow-Origin", "*");

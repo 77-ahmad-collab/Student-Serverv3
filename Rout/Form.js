@@ -2499,7 +2499,7 @@ const ProposalForm = async (req, res) => {
       rollNo,
       internal,
       reason,
-      RecomendationsandApproval,
+      RecommendationsandApproval,
     } = req.body;
     console.log(req.body, "internak");
     const submitproposal = await new proposal({
@@ -2515,7 +2515,7 @@ const ProposalForm = async (req, res) => {
       alignment,
       co_supervisor,
       reason,
-      RecomendationsandApproval,
+      RecommendationsandApproval,
     });
     const doc1 = await submitproposal.save();
     console.log(doc1, "your form is submitted");
