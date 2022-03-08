@@ -2498,8 +2498,10 @@ const ProposalForm = async (req, res) => {
       co_supervisor,
       rollNo,
       internal,
+      reason,
+      RecomendationsandApproval,
     } = req.body;
-    console.log(req.body.internal, "internak");
+    console.log(req.body, "internak");
     const submitproposal = await new proposal({
       category,
       characteristics,
@@ -2512,6 +2514,8 @@ const ProposalForm = async (req, res) => {
       gant_chart,
       alignment,
       co_supervisor,
+      reason,
+      RecomendationsandApproval,
     });
     const doc1 = await submitproposal.save();
     console.log(doc1, "your form is submitted");

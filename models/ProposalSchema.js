@@ -12,11 +12,15 @@ const ProposalSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
+  reason: {
+    type: String,
+    trim: true,
+  },
   outline: {
     type: String,
     trim: true,
   },
-  objective: {
+  objectives: {
     type: String,
     trim: true,
   },
@@ -41,6 +45,10 @@ const ProposalSchema = new mongoose.Schema({
     trim: true,
   },
   co_supervisor: {
+    type: String,
+    trim: true,
+  },
+  RecommendationsandApproval: {
     type: String,
     trim: true,
   },
