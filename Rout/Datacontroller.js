@@ -1161,6 +1161,10 @@ const getProposalData = async (req, res) => {
       studentEmail: student.s_email,
       studentRollNo: student.id,
       title: formdata.s_proj_title,
+      s_internal: formdata.s_internal,
+      s_external: formdata.s_external,
+      internal_designation: formdata.internal_designation,
+      external_designation: formdata.external_designation,
     };
     console.log(proposaldata);
     res.set("Access-Control-Allow-Origin", "*");
