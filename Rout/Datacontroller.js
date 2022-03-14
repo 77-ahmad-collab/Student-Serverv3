@@ -700,6 +700,7 @@ const getformdata = async (req, res) => {
         },
       ];
       res.set("Access-Control-Allow-Origin", "*");
+      console.log(formdata.mem_count, "mem_count>>");
       res.status(200).json({
         student: student,
         project_title: formdata.s_proj_title,
@@ -1133,6 +1134,7 @@ const getformdata = async (req, res) => {
         external_designation: formdata.external_designation,
         project_description: formdata.project_description,
         rejected: reject,
+        mem_count: formdata.mem_count,
       });
     }
   }
@@ -1165,6 +1167,7 @@ const getProposalData = async (req, res) => {
       s_external: formdata.s_external,
       internal_designation: formdata.internal_designation,
       external_designation: formdata.external_designation,
+      mem_count: formdata.mem_count,
     };
     console.log(proposaldata);
     res.set("Access-Control-Allow-Origin", "*");
