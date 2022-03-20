@@ -111,7 +111,9 @@ const login = async (req, res) => {
 
 //*****CONTROLLER FOR THE MIDDLEWARE ****AUTHENTICATION */
 const about = async (req, res) => {
+  // console.log(req.body, "bofy");
   console.log(req.id, "the id");
+  // req.id = "CT-18008";
   console.log("data in about controller", req);
   try {
     const result = await user.findOne({id: req.id}, {s_tokens: 0});
@@ -132,13 +134,13 @@ const about = async (req, res) => {
       console.log(req.formid, "haina");
       const formdata = await form.findOne({_id: req.formid});
       console.log("@", formdata.mem2.length, "1", formdata.mem1, "yes");
-      let proposal_remarks = "";
-      if (
-        formdata.proposal_remarks != undefined ||
-        formdata.proposal_remarks != null
-      ) {
-        proposal_remarks = formdata.proposal_remarks;
-      }
+      // let proposal_remarks = "";
+      // if (
+      //   formdata.proposal_remarks != undefined ||
+      //   formdata.proposal_remarks != null
+      // ) {
+      //   proposal_remarks = formdata.proposal_remarks;
+      // }
       if (formdata.mem2.length > 0 && formdata.mem3.length > 0) {
         console.log("nothing is null");
         res.set("Access-Control-Allow-Origin", "*");
@@ -158,7 +160,7 @@ const about = async (req, res) => {
           external_designation: formdata.external_designation,
           mem2: formdata.mem2,
           mem3: formdata.mem3,
-          proposal_remarks: proposal_remarks || "no value",
+          // proposal_remarks: proposal_remarks || "no value",
         });
       } else if (!formdata.mem2 && !formdata.mem3.length) {
         console.log("execute");
@@ -177,7 +179,7 @@ const about = async (req, res) => {
           isACCEPTED,
           isPROPOSAL,
           isPROPOSALSUBMIT,
-          proposal_remarks: proposal_remarks || "no value",
+          // proposal_remarks: proposal_remarks || "no value",
         });
       } else if (formdata.mem2.length == 0) {
         console.log("mem2 is 0");
@@ -197,7 +199,7 @@ const about = async (req, res) => {
           internal_designation: formdata.internal_designation,
           external_designation: formdata.external_designation,
           mem2: formdata.mem3,
-          proposal_remarks: proposal_remarks || "no value",
+          // proposal_remarks: proposal_remarks || "no value",
           //  mem3: formdata.mem3,
         });
       } else if (formdata.mem3.length == 0) {
@@ -218,7 +220,7 @@ const about = async (req, res) => {
           internal_designation: formdata.internal_designation,
           external_designation: formdata.external_designation,
           mem2: formdata.mem2,
-          proposal_remarks: proposal_remarks || "no value",
+          // proposal_remarks: proposal_remarks || "no value",
           //  mem3: formdata.mem3,
         });
       }
@@ -239,7 +241,7 @@ const about = async (req, res) => {
         isPROPOSALSUBMIT,
         internal_designation: "no value",
         external_designation: "no value",
-        proposal_remarks: proposal_remarks || "no value",
+        // proposal_remarks: proposal_remarks || "no value",
       });
     }
 
