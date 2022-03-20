@@ -6,6 +6,10 @@ const AdvisorFormSchema = new mongoose.Schema({
   proposalPending: [String],
   proposalAccepted: [String],
   proposalRejected: [String],
+  Attendance: {
+    type: [String],
+    default: [],
+  },
 });
 const AdvisorForm = mongoose.model(
   "AdvisorForm",

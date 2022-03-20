@@ -47,6 +47,7 @@ const ProposalSchema = new mongoose.Schema({
   co_supervisor: {
     type: String,
     trim: true,
+    default: "none",
   },
   RecommendationsandApproval: {
     type: String,

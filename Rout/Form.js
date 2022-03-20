@@ -1560,7 +1560,7 @@ const updateStatus = async (req, res) => {
           member1_status.isACCEPTED &&
           member2_status.isACCEPTED &&
           member3_status.isACCEPTED &&
-          member4_status
+          member4_status.isACCEPTED
         ) {
           console.log("all 4 members has accepted the invite");
           // const Result = await user.updateOne(
@@ -1609,6 +1609,7 @@ const updateStatus = async (req, res) => {
             const previousState = await advisorForm.findOne({
               _id: findinternal.advisorformid,
             });
+            console.log("previous state pending", previousState.pending);
             const previousRejected = previousState.rejected.filter(
               (val) => val != stu1_id.toUpperCase()
             );
