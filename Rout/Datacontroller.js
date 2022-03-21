@@ -1135,6 +1135,7 @@ const getformdata = async (req, res) => {
         project_description: formdata.project_description,
         rejected: reject,
         mem_count: formdata.mem_count,
+        proposal_remarks: formdata.proposal_remarks,
       });
     }
   }
