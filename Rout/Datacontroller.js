@@ -369,6 +369,7 @@ const test = async (req, res) => {
     name: "asalm",
   });
 };
+//  w
 
 const sendMail = async (
   count,
