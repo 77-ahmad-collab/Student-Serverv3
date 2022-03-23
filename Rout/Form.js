@@ -34,9 +34,11 @@ const formdata = async (req, res) => {
     console.log(`checkaccept`, CHECKACCEPT);
     if (CHECKACCEPT.isACCEPTED == true) {
       const groupleader = await user.findOne({id: stu1_id});
-      const studentformid = await leader.formid;
+      console.log("groupleader", groupleader);
+      const studentformid = await groupleader.formid;
+      console.log(studentformid, "student form id");
       const studentformdata = await form.findOne({_id: studentformid});
-
+      console.log(studentformdata, "studner form data");
       if (group_count == 4) {
         console.log("Resubmiting and group count is 4");
         const leader = await user.findOne({id: stu1_id});
@@ -1209,6 +1211,7 @@ const formdata = async (req, res) => {
     // res.send("Sucess form");
   } catch (error) {
     res.set("Access-Control-Allow-Origin", "*");
+    console.log(error);
     res.status(400).send("error hay");
   }
 };
