@@ -79,6 +79,10 @@ const FormSchema = new mongoose.Schema({
   proposal_remarks: {
     type: [String],
   },
+  isProgressResponded: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 const form = mongoose.model("formdata", FormSchema);
